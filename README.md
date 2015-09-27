@@ -5,10 +5,10 @@ Foreman provider for Terraform
 
 ## What is Terraform
 Terraform is an orchestration tool that can be used to deploy and manage the lifecycle of cloud resources such as virtual machines, DNS records etc.
-That probably isn't giving it enough credit so check it out at [https://terraform.io/]
+That probably isn't giving it enough credit so check it out at https://terraform.io/
 
 ## What is Foreman
-Foreman (or more accurately TheForeman) is a Red Hat sponsored open source tool used to manage infrastructure in a Private Cloud. Foreman can provision for instance Docker instances, Virtual Machines in OpenStack or VMWare and it can even deploy to bare metal. Foreman ties into PuppetLabs Puppet infrastructure and provides ENC data regarding the servers it manages. Check it out at [http://theforeman.org/]
+Foreman (or more accurately TheForeman) is a Red Hat sponsored open source tool used to manage infrastructure in a Private Cloud. Foreman can provision for instance Docker instances, Virtual Machines in OpenStack or VMWare and it can even deploy to bare metal. Foreman ties into PuppetLabs Puppet infrastructure and provides ENC data regarding the servers it manages. Check it out at http://theforeman.org/
 
 ## Usage
 
