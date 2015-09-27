@@ -10,7 +10,7 @@ providers {
 }
 ```
 
-Sample terraform config  
+Sample terraform config. Save this as a example.tf or similar
 ```
 resource "foreman_dns" "example" {
 	host = "example.com"
@@ -51,3 +51,32 @@ resource "foreman_server" "complex_VM" {
     comment = ""
 }
 ```
+
+if you have already built the terraform-foreman source then you are ready to test. Navigate to the directory where you saved your terraform config (example.tf) and execute:
+
+```
+terraform plan
+```
+
+this should output something similar to
+
+
+if you have already planned the terraform resources you can taint them essentially marking them to be rebuilt
+
+```
+# Taint the complex example vm
+terraform taint foreman_server.complex_VM
+```
+
+## Build
+In order to build/install the source, navigate to the checked out directory and ensure your $GOPATH is defined.
+
+Execute
+```
+go install
+```
+
+
+
+
+
