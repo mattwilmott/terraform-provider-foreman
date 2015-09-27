@@ -39,14 +39,12 @@ var descriptions map[string]string
 
 func init() {
 	descriptions = map[string]string{
-		"url": "The region where AWS operations will take place. Examples\n" +
-			"are us-east-1, us-west-2, etc.",
+		"url": "The Foreman server url. Example: \n" +
+			"https://foreman.example.com/api/v2/",
 
-		"username": "The access key for API operations. You can retrieve this\n" +
-			"from the 'Security & Credentials' section of the AWS console.",
+		"username": "Foreman username with API access",
 
-		"password": "The access key for API operations. You can retrieve this\n" +
-			"from the 'Security & Credentials' section of the AWS console.",
+		"password": "Foreman password",
 	}
 }
 
