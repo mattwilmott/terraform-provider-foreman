@@ -12,6 +12,8 @@ Foreman (or more accurately TheForeman) is a Red Hat sponsored open source tool 
 
 ## Usage
 
+Install terraform first using the instructions at https://terraform.io/intro/getting-started/install.html
+
 Add the following to your ~/.terraformrc
 ```
 providers {
@@ -67,7 +69,8 @@ if you have already built the terraform-foreman source then you are ready to tes
 terraform plan
 ```
 
-this should output something similar to
+This will interrogate the provider and should output something similar to
+**TODO**
 
 
 if you have already planned the terraform resources you can taint them essentially marking them to be rebuilt
@@ -77,7 +80,19 @@ if you have already planned the terraform resources you can taint them essential
 terraform taint foreman_server.complex_VM
 ```
 
-## Build
+Now you can write your own plan similar to the example. Reference the terraform documentation at https://terraform.io/intro/getting-started/build.html
+
+Once a plan has been created you are ready to apply the plan and actually deploy. 
+
+**Currently I havent implemented the API calls directly to foreman, instead I have utilized foreman's [Hammer CLI](https://github.com/theforeman/hammer-cli). I fully intend to replace this at some stage. It is simply a means to an end at this stage. Also only create has been completed, ran out of time this week. Follow the instructions on the Hammer guthub page for installation**
+
+```
+# In the directory of your my_custom_terraform.tf file
+terraform apply
+```
+This will interrogate the provider and make the changes. If a server isn't built for instance it will call the create method and the provider will instantiate the resource.
+
+## How to Build the Source
 In order to build/install the source, navigate to the checked out directory and ensure your $GOPATH is defined.
 
 Execute
@@ -89,7 +104,7 @@ If you'd like to contribute to this codebase please do!
 
 I would be more than pleased if you did but please remember I am not a programmer by default. Go easy on me! lol
 
-#### Instructions
+#### Contributing Instructions
 ```
 # Fork it on GitHub
 git clone https://github.com/your_name/terraform-foreman.git
