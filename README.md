@@ -1,7 +1,16 @@
 # terraform-foreman
 Foreman provider for Terraform
 
-### Usage
+**Note, I'm a DevOps Engineer who has come from a predominately Ops world. I have never written in Go previously instead prefering Ruby, Python, Javascript, Java or Bash. Hence this code may actually be completely wrong! Use this at your own risk! If you'd like to contribute please do, see the instructions below!**
+
+## What is Terraform
+Terraform is an orchestration tool that can be used to deploy and manage the lifecycle of cloud resources such as virtual machines, DNS records etc.
+That probably isn't giving it enough credit so check it out at [https://terraform.io/]
+
+## What is Foreman
+Foreman (or more accurately TheForeman) is a Red Hat sponsored open source tool used to manage infrastructure in a Private Cloud. Foreman can provision for instance Docker instances, Virtual Machines in OpenStack or VMWare and it can even deploy to bare metal. Foreman ties into PuppetLabs Puppet infrastructure and provides ENC data regarding the servers it manages. Check it out at [http://theforeman.org/]
+
+## Usage
 
 Add the following to your ~/.terraformrc
 ```
@@ -75,8 +84,25 @@ Execute
 ```
 go install
 ```
+## Contributing
+If you'd like to contribute to this codebase please do!
 
+I would be more than pleased if you did but please remember I am not a programmer by default. Go easy on me! lol
 
+### Instructions
+```
+# Fork it on GitHub
+git clone https://github.com/your_name/terraform-foreman.git
+cd terraform-foreman
+git checkout -b my_awesome_feature_branch master
+# Make your awesome changes
+git commit -a -m "my awesome changes explained"
+# Repeat till your happy
+git push origin my_awesome_feature_branch
+# Submit a pull request at https://github.com/your_name/terraform-foreman
+# Explain your changes in PR and include test instrcutions.
+# I'll hopefully accept it and we'll be on our way to shared awesomeness.
+```
 
 
 
