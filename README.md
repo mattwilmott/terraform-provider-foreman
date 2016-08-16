@@ -49,17 +49,12 @@ resource "foreman_server" "complex_VM" {
     comment = ""
 }
 ```
-```
-```
 
 This will interrogate the provider and should output something similar to
 **TODO**
 
 
 if you have already planned the terraform resources you can taint them essentially marking them to be rebuilt
-
-```
-```
 
 Now you can write your own plan similar to the example. Reference the terraform documentation at https://terraform.io/intro/getting-started/build.html
 
@@ -79,10 +74,8 @@ In order to build/install the source, navigate to the checked out directory and 
 Execute
 ```
 go build
-```
 
-```
-```
+
 
 
 
