@@ -1,7 +1,7 @@
 # terraform-foreman
-Foreman provider for Terraform
+Foreman provider for Terraform - !Please note that this is by no means production ready!
 
-**Note, I'm a DevOps Engineer who has come from a predominately Ops world. I have never written in Go previously instead prefering Ruby, Python, Javascript, Java or Bash. Hence this code may actually be completely wrong! Use this at your own risk! If you'd like to contribute please do, see the instructions below!**
+** Note, I am a sysops guy and have never touched golang in my life. I started this project to see if I could provision machines in foreman with terraform. 
 
 ## What is Terraform
 Terraform is an orchestration tool that can be used to deploy and manage the lifecycle of cloud resources such as virtual machines, DNS records etc.
@@ -12,29 +12,16 @@ Foreman (or more accurately TheForeman) is a Red Hat sponsored open source tool 
 
 ## Usage
 
-Install terraform first using the instructions at https://terraform.io/intro/getting-started/install.html
 
 Add the following to your ~/.terraformrc
 ```
 providers {
-     foreman = "/path/to/bin/terraform-foreman"
+     foreman = "/path/to/bin/terraform-provider-foreman"
 }
 ```
 
 Sample terraform config. Save this as a example.tf or similar
 ```
-resource "foreman_dns" "example" {
-	host = "example.com"
-}
-
-
-resource "foreman_server" "example" {
-    name = "host${count.index}.example.com"
-    location_id = 1
-    organization_id = 1
-    puppet_class_ids = ["1","2","3"]
-    count = 3
-}
 
 resource "foreman_server" "complex_VM" {
     name = "complex.example.com"
@@ -62,11 +49,7 @@ resource "foreman_server" "complex_VM" {
     comment = ""
 }
 ```
-
-if you have already built the terraform-foreman source then you are ready to test. Navigate to the directory where you saved your terraform config (example.tf) and execute:
-
 ```
-terraform plan
 ```
 
 This will interrogate the provider and should output something similar to
@@ -76,15 +59,13 @@ This will interrogate the provider and should output something similar to
 if you have already planned the terraform resources you can taint them essentially marking them to be rebuilt
 
 ```
-# Taint the complex example vm
-terraform taint foreman_server.complex_VM
 ```
 
 Now you can write your own plan similar to the example. Reference the terraform documentation at https://terraform.io/intro/getting-started/build.html
 
 Once a plan has been created you are ready to apply the plan and actually deploy. 
 
-**Currently I havent implemented the API calls directly to foreman, instead I have utilized foreman's [Hammer CLI](https://github.com/theforeman/hammer-cli). I fully intend to replace this at some stage. It is simply a means to an end at this stage. Also only create has been completed, ran out of time this week. Follow the instructions on the Hammer guthub page for installation**
+**So far I have implemented this as a simple call to the hammer command. Terraform providers are typically fully CRUD designed but so far I have only made the create functionality.**
 
 ```
 # In the directory of your my_custom_terraform.tf file
@@ -97,26 +78,10 @@ In order to build/install the source, navigate to the checked out directory and 
 
 Execute
 ```
-go install
+go build
 ```
-## Contributing
-If you'd like to contribute to this codebase please do!
 
-I would be more than pleased if you did but please remember I am not a programmer by default. Go easy on me! lol
-
-#### Contributing Instructions
 ```
-# Fork it on GitHub
-git clone https://github.com/your_name/terraform-foreman.git
-cd terraform-foreman
-git checkout -b my_awesome_feature_branch master
-# Make your awesome changes
-git commit -a -m "my awesome changes explained"
-# Repeat till your happy
-git push origin my_awesome_feature_branch
-# Submit a pull request at https://github.com/your_name/terraform-foreman
-# Explain your changes in PR and include test instrcutions.
-# I'll hopefully accept it and we'll be on our way to shared awesomeness.
 ```
 
 
