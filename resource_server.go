@@ -335,8 +335,8 @@ func hammerCLI(h *hammerArgs, bVal string) (output []byte, err error) {
 func httpClient(rType string, h *host, u *userAccess. meta interface{}) error {
   //setup local vars
   r := strings.ToLower(rType)
-  lUserAccess := &userAccess
-  lHost := &host
+  lUserAccess := userAccess
+  lHost := h
 
   //select and run request type.
   if (r == "get"){
