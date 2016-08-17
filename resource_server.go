@@ -9,6 +9,68 @@ import (
 	"fmt"
 )
 
+type host struct {
+  name				string
+  environment_id		string
+  ip				string
+  mac				string
+  architecture_id		int
+  domain_id			int
+  realm_id			int
+  puppet_proxy_id		int
+  puppetclass_ids		[]int
+  operatingsystem_id		string
+  medium_id			string
+  ptable_id			int
+  subnet_id			int
+  compute_resource_id		int
+  root_pass			string
+  model_id			int
+  hostgroup_id			int
+  owner_id			int
+  owner_type			string // must be either User or Usergroup
+  puppet_ca_proxy_id		int
+  image_id			int
+  host_parameters_attributes	[]string // make into a struct later after looking up values
+  build				bool
+  enabled			bool
+  provision_method		string
+  managed			bool
+  progress_report_id		string
+  comment			string
+  capabilities			string
+  compute_profile_id		int
+  interfaces_attributes		{
+				  var mac string
+				  var ip string
+				  var type string
+				  var name string
+				  var subnet_id int
+				  var domain_id int
+				  var identifier string
+				  var managed bool
+				  var primary bool
+				  var provision bool
+				  var username string //only for bmc
+				  var password string //only for bmc
+				  var provider string //only accepted IPMI
+				  var virtual bool
+				  var tag string
+				  var attached_to string
+				  var mode string // with validations
+				  var attached_devices []string
+				  var bond_options string
+				  var compute_attributes {}
+				}
+  compute_attributes		{
+				  var cpus string
+				  var start string
+				  var cluster string
+				  var memory_mb string
+				  var guest_id string
+				}
+}
+
 type compute_attributes struct {
   CPUS			string
   START			string
