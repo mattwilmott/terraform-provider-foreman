@@ -32,7 +32,12 @@ type host struct {
   owner_type			string // must be either User or Usergroup
   puppet_ca_proxy_id		int
   image_id			int
-  host_parameters_attributes	[]string // make into a struct later after looking up values
+  host_parameters_attributes	{
+				  var roles string
+				  var puppet string
+				  var chef string
+				  var JIRA_Ticket string
+				}
   build				bool
   enabled			bool
   provision_method		string
