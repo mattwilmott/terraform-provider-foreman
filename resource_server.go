@@ -240,22 +240,60 @@ type hammerArgs struct {
 	args       []string
 }
 
-func hammerCLI(h *hammerArgs, bVal string) (output []byte, err error) {
+func hammerCLI(h *hammerArgs, vm *machine) (output []byte, err error) {
         argStr := ""
-	build := bVal	
+	build := vm.BUILD
+	username := vm.USERNAME
+	password := vm.PASSWORD
+	server	 := vm.SERVER	
+	args := []string{}
 	
-	if strings.ToLower(build) == "true"{
-	 argStr += " create "
+	//build command arguments list
+	if (strings.ToLower(build) == "true") {
+	   if username != "" {
+	     args = append(args,"--username")
+	     args = append(args,username)
+	   }
+	   if password != "" {
+	     args = append(args,"--password")
+	     args = append(args,password)
+	   }
+	   if server != "" {
+	     args = append(args,"--server")
+	     args = append(args,server)
+	   }
+	 args = append(args,"host")
+	 args = append(args,"create")
          for i := 0; i < len(h.args); i++ {
-           argStr += h.args[i]
+           args = append(args, h.args[i])
          }
-	}else{
-	 argStr = "list"	
+	} else {
+	   if username != "" {
+	     args = append(args,"--username")
+	     args = append(args,username)
+	   }
+	   if password != "" {
+	     args = append(args,"--password")
+	     args = append(args,password)
+	   }
+	   if server != "" {
+	     args = append(args,"--server")
+	     args = append(args,server)
+	   }
+	   args = append(args,"host")
+	   args = append(args,"list")
 	 }
  
+	//Build args string for validation in logs
+
+         for i := 0; i < len(args); i++ {
+           argStr += fmt.Sprintf(" %s",args[i])
+         }
+	
         //print("/usr/bin/hammer ", h.subcommand, argStr)
-	 cmd := exec.Command("/usr/bin/hammer", h.subcommand, argStr)
-	 print("/usr/bin/hammer ",h.subcommand, argStr)
+	 print("/usr/bin/hammer ", argStr)
+	//cmd := exec.Command("/usr/bin/hammer", argStr)
+	cmd := exec.Command("/usr/bin/hammer", args...)
 	
 	stdout, err := cmd.Output()
 
@@ -331,7 +369,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
         if v,ok := d.GetOk("subnet-id"); ok{
           vm.SUBNET_ID = v.(string)
         }
-        if v,ok := d.GetOk("computer-resource-id"); ok{
+        if v,ok := d.GetOk("compute-resource-id"); ok{
           vm.COMPUTE_RESOURCE_ID = v.(string)
         }
         if v,ok := d.GetOk("root-pass"); ok{
@@ -431,17 +469,34 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 	  f := svm.Field(i)
 	  fName := typeOfvm.Field(i).Name
           switch {
-	   case fName == "BUILD":
+	   case fName == "BUILD" :
+	    continue
+	   case fName == "USERNAME":
+	    continue
+	   case fName == "PASSWORD": 
+	    continue
+	   case fName == "SERVER":
             continue
+	   case fName == "PARTITION_TABLE_ID":
+	    if (f.Interface() != "") {
+	     lStr := fmt.Sprintf("--%s=%v", strings.ToLower(strings.Replace(fName, "_", "-", -1)) , f.Interface())
+	     h.args = append(h.args, lStr)
+	     //h.args = append(h.args,fmt.Sprintf("--%s",strings.ToLower(strings.Replace(fName, "_", "-", -1))))
+	     //h.args = append(h.args,fmt.Sprintf("%v",f.Interface()))
+           } 
 	   case fName == "COMMENT":
 	    if (f.Interface() != "") {
-	     lStr := fmt.Sprintf("--%s \"%v\" ", strings.ToLower(strings.Replace(fName, "_", "-", -1)) , f.Interface())
-	     h.args = append(h.args, lStr)
+	     //lStr := fmt.Sprintf("--%s \"%v\" ", strings.ToLower(strings.Replace(fName, "_", "-", -1)) , f.Interface())
+	     //h.args = append(h.args, lStr)
+	     h.args = append(h.args,fmt.Sprintf("--%s",strings.ToLower(strings.Replace(fName, "_","-", -1))))
+	     h.args = append(h.args,fmt.Sprintf("\"%v\"",f.Interface()))
            } 
 	   default:
 	    if (f.Interface() != "") {
-	     lStr := fmt.Sprintf("--%s %v ", strings.ToLower(strings.Replace(fName, "_", "-", -1)) , f.Interface())
-	     h.args = append(h.args, lStr)
+	     //lStr := fmt.Sprintf("--%s %v", strings.ToLower(strings.Replace(fName, "_", "-", -1)) , f.Interface())
+	     //h.args = append(h.args, lStr)
+	     h.args = append(h.args,fmt.Sprintf("--%s",strings.ToLower(strings.Replace(fName, "_", "-", -1))))
+	     h.args = append(h.args,fmt.Sprintf("%v",f.Interface()))
            } 
           }
 	}
@@ -462,7 +517,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
           } 
 	}
 	if ifStr != "" {
-	  h.args = append(h.args, fmt.Sprintf("--interface=\"%s\" ",ifStr))
+	  h.args = append(h.args, fmt.Sprintf("--interface=\"%s\"",ifStr))
+	  //h.args = append(h.args, "--interface")
+	  //h.args = append(h.args, fmt.Sprintf("\"%s\"",ifStr))
 	}
 
  	svol := reflect.ValueOf(&vol).Elem()
@@ -483,7 +540,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if volStr != "" {
-	  h.args = append(h.args, fmt.Sprintf("--volume=\"%s\" ",volStr))
+	  h.args = append(h.args, fmt.Sprintf("--volume=\"%s\"",volStr))
+	  //h.args = append(h.args, "--volume")
+	  //h.args = append(h.args, fmt.Sprintf("\"%s\"",volStr))
 	}
 
  	scattr := reflect.ValueOf(&cattr).Elem()
@@ -502,10 +561,12 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
            } 
 	}
 	if cattrStr != "" {
-	  h.args = append(h.args, fmt.Sprintf("--compute-attributes=\"%s\" ",cattrStr))
+	 // h.args = append(h.args, fmt.Sprintf("--compute-attributes=\"%s\"",cattrStr))
+	  h.args = append(h.args,"--compute-attributes")
+	  h.args = append(h.args, fmt.Sprintf("\"%s\"",cattrStr))
 	}
 
-	output, err := hammerCLI(&h,vm.BUILD)
+	output, err := hammerCLI(&h,&vm)
 	if err != nil {
 		panic(err)
 	}
