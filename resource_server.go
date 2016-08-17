@@ -7,6 +7,7 @@ import (
         "strings"
 	"reflect"
 	"fmt"
+	"net/http"
 )
 
 type host struct {
@@ -330,6 +331,25 @@ func hammerCLI(h *hammerArgs, bVal string) (output []byte, err error) {
 	return stdout, err
 }
 
+// Setup a function to make api calls
+func httpClient(rType string, h *host, u *userAccess. meta interface{}) error {
+  //setup local vars
+  r := strings.ToLower(rType)
+  lUserAccess := &userAccess
+  lHost := &host
+
+  //select and run request type.
+  if (r == "get"){
+    http.Get()
+  } else if (r == "post") {
+    http.Post()
+  } else if (r == "put") {
+    http.Put()
+  } else if (r == "delete") {
+    http.Delete()
+  }
+}
+
 func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 	d.SetId(d.Get("name").(string))
 	h := hammerArgs{subcommand: "host "}
@@ -341,7 +361,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 	vol   := volume{}	
  	
 
-/* populate vm stuct instance */
+/* populate vm struct instance */
         if v, ok := d.GetOk("username"); ok {
           vm.USERNAME = v.(string)
         }
