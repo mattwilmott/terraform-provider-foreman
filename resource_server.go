@@ -16,7 +16,6 @@ type host_parameters_attributes	struct {
 				var chef 				string
 				var JIRA_Ticket string
 			}
-
 type interfaces_attributes	struct	{
 				var mac 								string
 				var ip 									string
@@ -37,7 +36,7 @@ type interfaces_attributes	struct	{
 				var mode 								string // with validations
 				var attached_devices 		[]string
 				var bond_options 				string
-				var compute_attributes 	[]string{}
+				compute_attributes
 			}
 type compute_attributes	struct {
 				var cpus 			string
@@ -46,7 +45,7 @@ type compute_attributes	struct {
 			  var memory_mb string
 			  var guest_id 	string
 			}
- type	volumes_attributes struct {
+type	volumes_attributes struct {
 				var name		  string
 				var size_gb	  int
 				var _delete	  string
