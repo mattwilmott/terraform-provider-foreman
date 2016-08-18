@@ -270,7 +270,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool, meta interface
 	client := &http.Client{}
 	req, err := http.NewRequest(r,lUserAccess.url,jData)
 	//set basic auth if necessary
-	if v, ok := u.GetOk("username"); ok {
+	if u.username != "" {
 	req.SetBasicAuth(lUserAccess.username,lUserAccess.password)
 	}
 	req.Header.Add("Content-Type", "application/json")
@@ -500,10 +500,12 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 
 	/* check debug flag */
 	if v, ok := d.GetOk("debug"); ok {
-		debug = v.(bool)
+		debug := v.(bool)
+	}else{
+		debug := false
 	}
 
-	httpClient("POST", &h, &lUserAccess, debug)
+	httpClient("POST", &h, &u, debug)
 	return nil
 }
 
