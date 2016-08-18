@@ -277,7 +277,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
    //enable debugging data
 	if !debug {
   resp, err := client.Do(req)
-	var content
+	var content []byte
 	defer resp.Body.Close()
 	content, _ := ioutil.ReadAll(resp.Body)
   } else {
