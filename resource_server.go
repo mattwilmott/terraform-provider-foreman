@@ -268,7 +268,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool, meta interface
   jData, err := json.Marshal(d)
   //build and make request
 	client := &http.Client{}
-	req, err := http.NewRequest(r,lUserAccess.url,jData)
+	req, err := http.NewRequest(r,lUserAccess.url,&jData)
 	//set basic auth if necessary
 	if u.username != "" {
 	req.SetBasicAuth(lUserAccess.username,lUserAccess.password)
