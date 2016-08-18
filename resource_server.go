@@ -4,11 +4,12 @@ import (
 	"github.com/hashicorp/terraform/helper/hashcode"
 	"github.com/hashicorp/terraform/helper/schema"
   "strings"
-	"reflect"
-	"fmt"
+	//"reflect"
+	//"fmt"
 	"net/http"
 	"encoding/json"
 	"io/ioutil"
+	"os"
 )
 type host_parameters_attributes	struct {
   roles 			string
@@ -105,7 +106,7 @@ func resourceServer() *schema.Resource {
 			"debug": &schema.Schema{
 				Type:			schema.TypeBool,
 				Optional:	true,
-				Default: False,
+				Default: false,
 			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -260,15 +261,14 @@ func resourceServer() *schema.Resource {
 }
 
 // Setup a function to make api calls
-func httpClient(rType string, d *data, u *userAccess, debug bool,meta interface{}) error {
+func httpClient(rType string, d *host, u *userAccess, debug bool, meta interface{}) error {
   //setup local vars
   r := strings.ToUpper(rType)
   lUserAccess := u
-  lData := d
-
+  jData, err := json.Marshal(d)
   //build and make request
 	client := &http.Client{}
-	req, err := http.NewRequest(r,lUserAccess.url,lData)
+	req, err := http.NewRequest(r,lUserAccess.url,jData)
 	//set basic auth if necessary
 	if (u.username != nil){
 	req.SetBasicAuth(lUserAccess.username,lUserAccess.password)
@@ -325,7 +325,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.volumes_attributes.name = v.(string)
 				}
 				if v, ok := d.GetOk("volumes_attributes.size_gb"); ok {
-					h.volumes_attributes.size_gb = v.(string)
+					h.volumes_attributes.size_gb = v.(int)
 				}
 				if v, ok := d.GetOk("volumes_attributes._delete"); ok {
 					h.volumes_attributes._delete = v.(string)
@@ -375,7 +375,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("interfaces_attributes.provider"); ok {
 					h.interfaces_attributes.provider = v.(string)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.virtual"); {
+				if v, ok := d.GetOk("interfaces_attributes.virtual"); ok{
 					h.interfaces_attributes.virtual = v.(bool)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.tag"); ok {
@@ -391,7 +391,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.interfaces_attributes.attached_devices = v.([]string)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.bond_options"); ok {
-					h.interfaces_attributes.attached_devices = v.(string)
+					h.interfaces_attributes.bond_options = v.(string)
 				}
 /* pupulate host_parameters_attributes now */
 				if v, ok := d.GetOk("host_parameters_attributes.roles"); ok {
@@ -499,8 +499,8 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 	if v, ok := d.GetOk("debug"); ok {
 		debug = v.(bool)
 	}
-  jData, err := json.Marshal(h)
-	httpClient("POST",jData, lUserAccess, debug)
+
+	httpClient("POST", &h, &lUserAccess, debug)
 	return nil
 }
 
