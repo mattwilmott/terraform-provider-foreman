@@ -5,7 +5,7 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
   "strings"
 	//"reflect"
-	//"fmt"
+	"fmt"
 	"net/http"
 	"encoding/json"
 	"io/ioutil"
@@ -283,7 +283,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 		print(req)
 		os.Exit(2)
 	}
-	//return content
+	return nil
 }
 
 
