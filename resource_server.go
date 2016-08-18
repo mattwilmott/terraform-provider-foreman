@@ -270,7 +270,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool, meta interface
 	client := &http.Client{}
 	req, err := http.NewRequest(r,lUserAccess.url,jData)
 	//set basic auth if necessary
-	if v, ok u.GetOk("username"); ok {
+	if v, ok := u.GetOk("username"); ok {
 	req.SetBasicAuth(lUserAccess.username,lUserAccess.password)
 	}
 	req.Header.Add("Content-Type", "application/json")
