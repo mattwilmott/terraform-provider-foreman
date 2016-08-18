@@ -295,7 +295,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 		print(req)
 		panic("Exiting for debug mode")
 	}
-
+	fmt.Println("%v",content)
 	return nil
 }
 
@@ -510,7 +510,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 	/* check debug flag */
 	debug := false
 	if v, ok := d.GetOk("debug"); ok {
-		debug := v.(bool)
+		debug = v.(bool)
 	}
 
 	httpClient("POST", &h, &u, debug)
