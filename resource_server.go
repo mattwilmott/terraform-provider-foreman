@@ -10,78 +10,83 @@ import (
 	"encoding/json"
 	"io/ioutil"
 )
+type host_parameters_attributes	struct {
+				var roles 			string
+				var puppet 			string
+				var chef 				string
+				var JIRA_Ticket string
+			}
+
+type interfaces_attributes	struct	{
+				var mac 								string
+				var ip 									string
+				var type 								string
+				var name 								string
+				var subnet_id 					int
+				var domain_id 					int
+				var identifier 					string
+				var managed 						bool
+				var primary 						bool
+				var provision 					bool
+				var username 						string //only for bmc
+				var password 						string //only for bmc
+				var provider 						string //only accepted IPMI
+				var virtual 						bool
+				var tag 								string
+				var attached_to 				string
+				var mode 								string // with validations
+				var attached_devices 		[]string
+				var bond_options 				string
+				var compute_attributes 	[]string{}
+			}
+type compute_attributes	struct {
+				var cpus 			string
+				var start 		string
+			  var cluster 	string
+			  var memory_mb string
+			  var guest_id 	string
+			}
+ type	volumes_attributes struct {
+				var name		  string
+				var size_gb	  int
+				var _delete	  string
+				var datastore	string
+			}
 
 type host struct {
-  name				string
-  environment_id		string
-  ip				string
-  mac				string
-  architecture_id		int
-  domain_id			int
-  realm_id			int
-  puppet_proxy_id		int
-  puppetclass_ids		[]int
+  name									string
+  environment_id				string
+  ip										string
+  mac										string
+  architecture_id				int
+  domain_id							int
+  realm_id							int
+  puppet_proxy_id				int
+  puppetclass_ids				[]int
   operatingsystem_id		string
-  medium_id			string
-  ptable_id			int
-  subnet_id			int
+  medium_id							string
+  ptable_id							int
+  subnet_id							int
   compute_resource_id		int
-  root_pass			string
-  model_id			int
-  hostgroup_id			int
-  owner_id			int
-  owner_type			string // must be either User or Usergroup
+  root_pass							string
+  model_id							int
+  hostgroup_id					int
+  owner_id							int
+  owner_type						string // must be either User or Usergroup
   puppet_ca_proxy_id		int
-  image_id			int
-  host_parameters_attributes	{
-				  var roles string
-				  var puppet string
-				  var chef string
-				  var JIRA_Ticket string
-				}
-  build				bool
-  enabled			bool
-  provision_method		string
-  managed			bool
+  image_id							int
+  build									bool
+  enabled								bool
+  provision_method			string
+  managed								bool
   progress_report_id		string
-  comment			string
-  capabilities			string
+  comment								string
+  capabilities					string
   compute_profile_id		int
-  interfaces_attributes		{
-				  var mac string
-				  var ip string
-				  var type string
-				  var name string
-				  var subnet_id int
-				  var domain_id int
-				  var identifier string
-				  var managed bool
-				  var primary bool
-				  var provision bool
-				  var username string //only for bmc
-				  var password string //only for bmc
-				  var provider string //only accepted IPMI
-				  var virtual bool
-				  var tag string
-				  var attached_to string
-				  var mode string // with validations
-				  var attached_devices []string
-				  var bond_options string
-				  var compute_attributes []string{}
-				}
-  compute_attributes		{
-				  var cpus string
-				  var start string
-				  var cluster string
-				  var memory_mb string
-				  var guest_id string
-				}
-	volumes_attributes		{
-					var name		  string
-					var size_gb	  int
-					var _delete	  string
-					var datastore	string
-				}
+	host_parameters_attributes
+  interfaces_attributes
+  compute_attributes
+	volumes_attributes
 }
 
 type userAccess struct {
