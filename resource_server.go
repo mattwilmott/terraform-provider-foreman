@@ -265,9 +265,11 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
   r := strings.ToUpper(rType)
   lUserAccess := u
   jData, err := json.Marshal(d)
+
+	b := bytes.NewBuffer(jData)
   //build and make request
 	client := &http.Client{}
-	req, err := http.NewRequest(r,lUserAccess.url,fmt.Sprint(d))
+	req, err := http.NewRequest(r,lUserAccess.url,b)
 	//set basic auth if necessary
 	if u.username != "" {
 	req.SetBasicAuth(lUserAccess.username,lUserAccess.password)
