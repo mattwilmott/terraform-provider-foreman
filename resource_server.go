@@ -5,7 +5,7 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
   "strings"
 	//"reflect"
-	//"fmt"
+	"fmt"
 	"net/http"
 	"encoding/json"
 	"io/ioutil"
@@ -295,7 +295,9 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 		print(req)
 		panic("Exiting for debug mode")
 	}
+	if content != "" {
 	fmt.Println("%v",content)
+  }
 	return nil
 }
 
