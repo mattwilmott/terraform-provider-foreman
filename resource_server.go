@@ -3,10 +3,12 @@ package main
 import (
 	"github.com/hashicorp/terraform/helper/hashcode"
 	"github.com/hashicorp/terraform/helper/schema"
-        "strings"
+  "strings"
 	"reflect"
 	"fmt"
 	"net/http"
+	"encoding/json"
+	"io/ioutil"
 )
 
 type host struct {
@@ -74,6 +76,18 @@ type host struct {
 				  var memory_mb string
 				  var guest_id string
 				}
+	volumes_attributes		{
+					var name		  string
+					var size_gb	  int
+					var _delete	  string
+					var datastore	string
+				}
+}
+
+type userAccess struct {
+	var username	string
+	var password	string
+	var url				string
 }
 
 func resourceServer() *schema.Resource {
@@ -141,7 +155,7 @@ func resourceServer() *schema.Resource {
 				Optional: true,
 			},
 			"medium_id": &schema.Schema{
-				Type:     schema.TypeString, 
+				Type:     schema.TypeString,
 				Optional: true,
 			},
 			"ptable_id": &schema.Schema{
@@ -220,11 +234,11 @@ func resourceServer() *schema.Resource {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"interface_attributes": &schema.Schema{
+			"interfaces_attributes": &schema.Schema{
 				Type:     schema.TypeMap,
 				Optional: true,
 			},
-			"storage_attributes": &schema.Schema{
+			"volumes_attributes": &schema.Schema{
 				Type:     schema.TypeMap,
 				Optional: true,
 			},
@@ -237,23 +251,29 @@ func resourceServer() *schema.Resource {
 }
 
 // Setup a function to make api calls
-func httpClient(rType string, h *host, u *userAccess. meta interface{}) error {
+func httpClient(rType string, d *data, u *userAccess, meta interface{}) error {
   //setup local vars
-  r := strings.ToLower(rType)
-  lUserAccess := userAccess
-  lHost := h
+  r := strings.ToUpper(rType)
+  lUserAccess := u
+  lData := d
 
-  //select and run request type.
-  if (r == "get"){
-    http.Get()
-  } else if (r == "post") {
-    http.Post()
-  } else if (r == "put") {
-    http.Put()
-  } else if (r == "delete") {
-    http.Delete()
-  }
+  //build and make request
+	client := &http.Client{}
+	req, err := http.NewRequest(r,lUserAccess.url,lData)
+	//set basic auth if necessary
+	if (u.username != nil){
+	req.SetBasicAuth(lUserAccess.username,lUserAccess.password)
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Accept", "application/json")
+
+  resp, err := client.Do(req)
+
+	defer resp.Body.Close()
+
+	content, _ := ioutil.ReadAll(resp.Body)
 }
+
 
 func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 	d.SetId(d.Get("name").(string))
@@ -261,7 +281,118 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
           name: d.Get("name").(string),
         }
 
-/* populate h struct instance */
+				u := userAccess{}
+
+/* populate u struct instance */
+				if v, ok := d.GetOk("username"); ok {
+					u.username = v.(string)
+				}
+				if v, ok := d.GetOk("password"); ok {
+					u.password = v.(string)
+				}
+				if v, ok := d.GetOk("url"); ok {
+					u.url	= v.(string)
+				}
+
+/* build subtree level stuff first */
+/* build compute_attributes now */
+				if v, ok := d.GetOk("compute_attributes.cpus"); ok {
+					h.compute_attributes.cpus = v.(string)
+				}
+				if v, ok := d.GetOk("compute_attributes.start"); ok {
+					h.compute_attributes.cluster = v.(string)
+				}
+				if v, ok := d.GetOk("compute_attributes.memory_mb"); ok {
+					h.compute_attributes.memory_mb = v.(string)
+				}
+				if v, ok := d.GetOk("compute_attributes.guest_id"); ok {
+					h.compute_attributes.guest_id = v.(string)
+				}
+/* build volumes_attributes now */
+				if v, ok := d.GetOk("volumes_attributes.name"); ok {
+					h.volumes_attributes.name = v.(string)
+				}
+				if v, ok := d.GetOk("volumes_attributes.size_gb"); ok {
+					h.volumes_attributes.size_gb = v.(string)
+				}
+				if v, ok := d.GetOk("volumes_attributes._delete"); ok {
+					h.volumes_attributes._delete = v.(string)
+				}
+				if v, ok := d.GetOk("volumes_attributes.datastore"); ok {
+					h.volumes_attributes.datastore = v.(string)
+				}
+/* build interfaces_attributes now */
+				if v, ok := d.GetOk("interfaces_attributes.mac"); ok {
+					h.interfaces_attributes.mac = v.(string)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.ip"); ok {
+					h.interfaces_attributes.ip = v.(string)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.type"); ok {
+					h.interfaces_attributes.type = v.(string)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.name"); ok {
+					h.interfaces_attributes.name = v.(string)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.subnet_id"); ok {
+					h.interfaces_attributes.subnet_id = v.(int)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.domain_id"); ok {
+					h.interfaces_attributes.domain_id = v.(int)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.identifier"); ok {
+					h.interfaces_attributes.identifier = v.(string)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.managed"); ok {
+					h.interfaces_attributes.managed = v.(bool)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.primary"); ok {
+					h.interfaces_attributes.primary = v.(bool)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.provision"); ok {
+					h.interfaces_attributes.provision = v.(bool)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.username"); ok {
+					h.interfaces_attributes.username = v.(string)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.password"); ok {
+					h.interfaces_attributes.password = v.(string)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.provider"); ok {
+					h.interfaces_attributes.provider = v.(string)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.virtual"); {
+					h.interfaces_attributes.virtual = v.(bool)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.tag"); ok {
+					h.interfaces_attributes.tag = v.(string)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.attached_to"); ok {
+					h.interfaces_attributes.attached_to = v.(string)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.mode"); ok {
+					h.interfaces_attributes.mode = v.(string)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.attached_devices"); ok {
+					h.interfaces_attributes.attached_devices = v.([]string)
+				}
+				if v, ok := d.GetOk("interfaces_attributes.bond_options"); ok {
+					h.interfaces_attributes.attached_devices = v.(string)
+				}
+/* pupulate host_parameters_attributes now */
+				if v, ok := d.GetOk("host_parameters_attributes.roles"); ok {
+					h.host_parameters_attributes.roles = v.(string)
+				}
+				if v, ok := d.GetOk("host_parameters_attributes.puppet"); ok {
+					h.host_parameters_attributes.puppet = v.(string)
+				}
+				if v, ok := d.GetOk("host_parameters_attributes.chef"); ok {
+					h.host_parameters_attributes.chef = v.(string)
+				}
+				if v, ok := d.GetOk("host_parameters_attributes.JIRA_Ticket"); ok {
+					h.host_parameters_attributes.JIRA_Ticket = v.(string)
+				}
+/* populate h struct instance for regular level data */
         if v, ok := d.GetOk("environment-id"); ok {
           h.environment_id = v.(string)
         }
@@ -349,7 +480,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
         if v,ok := d.GetOk("compute_profile_id"); ok{
           h.compute_profile_id = v.(int)
         }
-
+  jData, err := json.Marshal(h)
 	return nil
 }
 
