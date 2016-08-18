@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"io/ioutil"
-	"os"
+	//"os"
 	"bytes"
 )
 type host_parameters_attributes	struct {
@@ -290,12 +290,14 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 	}
 
 	defer resp.Body.Close()
-	content, _ := ioutil.ReadAll(resp.Body)
+	content, err := ioutil.ReadAll(resp.Body)
   } else {
 		print(req)
-		os.Exit(2)
+		panic()
 	}
-	return content
+
+	print(content)
+	return nil
 }
 
 
