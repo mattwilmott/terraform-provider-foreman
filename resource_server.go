@@ -260,7 +260,7 @@ func resourceServer() *schema.Resource {
 }
 
 // Setup a function to make api calls
-func httpClient(rType string, d *host, u *userAccess, debug bool, meta interface{}) error {
+func httpClient(rType string, d *host, u *userAccess, debug bool) error {
   //setup local vars
   r := strings.ToUpper(rType)
   lUserAccess := u
@@ -277,11 +277,11 @@ func httpClient(rType string, d *host, u *userAccess, debug bool, meta interface
    //enable debugging data
 	if !debug {
   resp, err := client.Do(req)
+	var content
 	defer resp.Body.Close()
 	content, _ := ioutil.ReadAll(resp.Body)
   } else {
 		print(req)
-		content := "Debugging mode on"
 		os.Exit(2)
 	}
 	return content
