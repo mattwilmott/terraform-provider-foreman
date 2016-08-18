@@ -96,15 +96,7 @@ func resourceServer() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"server": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"location-id": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"organization-id": &schema.Schema{
+			"url": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
@@ -120,23 +112,23 @@ func resourceServer() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"architecture-id": &schema.Schema{
-				Type:     schema.TypeString,
+			"architecture_id": &schema.Schema{
+				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"domain-id": &schema.Schema{
-				Type:     schema.TypeString,
+			"domain_id": &schema.Schema{
+				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"realm-id": &schema.Schema{
-				Type:     schema.TypeString,
+			"realm_id": &schema.Schema{
+				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"puppet-proxy-id": &schema.Schema{
-				Type:     schema.TypeString,
+			"puppet_proxy_id": &schema.Schema{
+				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"puppet-class-ids": &schema.Schema{
+			"puppetclass_ids": &schema.Schema{
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
@@ -144,51 +136,51 @@ func resourceServer() *schema.Resource {
 					return hashcode.String(v.(string))
 				},
 			},
-			"operatingsystem-id": &schema.Schema{
-				Type:     schema.TypeString, //Why isnt this an Int? API doco may be incorrect
-				Optional: true,
-			},
-			"medium-id": &schema.Schema{
-				Type:     schema.TypeString, //Why isnt this an Int as well? wtf
-				Optional: true,
-			},
-			"partition-table-id": &schema.Schema{
+			"operatingsystem_id": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"subnet-id": &schema.Schema{
-				Type:     schema.TypeString,
+			"medium_id": &schema.Schema{
+				Type:     schema.TypeString, 
 				Optional: true,
 			},
-			"compute-resource-id": &schema.Schema{
-				Type:     schema.TypeString,
+			"ptable_id": &schema.Schema{
+				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"root-pass": &schema.Schema{
-				Type:     schema.TypeString,
+			"subnet_id": &schema.Schema{
+				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"model-id": &schema.Schema{
-				Type:     schema.TypeString,
+			"compute_resource_id": &schema.Schema{
+				Type:     schema.TypeInt, // if nil it assumes bare-metal build ,Add some validation logic later when you have time.
 				Optional: true,
 			},
-			"hostgroup-id": &schema.Schema{
-				Type:     schema.TypeString,
+			"root_pass": &schema.Schema{
+				Type:     schema.TypeString, // required if host is managed and not inherited from hostgroup or default password.
 				Optional: true,
 			},
-			"owner-id": &schema.Schema{
-				Type:     schema.TypeString,
+			"model_id": &schema.Schema{
+				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"puppet-ca-proxy-id": &schema.Schema{
-				Type:     schema.TypeString,
+			"hostgroup_id": &schema.Schema{
+				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"image-id": &schema.Schema{
-				Type:     schema.TypeString,
+			"owner_id": &schema.Schema{
+				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"host-parameters-attributes": &schema.Schema{
+			"puppet_ca_proxy_id": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+			"image_id": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+			"host_parameters_attributes": &schema.Schema{
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
@@ -197,22 +189,22 @@ func resourceServer() *schema.Resource {
 				},
 			},
 			"build": &schema.Schema{
-				Type:     schema.TypeString,
+				Type:     schema.TypeBool,
 				Optional: true,
 			},
 			"enabled": &schema.Schema{
-				Type:     schema.TypeString,
+				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"provision-method": &schema.Schema{
+			"provision_method": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
 			"managed": &schema.Schema{
-				Type:     schema.TypeString,
+				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"provision-report-id": &schema.Schema{
+			"progress_report_id": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
@@ -224,19 +216,19 @@ func resourceServer() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"compute-profile-id": &schema.Schema{
-				Type:     schema.TypeString,
+			"compute_profile_id": &schema.Schema{
+				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"interface-attributes": &schema.Schema{
+			"interface_attributes": &schema.Schema{
 				Type:     schema.TypeMap,
 				Optional: true,
 			},
-			"storage-attributes": &schema.Schema{
+			"storage_attributes": &schema.Schema{
 				Type:     schema.TypeMap,
 				Optional: true,
 			},
-			"compute-attributes": &schema.Schema{
+			"compute_attributes": &schema.Schema{
 				Type:     schema.TypeMap,
 				Optional: true,
 			},
@@ -279,58 +271,58 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
         if v,ok := d.GetOk("mac"); ok{
           h.mac = v.(string)
         }
-        if v,ok := d.GetOk("architecture-id"); ok{
+        if v,ok := d.GetOk("architecture_id"); ok{
           h.architecture_id = v.(string)
         }
-        if v,ok := d.GetOk("domain-id"); ok{
+        if v,ok := d.GetOk("domain_id"); ok{
           h.domain_id = v.(int)
         }
-        if v,ok := d.GetOk("realm-id"); ok{
+        if v,ok := d.GetOk("realm_id"); ok{
           h.realm_id = v.(int)
         }
-        if v,ok := d.GetOk("puppet-proxy-id"); ok{
+        if v,ok := d.GetOk("puppet_proxy_id"); ok{
           h.puppet_proxy_id = v.(int)
         }
-        if v,ok := d.GetOk("puppet-class-ids"); ok{
+        if v,ok := d.GetOk("puppet_class_ids"); ok{
           h.puppet_class_ids = v.([]int)
         }
-        if v,ok := d.GetOk("operatingsystem-id"); ok{
+        if v,ok := d.GetOk("operatingsystem_id"); ok{
           h.operatingsystem_id = v.(string)
         }
-        if v,ok := d.GetOk("medium-id"); ok{
+        if v,ok := d.GetOk("medium_id"); ok{
           h.medium_id = v.(string)
         }
-        if v,ok := d.GetOk("ptable-id"); ok{
+        if v,ok := d.GetOk("ptable_id"); ok{
           h.ptable_id = v.(int)
         }
-        if v,ok := d.GetOk("subnet-id"); ok{
+        if v,ok := d.GetOk("subnet_id"); ok{
           h.subnet_id = v.(int)
         }
-        if v,ok := d.GetOk("computer-resource-id"); ok{
+        if v,ok := d.GetOk("computer_resource_id"); ok{
           h.compute_resource_id = v.(int)
         }
-        if v,ok := d.GetOk("root-pass"); ok{
+        if v,ok := d.GetOk("root_pass"); ok{
           h.root_pass = v.(string)
         }
-        if v,ok := d.GetOk("model-id"); ok{
+        if v,ok := d.GetOk("model_id"); ok{
           h.model_id = v.(int)
         }
-        if v,ok := d.GetOk("hostgroup-id"); ok{
+        if v,ok := d.GetOk("hostgroup_id"); ok{
           h.hostgroup_id = v.(int)
         }
-        if v,ok := d.GetOk("owner-id"); ok{
+        if v,ok := d.GetOk("owner_id"); ok{
           h.owner_id = v.(int)
         }
-        if v,ok := d.GetOk("owner-type"); ok{
+        if v,ok := d.GetOk("owner_type"); ok{
           h.owner_type = v.(int)
         }
-        if v,ok := d.GetOk("puppet-ca-proxy-id"); ok{
+        if v,ok := d.GetOk("puppet_ca_proxy_id"); ok{
           h.puppet_ca_proxy_id = v.(int)
         }
-        if v,ok := d.GetOk("image-id"); ok{
+        if v,ok := d.GetOk("image_id"); ok{
           h.image_id = v.(string)
         }
-        if v,ok := d.GetOk("host-parameters-attributes"); ok{
+        if v,ok := d.GetOk("host_parameters_attributes"); ok{
           h.host_parameters_attributes = v.([]string)
         }
         if v,ok := d.GetOk("build"); ok{
@@ -339,13 +331,13 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
         if v,ok := d.GetOk("enabled"); ok{
           h.enabled = v.(bool)
         }
-        if v,ok := d.GetOk("provision-method"); ok{
+        if v,ok := d.GetOk("provision_method"); ok{
           h.provision_method = v.(string)
         }
         if v,ok := d.GetOk("managed"); ok{
           h.managed = v.(bool)
         }
-        if v,ok := d.GetOk("progress-report-id"); ok{
+        if v,ok := d.GetOk("progress_report_id"); ok{
           h.progess_report_id = v.(string)
         }
         if v,ok := d.GetOk("comment"); ok{
@@ -354,7 +346,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
         if v,ok := d.GetOk("capabilities"); ok{
           h.capabilities = v.(string)
         }
-        if v,ok := d.GetOk("compute-profile-id"); ok{
+        if v,ok := d.GetOk("compute_profile_id"); ok{
           h.compute_profile_id = v.(int)
         }
 
