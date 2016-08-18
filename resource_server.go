@@ -267,8 +267,8 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
   lUserAccess := u
   jData, err := json.Marshal(d)
 
-  if err != "" {
-		print(err.(string))
+  if err != nil {
+		panic(err)
 	}
 
 	b := bytes.NewBuffer(jData)
@@ -285,8 +285,8 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 	if !debug {
   resp, err := client.Do(req)
 
-	if err != "" {
-		print(err.(string))
+	if err != nil {
+		panic(err)
 	}
 
 	defer resp.Body.Close()
