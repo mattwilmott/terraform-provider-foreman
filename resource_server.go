@@ -291,7 +291,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 
 	  defer resp.Body.Close()
 	  content, err := ioutil.ReadAll(resp.Body)
-		if content != "" {
+		if content != nil {
 		fmt.Println("%v",content)
 	  }
     } else {
