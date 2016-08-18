@@ -267,6 +267,10 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
   lUserAccess := u
   jData, err := json.Marshal(d)
 
+  if err != "" {
+		print(err.(string))
+	}
+
 	b := bytes.NewBuffer(jData)
   //build and make request
 	client := &http.Client{}
@@ -280,13 +284,18 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
    //enable debugging data
 	if !debug {
   resp, err := client.Do(req)
+
+	if err != "" {
+		print(err.(string))
+	}
+
 	defer resp.Body.Close()
 	content, _ := ioutil.ReadAll(resp.Body)
   } else {
 		print(req)
 		os.Exit(2)
 	}
-	return nil
+	return content
 }
 
 
