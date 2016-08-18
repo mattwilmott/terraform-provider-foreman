@@ -106,7 +106,7 @@ func resourceServer() *schema.Resource {
 				Type:			schema.TypeBool,
 				Optional:	true,
 				Default: False,
-			}
+			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
@@ -280,8 +280,7 @@ func httpClient(rType string, d *data, u *userAccess, debug bool,meta interface{
   resp, err := client.Do(req)
 	defer resp.Body.Close()
 	content, _ := ioutil.ReadAll(resp.Body)
-  }
-	else {
+  } else {
 		print(req)
 		os.Exit(2)
 	}
