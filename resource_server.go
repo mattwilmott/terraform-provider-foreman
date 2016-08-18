@@ -283,21 +283,22 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 	req.Header.Add("Accept", "application/json")
    //enable debugging data
 	if !debug {
-  resp, err := client.Do(req)
+    resp, err := client.Do(req)
 
-	if err != nil {
-		panic(err)
-	}
+	  if err != nil {
+		  panic(err)
+	  }
 
-	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
-  } else {
-		print(req)
-		panic("Exiting for debug mode")
-	}
-	if content != "" {
-	fmt.Println("%v",content)
-  }
+	  defer resp.Body.Close()
+	  content, err := ioutil.ReadAll(resp.Body)
+		if content != "" {
+		fmt.Println("%v",content)
+	  }
+    } else {
+		  print(req)
+		  panic("Exiting for debug mode")
+	  }
+
 	return nil
 }
 
