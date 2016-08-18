@@ -293,10 +293,9 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 	content, err := ioutil.ReadAll(resp.Body)
   } else {
 		print(req)
-		panic()
+		panic("Exiting for debug mode")
 	}
 
-	print(content)
 	return nil
 }
 
