@@ -267,7 +267,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
   jData, err := json.Marshal(d)
   //build and make request
 	client := &http.Client{}
-	req, err := http.NewRequest(r,lUserAccess.url,&jData)
+	req, err := http.NewRequest(r,lUserAccess.url,fmt.Sprint(d))
 	//set basic auth if necessary
 	if u.username != "" {
 	req.SetBasicAuth(lUserAccess.username,lUserAccess.password)
@@ -277,14 +277,13 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
    //enable debugging data
 	if !debug {
   resp, err := client.Do(req)
-	var content []byte
 	defer resp.Body.Close()
-	content, _ = ioutil.ReadAll(resp.Body)
+	content, _ := ioutil.ReadAll(resp.Body)
   } else {
 		print(req)
 		os.Exit(2)
 	}
-	return content
+	//return content
 }
 
 
