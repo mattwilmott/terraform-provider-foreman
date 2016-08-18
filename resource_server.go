@@ -5,11 +5,12 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
   "strings"
 	//"reflect"
-	"fmt"
+	//"fmt"
 	"net/http"
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"bytes"
 )
 type host_parameters_attributes	struct {
   roles 			string
