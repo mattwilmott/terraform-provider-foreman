@@ -270,7 +270,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool, meta interface
 	client := &http.Client{}
 	req, err := http.NewRequest(r,lUserAccess.url,jData)
 	//set basic auth if necessary
-	if (u.username != nil){
+	if v, ok u.GetOk("username"); ok {
 	req.SetBasicAuth(lUserAccess.username,lUserAccess.password)
 	}
 	req.Header.Add("Content-Type", "application/json")
@@ -284,6 +284,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool, meta interface
 		print(req)
 		os.Exit(2)
 	}
+	return content
 }
 
 
@@ -417,7 +418,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
           h.mac = v.(string)
         }
         if v,ok := d.GetOk("architecture_id"); ok{
-          h.architecture_id = v.(string)
+          h.architecture_id = v.(int)
         }
         if v,ok := d.GetOk("domain_id"); ok{
           h.domain_id = v.(int)
@@ -429,7 +430,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
           h.puppet_proxy_id = v.(int)
         }
         if v,ok := d.GetOk("puppet_class_ids"); ok{
-          h.puppet_class_ids = v.([]int)
+          h.puppetclass_ids = v.([]int)
         }
         if v,ok := d.GetOk("operatingsystem_id"); ok{
           h.operatingsystem_id = v.(string)
@@ -459,16 +460,18 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
           h.owner_id = v.(int)
         }
         if v,ok := d.GetOk("owner_type"); ok{
-          h.owner_type = v.(int)
+					if v.(string) == "User" || v.(string) == "Usergroup" {
+					  h.owner_type = v.(string)
+					}
         }
         if v,ok := d.GetOk("puppet_ca_proxy_id"); ok{
           h.puppet_ca_proxy_id = v.(int)
         }
         if v,ok := d.GetOk("image_id"); ok{
-          h.image_id = v.(string)
+          h.image_id = v.(int)
         }
         if v,ok := d.GetOk("host_parameters_attributes"); ok{
-          h.host_parameters_attributes = v.([]string)
+          h.host_parameters_attributes = v.(string{})
         }
         if v,ok := d.GetOk("build"); ok{
           h.build = v.(bool)
@@ -483,7 +486,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
           h.managed = v.(bool)
         }
         if v,ok := d.GetOk("progress_report_id"); ok{
-          h.progess_report_id = v.(string)
+          h.progress_report_id = v.(string)
         }
         if v,ok := d.GetOk("comment"); ok{
           h.comment = v.(string)
