@@ -340,9 +340,11 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("interfaces_attributes.ip"); ok {
 					h.interfaces_attributes.ip = v.(string)
 				}
+				/* removing the following bit since type is a keyword
 				if v, ok := d.GetOk("interfaces_attributes.type"); ok {
 					h.interfaces_attributes.type = v.(string)
 				}
+				*/
 				if v, ok := d.GetOk("interfaces_attributes.name"); ok {
 					h.interfaces_attributes.name = v.(string)
 				}
