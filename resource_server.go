@@ -279,7 +279,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool, meta interface
 	if !debug {
   resp, err := client.Do(req)
 	defer resp.Body.Close()
-	content, _ := ioutil.ReadAll(resp.Body
+	content, _ := ioutil.ReadAll(resp.Body)
   } else {
 		print(req)
 		os.Exit(2)
