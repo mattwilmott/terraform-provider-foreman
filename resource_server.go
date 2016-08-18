@@ -279,7 +279,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool, meta interface
 	if !debug {
   resp, err := client.Do(req)
 	defer resp.Body.Close()
-	content, _ := ioutil.ReadAll(resp.Body)
+	content, _ := ioutil.ReadAll(resp.Body
   } else {
 		print(req)
 		os.Exit(2)
@@ -471,7 +471,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
           h.image_id = v.(int)
         }
         if v,ok := d.GetOk("host_parameters_attributes"); ok{
-          h.host_parameters_attributes = v.(string{})
+          h.host_parameters_attributes = v.(string)
         }
         if v,ok := d.GetOk("build"); ok{
           h.build = v.(bool)
