@@ -11,46 +11,46 @@ import (
 	"io/ioutil"
 )
 type host_parameters_attributes	struct {
-				var roles 			string
-				var puppet 			string
-				var chef 				string
-				var JIRA_Ticket string
-			}
+  roles 			string
+	puppet 			string
+	chef 				string
+	JIRA_Ticket string
+}
 type interfaces_attributes	struct	{
-				var mac 								string
-				var ip 									string
-				var type 								string
-				var name 								string
-				var subnet_id 					int
-				var domain_id 					int
-				var identifier 					string
-				var managed 						bool
-				var primary 						bool
-				var provision 					bool
-				var username 						string //only for bmc
-				var password 						string //only for bmc
-				var provider 						string //only accepted IPMI
-				var virtual 						bool
-				var tag 								string
-				var attached_to 				string
-				var mode 								string // with validations
-				var attached_devices 		[]string
-				var bond_options 				string
-				compute_attributes
-			}
+	mac 								string
+	ip 									string
+	//type 								string
+	name 								string
+	subnet_id 					int
+	domain_id 					int
+	identifier 					string
+	managed 						bool
+	primary 						bool
+	provision 					bool
+	username 						string //only for bmc
+	password 						string //only for bmc
+	provider 						string //only accepted IPMI
+	virtual 						bool
+	tag 								string
+	attached_to 				string
+	mode 								string // with validations
+	attached_devices 		[]string
+	bond_options 				string
+	compute_attributes
+}
 type compute_attributes	struct {
-				var cpus 			string
-				var start 		string
-			  var cluster 	string
-			  var memory_mb string
-			  var guest_id 	string
-			}
+	cpus 			string
+	start 		string
+	cluster 	string
+	memory_mb string
+	guest_id 	string
+}
 type	volumes_attributes struct {
-				var name		  string
-				var size_gb	  int
-				var _delete	  string
-				var datastore	string
-			}
+	name		  string
+	size_gb	  int
+	_delete	  string
+	datastore	string
+}
 
 type host struct {
   name									string
@@ -89,9 +89,9 @@ type host struct {
 }
 
 type userAccess struct {
-	var username	string
-	var password	string
-	var url				string
+	username	string
+	password	string
+	url				string
 }
 
 func resourceServer() *schema.Resource {
