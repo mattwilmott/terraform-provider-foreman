@@ -98,6 +98,11 @@ func resourceServer() *schema.Resource {
 		Delete: resourceServerDelete,
 
 		Schema: map[string]*schema.Schema{
+			"debug": &schema.Schema{
+				Type:			schema.TypeBool,
+				Optional:	true,
+				Default: False,
+			}
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
@@ -251,7 +256,7 @@ func resourceServer() *schema.Resource {
 }
 
 // Setup a function to make api calls
-func httpClient(rType string, d *data, u *userAccess, meta interface{}) error {
+func httpClient(rType string, d *data, u *userAccess, debug bool,meta interface{}) error {
   //setup local vars
   r := strings.ToUpper(rType)
   lUserAccess := u
@@ -266,12 +271,16 @@ func httpClient(rType string, d *data, u *userAccess, meta interface{}) error {
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-
+   //enable debugging data
+	if !debug {
   resp, err := client.Do(req)
-
 	defer resp.Body.Close()
-
 	content, _ := ioutil.ReadAll(resp.Body)
+  }
+	else {
+		print(req)
+		os.Exit(2)
+	}
 }
 
 
@@ -480,7 +489,13 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
         if v,ok := d.GetOk("compute_profile_id"); ok{
           h.compute_profile_id = v.(int)
         }
+
+	/* check debug flag */
+	if v, ok := d.GetOk("debug"); ok {
+		debug = v.(bool)
+	}
   jData, err := json.Marshal(h)
+	httpClient("POST",jData, lUserAccess, debug)
 	return nil
 }
 
