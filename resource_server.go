@@ -106,7 +106,6 @@ func resourceServer() *schema.Resource {
 			"debug": &schema.Schema{
 				Type:			schema.TypeBool,
 				Optional:	true,
-				Default: false,
 			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -282,6 +281,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool, meta interface
 	content, _ := ioutil.ReadAll(resp.Body)
   } else {
 		print(req)
+		content := "Debugging mode on"
 		os.Exit(2)
 	}
 	return content
@@ -470,9 +470,6 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
         if v,ok := d.GetOk("image_id"); ok{
           h.image_id = v.(int)
         }
-        if v,ok := d.GetOk("host_parameters_attributes"); ok{
-          h.host_parameters_attributes = v.(string)
-        }
         if v,ok := d.GetOk("build"); ok{
           h.build = v.(bool)
         }
@@ -499,10 +496,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
         }
 
 	/* check debug flag */
+	debug := false
 	if v, ok := d.GetOk("debug"); ok {
 		debug := v.(bool)
-	}else{
-		debug := false
 	}
 
 	httpClient("POST", &h, &u, debug)
