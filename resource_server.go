@@ -289,7 +289,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 	panic(b)
   //build and make request
 	client := &http.Client{}
-	req, err := http.NewRequest(r,lUserAccess.url,b)
+	req, err := http.NewRequest(r,lUserAccess.url,bytes.NewReader(b))
 
 	if err != nil {
 		panic(err)
