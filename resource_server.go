@@ -274,7 +274,9 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 	}
 
 	b := bytes.NewBuffer(jData)
+
 	println("JPB - Setup b object from jData")
+	panic(b)
   //build and make request
 	client := &http.Client{}
 	req, err := http.NewRequest(r,lUserAccess.url,b)
@@ -353,8 +355,6 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				println("JPB - Added volumes_attributes.name ")
 				println("JPB - About to add volumes_attributes.size_gb")
 				if v, ok := d.GetOk("volumes_attributes.size_gb"); ok {
-					dStr := fmt.Sprintf("JPB - the size_gb type is %t and value is %v",v,v)
-					println(dStr)
 					i, _ := strconv.Atoi(v.(string))
 					h.volumes_attributes.size_gb = i
 				}
