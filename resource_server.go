@@ -275,14 +275,14 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
   lUserAccess := u
 
 	//Need to chek what's actually in the struct object
-	//hData := fmt.Sprintf("%+v\n",d)
+	hData := fmt.Sprintf("%+v\n",d)
 	//print("JPB - h struct data:")
 	//print(hData)
 
   jData, _ := json.Marshal(d)
   println("JPB - Marshalled json data")
 
-	b := bytes.NewReader(jData)
+	b := bytes.NewReader(hData)
   //json.NewEncoder(b).Encode(d)
 	println("JPB - Setup b object from jData")
 	panic(b)
