@@ -279,7 +279,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 	//print("JPB - h struct data:")
 	//print(hData)
 
-  jData, _ := json.Marshal(d)
+  //jData, _ := json.Marshal(d)
   println("JPB - Marshalled json data")
 
 	//b := bytes.NewReader(hData)
