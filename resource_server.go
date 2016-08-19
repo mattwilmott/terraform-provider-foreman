@@ -281,7 +281,8 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 
   jData, _ := json.Marshal(d)
   println("JPB - Marshalled json data")
-
+	jString := fmt.Sprintf("%+v\n",jData)
+  panic(jString)
 	b := bytes.NewReader(jData)
   //json.NewEncoder(b).Encode(d)
 	println("JPB - Setup b object from jData")
