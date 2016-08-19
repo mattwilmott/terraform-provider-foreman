@@ -349,15 +349,19 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("volumes_attributes.name"); ok {
 					h.volumes_attributes.name = v.(string)
 				}
+				println("JPB - Added volumes_attributes.name ")
 				if v, ok := d.GetOk("volumes_attributes.size_gb"); ok {
 					h.volumes_attributes.size_gb = v.(int)
 				}
+				println("JPB - Added volumes_attributes.size_gb")
 				if v, ok := d.GetOk("volumes_attributes._delete"); ok {
 					h.volumes_attributes._delete = v.(string)
 				}
+				println("JPB - Added volumes_attributes._delete")
 				if v, ok := d.GetOk("volumes_attributes.datastore"); ok {
 					h.volumes_attributes.datastore = v.(string)
 				}
+				println("JPB - Added volumes_attributes.datastore")
 				println("JPB - Built u volumes_attributes instance")
 /* build interfaces_attributes now */
 				if v, ok := d.GetOk("interfaces_attributes.mac"); ok {
