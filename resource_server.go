@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	//"os"
 	"bytes"
+	"strconv"
 )
 type host_parameters_attributes	struct {
   roles 			string
@@ -354,7 +355,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("volumes_attributes.size_gb"); ok {
 					dStr := fmt.Sprintf("JPB - the size_gb type is %t and value is %v",v,v)
 					println(dStr)
-					h.volumes_attributes.size_gb = int(v.(int))
+					h.volumes_attributes.size_gb = strconv.Atoi(v)
 				}
 				println("JPB - Added volumes_attributes.size_gb")
 				if v, ok := d.GetOk("volumes_attributes._delete"); ok {
