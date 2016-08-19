@@ -281,7 +281,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
   */
 	//b := new(bytes.Buffer)
   //json.NewEncoder(b).Encode(d)
-	b, _ json.Marshal(d)
+	b, _ := json.Marshal(d)
 	s := string(b)
 	print("Print json string value")
 	println(s)
