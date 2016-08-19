@@ -12,6 +12,7 @@ import (
 	//"os"
 	"bytes"
 	"strconv"
+	"decoder"
 )
 type host_parameters_attributes	struct {
   roles 			string
@@ -268,13 +269,13 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
   r := strings.ToUpper(rType)
   lUserAccess := u
   jData, err := json.Marshal(d)
-  println("JPB - Marshallled json data")
+  println("JPB - Marshalled json data")
   if err != nil {
 		panic(err)
 	}
 
-	b := bytes.NewBuffer(jData)
-
+	b := new(bytes.Buffer)
+  json.NewEncoder(b).Encode(jData)
 	println("JPB - Setup b object from jData")
 	panic(b)
   //build and make request
