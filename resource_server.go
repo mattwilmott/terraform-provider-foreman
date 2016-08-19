@@ -272,19 +272,12 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 	//hData := fmt.Sprintf("%+v\n",d)
 	//print("JPB - h struct data:")
 	//print(hData)
-	/*
-  jData, err := json.Marshal(d)
+
+  jData, _ := json.Marshal(d)
   println("JPB - Marshalled json data")
-  if err != nil {
-		panic(err)
-	}
-  */
-	//b := new(bytes.Buffer)
+
+	b := bytes.NewReader(jData)
   //json.NewEncoder(b).Encode(d)
-	b, _ := json.Marshal(d)
-	s := string(b)
-	print("Print json string value")
-	println(s)
 	println("JPB - Setup b object from jData")
 	panic(b)
   //build and make request
