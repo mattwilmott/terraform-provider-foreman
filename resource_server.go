@@ -286,7 +286,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 	b := []byte(hData)
   //json.NewEncoder(b).Encode(d)
 	println("JPB - Setup b object from jData")
-	panic(b)
+	//panic(b)
   //build and make request
 	client := &http.Client{}
 	req, err := http.NewRequest(r,lUserAccess.url,bytes.NewReader(b))
