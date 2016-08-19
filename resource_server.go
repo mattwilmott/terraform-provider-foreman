@@ -267,14 +267,15 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
   //setup local vars
   r := strings.ToUpper(rType)
   lUserAccess := u
+	/*
   jData, err := json.Marshal(d)
   println("JPB - Marshalled json data")
   if err != nil {
 		panic(err)
 	}
-
+  */
 	b := new(bytes.Buffer)
-  json.NewEncoder(b).Encode(jData)
+  json.NewEncoder(b).Encode(d)
 	println("JPB - Setup b object from jData")
 	panic(b)
   //build and make request
