@@ -351,7 +351,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				}
 				println("JPB - Added volumes_attributes.name ")
 				if v, ok := d.GetOk("volumes_attributes.size_gb"); ok {
-					h.volumes_attributes.size_gb = v.(int)
+					h.volumes_attributes.size_gb = v
 				}
 				println("JPB - Added volumes_attributes.size_gb")
 				if v, ok := d.GetOk("volumes_attributes._delete"); ok {
@@ -379,10 +379,10 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.interfaces_attributes.name = v.(string)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.subnet_id"); ok {
-					h.interfaces_attributes.subnet_id = v.(int)
+					h.interfaces_attributes.subnet_id = v
 				}
 				if v, ok := d.GetOk("interfaces_attributes.domain_id"); ok {
-					h.interfaces_attributes.domain_id = v.(int)
+					h.interfaces_attributes.domain_id = v
 				}
 				if v, ok := d.GetOk("interfaces_attributes.identifier"); ok {
 					h.interfaces_attributes.identifier = v.(string)
