@@ -269,7 +269,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
   lUserAccess := u
 
 	//Need to chek what's actually in the struct object
-	hData := fmt.Sprintf("%+v\n",h)
+	hData := fmt.Sprintf("%+v\n",d)
 	print("JPB - h struct data:")
 	print(hData)
 	/*
