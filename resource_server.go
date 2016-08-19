@@ -355,7 +355,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("volumes_attributes.size_gb"); ok {
 					dStr := fmt.Sprintf("JPB - the size_gb type is %t and value is %v",v,v)
 					println(dStr)
-					i, err := strconv.Atoi(v.(string))
+					i, _ := strconv.Atoi(v.(string))
 					h.volumes_attributes.size_gb = i
 				}
 				println("JPB - Added volumes_attributes.size_gb")
