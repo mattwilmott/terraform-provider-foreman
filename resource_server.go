@@ -281,6 +281,10 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
   //build and make request
 	client := &http.Client{}
 	req, err := http.NewRequest(r,lUserAccess.url,b)
+
+	if err != nil {
+		panic(err)
+	}
 	println("JPB - Setup request and client successfully")
 	//set basic auth if necessary
 	if u.username != "" {
