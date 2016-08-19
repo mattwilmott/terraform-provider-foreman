@@ -205,6 +205,7 @@ func resourceServer() *schema.Resource {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
+			/*
 			"host_parameters_attributes": &schema.Schema{
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
@@ -213,6 +214,7 @@ func resourceServer() *schema.Resource {
 					return hashcode.String(v.(string))
 				},
 			},
+			*/
 			"build": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -254,6 +256,10 @@ func resourceServer() *schema.Resource {
 				Optional: true,
 			},
 			"compute_attributes": &schema.Schema{
+				Type:     schema.TypeMap,
+				Optional: true,
+			},
+			"host_parameters_attributes": &schema.Schema{
 				Type:     schema.TypeMap,
 				Optional: true,
 			},
