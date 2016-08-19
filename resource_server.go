@@ -353,7 +353,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				println("JPB - About to add volumes_attributes.size_gb")
 				if v, ok := d.GetOk("volumes_attributes.size_gb"); ok {
 					fmt.Printf("%v\n",v)
-					h.volumes_attributes.size_gb = v.(string)
+					h.volumes_attributes.size_gb = int(v.(string))
 				}
 				println("JPB - Added volumes_attributes.size_gb")
 				if v, ok := d.GetOk("volumes_attributes._delete"); ok {
