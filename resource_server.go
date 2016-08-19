@@ -267,6 +267,11 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
   //setup local vars
   r := strings.ToUpper(rType)
   lUserAccess := u
+
+	//Need to chek what's actually in the struct object
+	hData := fmt.Sprintf("%+v\n",h)
+	print("JPB - h struct data:")
+	print(hData)
 	/*
   jData, err := json.Marshal(d)
   println("JPB - Marshalled json data")
