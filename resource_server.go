@@ -37,7 +37,7 @@ type interfaces_attributes	struct	{
 	Tag 								string	`json:"tag,omitempty"`
 	Attached_to 				string	`json:"attached_to,omitempty"`
 	Mode 								string	`json:"mode,omitempty"` // with validations
-	Attached_devices 		[]string
+	Attached_devices 		[]string `json:"attached_devices,omitempty"`
 	Bond_options 				string	`json:"bond_options,omitempty"`
 	compute_attributes
 }
