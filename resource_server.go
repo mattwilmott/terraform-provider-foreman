@@ -14,77 +14,77 @@ import (
 	"strconv"
 )
 type host_parameters_attributes	struct {
-  roles 			string
-	puppet 			string
-	chef 				string
-	JIRA_Ticket string
+  Roles 			string	`json:"roles,omitempty"`
+	Puppet 			string	`json:"puppet,omitempty"`
+	Chef 				string	`json:"chef,omitempty"`
+	JIRA_Ticket string	`json:",omitempty"`
 }
 type interfaces_attributes	struct	{
-	mac 								string
-	ip 									string
+	Mac 								string	`json:"mac,omitempty"`
+	Ip 									string	`json:"ip,omitempty"`
 	//type 								string
-	name 								string
-	subnet_id 					int
-	domain_id 					int
-	identifier 					string
-	managed 						bool
-	primary 						bool
-	provision 					bool
-	username 						string //only for bmc
-	password 						string //only for bmc
-	provider 						string //only accepted IPMI
-	virtual 						bool
-	tag 								string
-	attached_to 				string
-	mode 								string // with validations
-	attached_devices 		[]string
-	bond_options 				string
+	Name 								string	`json:"name,omitempty"`
+	Subnet_id 					int			`json:"subnet_id,omitempty"`
+	Domain_id 					int			`json:"domain_id,omitempty"`
+	Identifier 					string	`json:"identifier,omitempty"`
+	Managed 						bool		`json:"managed,omitempty"`
+	Primary 						bool		`json:"primary,omitempty"`
+	Provision 					bool		`json:"provision,omitempty"`
+	Username 						string	`json:"username,omitempty"`//only for bmc
+	Password 						string	`json:"password,omitempty"` //only for bmc
+	Provider 						string	`json:"provider,omitempty"` //only accepted IPMI
+	Virtual 						bool		`json:"virtual,omitempty"`
+	Tag 								string	`json:"tag,omitempty"`
+	Attached_to 				string	`json:"attached_to,omitempty"`
+	Mode 								string	`json:"mode,omitempty"` // with validations
+	Attached_devices 		[]string
+	Bond_options 				string	`json:"bond_options,omitempty"`
 	compute_attributes
 }
 type compute_attributes	struct {
-	cpus 			string
-	start 		string
-	cluster 	string
-	memory_mb string
-	guest_id 	string
+	Cpus 			string	`json:"cpus,omitempty"`
+	//start 		string
+	Cluster 	string	`json:"cluster,omitempty"`
+	Memory_mb string	`json:"memory_mb,omitempty"`
+	Guest_id 	string	`json:"guest_id,omitempty"`
 }
 type	volumes_attributes struct {
-	name		  string
-	size_gb	  int
-	_delete	  string
-	datastore	string
+	Name		  string	`json:"name,omitempty"`
+	Size_gb	  int			`json:"size_gb,omitempty"`
+	_delete	  string	`json:",omitempty"`
+	Datastore	string	`json:"datastore,omitempty"`
 }
 
 type host struct {
-  name									string
-  environment_id				string
-  ip										string
-  mac										string
-  architecture_id				int
-  domain_id							int
-  realm_id							int
-  puppet_proxy_id				int
-  puppetclass_ids				[]int
-  operatingsystem_id		string
-  medium_id							string
-  ptable_id							int
-  subnet_id							int
-  compute_resource_id		int
-  root_pass							string
-  model_id							int
-  hostgroup_id					int
-  owner_id							int
-  owner_type						string // must be either User or Usergroup
-  puppet_ca_proxy_id		int
-  image_id							int
-  build									bool
-  enabled								bool
-  provision_method			string
-  managed								bool
-  progress_report_id		string
-  comment								string
-  capabilities					string
-  compute_profile_id		int
+  Name									string	`json:"name,omitempty"`
+  Environment_id				string	`json:"environment_id,omitempty"`
+  Ip										string	`json:"ip,omitempty"`
+  Mac										string	`json:"mac,omitempty"`
+  Architecture_id				int			`json:"architecture_id,omitempty"`
+  Domain_id							int			`json:"domain_id,omitempty"`
+  Realm_id							int			`json:"realm_id,omitempty"`
+  Puppet_proxy_id				int			`json:"puppet_proxy_id,omitempty"`
+  Puppetclass_ids				[]int		`json:"puppetclass_ids,omitempty"`
+  Operatingsystem_id		string	`json:"operatingsystem_id,omitempty"`
+  Medium_id							string	`json:"medium_id,omitempty"`
+  Ptable_id							int			`json:"ptable_id,omitempty"`
+  Subnet_id							int			`json:"subnet_id,omitempty"`
+  Compute_resource_id		int			`json:"compute_resource_id,omitempty"`
+  Root_pass							string	`json:"root_pass,omitempty"`
+  Model_id							int			`json:"model_id,omitempty"`
+  Hostgroup_id					int			`json:"hostgroup_id,omitempty"`
+  Owner_id							int			`json:"owner_id,omitempty"`
+  Owner_type						string	`json:"owner_type,omitempty"` // must be either User or Usergroup
+  Puppet_ca_proxy_id		int			`json:"puppet_ca_proxy_id,omitempty"`
+  Image_id							int			`json:"image_id,omitempty"`
+  Build									bool		`json:"build,omitempty"`
+  Enabled								bool		`json:"enabled,omitempty"`
+  Provision_method			string	`json:"provision_method,omitempty"`
+  Managed								bool		`json:"managed,omitempty"`
+  Progress_report_id		string	`json:"progress_report_id,omitempty"`
+  Comment								string	`json:"comment,omitempty"`
+  Capabilities					string	`json:"capabilities,omitempty"`
+  Compute_profile_id		int			`json:"compute_profile_id,omitempty"`
 	host_parameters_attributes
   interfaces_attributes
   compute_attributes
@@ -274,22 +274,14 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
   r := strings.ToUpper(rType)
   lUserAccess := u
 
-	//Need to chek what's actually in the struct object
-	hData := fmt.Sprintf("%+v\n",d)
-	//print("JPB - h struct data:")
-	//print(hData)
 
-  //jData, _ := json.Marshal(d)
-  println("JPB - Marshalled json data")
+  b := new(bytes.Buffer)
+	json.NewEncoder(b).Encode(h)
 
-	//b := bytes.NewReader(hData)
-	b := []byte(hData)
-  //json.NewEncoder(b).Encode(d)
-	println("JPB - Setup b object from jData")
 	//panic(b)
   //build and make request
 	client := &http.Client{}
-	req, err := http.NewRequest(r,lUserAccess.url,bytes.NewReader(b))
+	req, err := http.NewRequest(r,lUserAccess.url,b)
 
 	if err != nil {
 		panic(err)
@@ -303,24 +295,22 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 	req.Header.Add("Accept", "application/json")
 	println("JPB - Setup basic auth headers")
    //enable debugging data
-	if !debug {
-    resp, err := client.Do(req)
-		println("JPB - Request made to server")
+	if debug {
+		panic(req)
+	}
+  resp, err := client.Do(req)
+	println("JPB - Request made to server")
 
-	  if err != nil {
-		  panic(err)
-	  }
+	if err != nil {
+		panic(err)
+	}
 
-	  defer resp.Body.Close()
-	  content, err := ioutil.ReadAll(resp.Body)
-		println("JPB - Reading content")
-		if content != nil {
+	defer resp.Body.Close()
+	content, err := ioutil.ReadAll(resp.Body)
+	println("JPB - Reading content")
+	if content != nil {
 		fmt.Println("%v",content)
-	  }
-    } else {
-		  print(req)
-		  panic("Exiting for debug mode")
-	  }
+	}
 
 	return nil
 }
@@ -350,27 +340,27 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 /* build subtree level stuff first */
 /* build compute_attributes now */
 				if v, ok := d.GetOk("compute_attributes.cpus"); ok {
-					h.compute_attributes.cpus = v.(string)
+					h.compute_attributes.Cpus = v.(string)
 				}
 				if v, ok := d.GetOk("compute_attributes.start"); ok {
-					h.compute_attributes.cluster = v.(string)
+					h.compute_attributes.Cluster = v.(string)
 				}
 				if v, ok := d.GetOk("compute_attributes.memory_mb"); ok {
-					h.compute_attributes.memory_mb = v.(string)
+					h.compute_attributes.Memory_mb = v.(string)
 				}
 				if v, ok := d.GetOk("compute_attributes.guest_id"); ok {
-					h.compute_attributes.guest_id = v.(string)
+					h.compute_attributes.Guest_id = v.(string)
 				}
 				println("JPB - Built compute_attrs struct instance")
 /* build volumes_attributes now */
 				if v, ok := d.GetOk("volumes_attributes.name"); ok {
-					h.volumes_attributes.name = v.(string)
+					h.volumes_attributes.Name = v.(string)
 				}
 				println("JPB - Added volumes_attributes.name ")
 				println("JPB - About to add volumes_attributes.size_gb")
 				if v, ok := d.GetOk("volumes_attributes.size_gb"); ok {
 					i, _ := strconv.Atoi(v.(string))
-					h.volumes_attributes.size_gb = i
+					h.volumes_attributes.Size_gb = i
 				}
 				println("JPB - Added volumes_attributes.size_gb")
 				if v, ok := d.GetOk("volumes_attributes._delete"); ok {
@@ -378,16 +368,16 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				}
 				println("JPB - Added volumes_attributes._delete")
 				if v, ok := d.GetOk("volumes_attributes.datastore"); ok {
-					h.volumes_attributes.datastore = v.(string)
+					h.volumes_attributes.Datastore = v.(string)
 				}
 				println("JPB - Added volumes_attributes.datastore")
 				println("JPB - Built u volumes_attributes instance")
 /* build interfaces_attributes now */
 				if v, ok := d.GetOk("interfaces_attributes.mac"); ok {
-					h.interfaces_attributes.mac = v.(string)
+					h.interfaces_attributes.Mac = v.(string)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.ip"); ok {
-					h.interfaces_attributes.ip = v.(string)
+					h.interfaces_attributes.Ip = v.(string)
 				}
 				/* removing the following bit since type is a keyword
 				if v, ok := d.GetOk("interfaces_attributes.type"); ok {
@@ -395,63 +385,63 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				}
 				*/
 				if v, ok := d.GetOk("interfaces_attributes.name"); ok {
-					h.interfaces_attributes.name = v.(string)
+					h.interfaces_attributes.Name = v.(string)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.subnet_id"); ok {
-					h.interfaces_attributes.subnet_id = v.(int)
+					h.interfaces_attributes.Subnet_id = v.(int)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.domain_id"); ok {
-					h.interfaces_attributes.domain_id = v.(int)
+					h.interfaces_attributes.Domain_id = v.(int)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.identifier"); ok {
-					h.interfaces_attributes.identifier = v.(string)
+					h.interfaces_attributes.Identifier = v.(string)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.managed"); ok {
-					h.interfaces_attributes.managed = v.(bool)
+					h.interfaces_attributes.Managed = v.(bool)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.primary"); ok {
-					h.interfaces_attributes.primary = v.(bool)
+					h.interfaces_attributes.Primary = v.(bool)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.provision"); ok {
-					h.interfaces_attributes.provision = v.(bool)
+					h.interfaces_attributes.Provision = v.(bool)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.username"); ok {
-					h.interfaces_attributes.username = v.(string)
+					h.interfaces_attributes.Username = v.(string)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.password"); ok {
-					h.interfaces_attributes.password = v.(string)
+					h.interfaces_attributes.Password = v.(string)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.provider"); ok {
-					h.interfaces_attributes.provider = v.(string)
+					h.interfaces_attributes.Provider = v.(string)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.virtual"); ok{
-					h.interfaces_attributes.virtual = v.(bool)
+					h.interfaces_attributes.Virtual = v.(bool)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.tag"); ok {
-					h.interfaces_attributes.tag = v.(string)
+					h.interfaces_attributes.Tag = v.(string)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.attached_to"); ok {
-					h.interfaces_attributes.attached_to = v.(string)
+					h.interfaces_attributes.Attached_to = v.(string)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.mode"); ok {
-					h.interfaces_attributes.mode = v.(string)
+					h.interfaces_attributes.Mode = v.(string)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.attached_devices"); ok {
-					h.interfaces_attributes.attached_devices = v.([]string)
+					h.interfaces_attributes.Attached_devices = v.([]string)
 				}
 				if v, ok := d.GetOk("interfaces_attributes.bond_options"); ok {
-					h.interfaces_attributes.bond_options = v.(string)
+					h.interfaces_attributes.Bond_options = v.(string)
 				}
 				println("JPB - Built interfaces struct instance")
 /* pupulate host_parameters_attributes now */
 				if v, ok := d.GetOk("host_parameters_attributes.roles"); ok {
-					h.host_parameters_attributes.roles = v.(string)
+					h.host_parameters_attributes.Roles = v.(string)
 				}
 				if v, ok := d.GetOk("host_parameters_attributes.puppet"); ok {
-					h.host_parameters_attributes.puppet = v.(string)
+					h.host_parameters_attributes.Puppet = v.(string)
 				}
 				if v, ok := d.GetOk("host_parameters_attributes.chef"); ok {
-					h.host_parameters_attributes.chef = v.(string)
+					h.host_parameters_attributes.Chef = v.(string)
 				}
 				if v, ok := d.GetOk("host_parameters_attributes.JIRA_Ticket"); ok {
 					h.host_parameters_attributes.JIRA_Ticket = v.(string)
@@ -459,90 +449,90 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				println("JPB - Built host_parameters_attributes struct instance")
 /* populate h struct instance for regular level data */
         if v, ok := d.GetOk("environment-id"); ok {
-          h.environment_id = v.(string)
+          h.Environment_id = v.(string)
         }
         if v,ok := d.GetOk("ip"); ok{
-          h.ip = v.(string)
+          h.Ip = v.(string)
         }
         if v,ok := d.GetOk("mac"); ok{
-          h.mac = v.(string)
+          h.Mac = v.(string)
         }
         if v,ok := d.GetOk("architecture_id"); ok{
-          h.architecture_id = v.(int)
+          h.Architecture_id = v.(int)
         }
         if v,ok := d.GetOk("domain_id"); ok{
-          h.domain_id = v.(int)
+          h.Domain_id = v.(int)
         }
         if v,ok := d.GetOk("realm_id"); ok{
-          h.realm_id = v.(int)
+          h.Realm_id = v.(int)
         }
         if v,ok := d.GetOk("puppet_proxy_id"); ok{
-          h.puppet_proxy_id = v.(int)
+          h.Puppet_proxy_id = v.(int)
         }
         if v,ok := d.GetOk("puppet_class_ids"); ok{
-          h.puppetclass_ids = v.([]int)
+          h.Puppetclass_ids = v.([]int)
         }
         if v,ok := d.GetOk("operatingsystem_id"); ok{
-          h.operatingsystem_id = v.(string)
+          h.Operatingsystem_id = v.(string)
         }
         if v,ok := d.GetOk("medium_id"); ok{
-          h.medium_id = v.(string)
+          h.Medium_id = v.(string)
         }
         if v,ok := d.GetOk("ptable_id"); ok{
-          h.ptable_id = v.(int)
+          h.Ptable_id = v.(int)
         }
         if v,ok := d.GetOk("subnet_id"); ok{
-          h.subnet_id = v.(int)
+          h.Subnet_id = v.(int)
         }
         if v,ok := d.GetOk("computer_resource_id"); ok{
-          h.compute_resource_id = v.(int)
+          h.Compute_resource_id = v.(int)
         }
         if v,ok := d.GetOk("root_pass"); ok{
-          h.root_pass = v.(string)
+          h.Root_pass = v.(string)
         }
         if v,ok := d.GetOk("model_id"); ok{
-          h.model_id = v.(int)
+          h.Model_id = v.(int)
         }
         if v,ok := d.GetOk("hostgroup_id"); ok{
-          h.hostgroup_id = v.(int)
+          h.Hostgroup_id = v.(int)
         }
         if v,ok := d.GetOk("owner_id"); ok{
-          h.owner_id = v.(int)
+          h.Owner_id = v.(int)
         }
         if v,ok := d.GetOk("owner_type"); ok{
 					if v.(string) == "User" || v.(string) == "Usergroup" {
-					  h.owner_type = v.(string)
+					  h.Owner_type = v.(string)
 					}
         }
         if v,ok := d.GetOk("puppet_ca_proxy_id"); ok{
-          h.puppet_ca_proxy_id = v.(int)
+          h.Puppet_ca_proxy_id = v.(int)
         }
         if v,ok := d.GetOk("image_id"); ok{
-          h.image_id = v.(int)
+          h.Image_id = v.(int)
         }
         if v,ok := d.GetOk("build"); ok{
-          h.build = v.(bool)
+          h.Build = v.(bool)
         }
         if v,ok := d.GetOk("enabled"); ok{
-          h.enabled = v.(bool)
+          h.Enabled = v.(bool)
         }
         if v,ok := d.GetOk("provision_method"); ok{
-          h.provision_method = v.(string)
+          h.Provision_method = v.(string)
         }
         if v,ok := d.GetOk("managed"); ok{
-          h.managed = v.(bool)
+          h.Managed = v.(bool)
         }
         if v,ok := d.GetOk("progress_report_id"); ok{
-          h.progress_report_id = v.(string)
+          h.Progress_report_id = v.(string)
         }
         if v,ok := d.GetOk("comment"); ok{
-          h.comment = v.(string)
+          h.Comment = v.(string)
         }
         if v,ok := d.GetOk("capabilities"); ok{
-          h.capabilities = v.(string)
+          h.Capabilities = v.(string)
         }
         if v,ok := d.GetOk("compute_profile_id"); ok{
-          h.compute_profile_id = v.(int)
+          h.Compute_profile_id = v.(int)
         }
 				println("JPB - Built h struct instance")
 	/* check debug flag */
