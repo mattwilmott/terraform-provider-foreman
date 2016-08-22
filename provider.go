@@ -38,6 +38,7 @@ func Provider() terraform.ResourceProvider {
 var descriptions map[string]string
 
 func init() {
+/*
 	descriptions = map[string]string{
 		"url": "The Foreman server url. Example: \n" +
 			"https://foreman.example.com/api/v2/",
@@ -46,6 +47,7 @@ func init() {
 
 		"password": "Foreman password",
 	}
+*/
 }
 
 /*func providerConfigure(d *schema.ResourceData) (interface{}, error) {
