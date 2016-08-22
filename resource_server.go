@@ -319,7 +319,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 	println("JPB - Made it to create method")
 	d.SetId(d.Get("name").(string))
-        h := new(host)
+        h := host{}
 
 				u := userAccess{}
 
