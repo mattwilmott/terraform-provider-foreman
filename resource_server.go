@@ -269,7 +269,6 @@ func resourceServer() *schema.Resource {
 
 // Setup a function to make api calls
 func httpClient(rType string, d *host, u *userAccess, debug bool) error {
-	println("JPB - Made it to httpClient")
   //setup local vars
   r := strings.ToUpper(rType)
   lUserAccess := u
@@ -286,20 +285,17 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 	if err != nil {
 		panic(err)
 	}
-	println("JPB - Setup request and client successfully")
 	//set basic auth if necessary
 	if u.username != "" {
 	req.SetBasicAuth(lUserAccess.username,lUserAccess.password)
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	println("JPB - Setup basic auth headers")
    //enable debugging data
 	if debug {
 		panic(req)
 	}
   resp, err := client.Do(req)
-	println("JPB - Request made to server")
 
 	if err != nil {
 		panic(err)
@@ -307,7 +303,6 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 
 	defer resp.Body.Close()
 	content, err := ioutil.ReadAll(resp.Body)
-	println("JPB - Reading content")
 	if content != nil {
 		fmt.Println("%v",content)
 	}
@@ -317,7 +312,6 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 
 
 func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
-	println("JPB - Made it to create method")
 	d.SetId(d.Get("name").(string))
         h := host{}
 
@@ -352,27 +346,21 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("compute_attributes.guest_id"); ok {
 					h.compute_attributes.Guest_id = v.(string)
 				}
-				println("JPB - Built compute_attrs struct instance")
 /* build volumes_attributes now */
 				if v, ok := d.GetOk("volumes_attributes.name"); ok {
 					h.volumes_attributes.Name = v.(string)
 				}
-				println("JPB - Added volumes_attributes.name ")
-				println("JPB - About to add volumes_attributes.size_gb")
 				if v, ok := d.GetOk("volumes_attributes.size_gb"); ok {
 					i, _ := strconv.Atoi(v.(string))
 					h.volumes_attributes.Size_gb = i
 				}
-				println("JPB - Added volumes_attributes.size_gb")
 				if v, ok := d.GetOk("volumes_attributes._delete"); ok {
 					h.volumes_attributes._delete = v.(string)
 				}
-				println("JPB - Added volumes_attributes._delete")
 				if v, ok := d.GetOk("volumes_attributes.datastore"); ok {
 					h.volumes_attributes.Datastore = v.(string)
 				}
-				println("JPB - Added volumes_attributes.datastore")
-				println("JPB - Built u volumes_attributes instance")
+
 /* build interfaces_attributes now */
 				if v, ok := d.GetOk("interfaces_attributes.mac"); ok {
 					h.interfaces_attributes.Mac = v.(string)
@@ -433,7 +421,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("interfaces_attributes.bond_options"); ok {
 					h.interfaces_attributes.Bond_options = v.(string)
 				}
-				println("JPB - Built interfaces struct instance")
+
 /* pupulate host_parameters_attributes now */
 				if v, ok := d.GetOk("host_parameters_attributes.roles"); ok {
 					h.host_parameters_attributes.Roles = v.(string)
@@ -447,7 +435,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("host_parameters_attributes.JIRA_Ticket"); ok {
 					h.host_parameters_attributes.JIRA_Ticket = v.(string)
 				}
-				println("JPB - Built host_parameters_attributes struct instance")
+
 /* populate h struct instance for regular level data */
         if v, ok := d.GetOk("environment-id"); ok {
           h.Environment_id = v.(string)
@@ -535,14 +523,12 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
         if v,ok := d.GetOk("compute_profile_id"); ok{
           h.Compute_profile_id = v.(int)
         }
-				println("JPB - Built h struct instance")
 	/* check debug flag */
-	println("JPB -  setting up debug flag")
 	debug := false
 	if v, ok := d.GetOk("debug"); ok {
 		debug = v.(bool)
 	}
-  println("JPB - Debug complete calling httpClient")
+
 	httpClient("POST", &h, &u, debug)
 	return nil
 }
