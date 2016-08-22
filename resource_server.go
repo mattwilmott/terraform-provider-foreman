@@ -276,7 +276,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 
 
   b := new(bytes.Buffer)
-	json.NewEncoder(b).Encode(h)
+	json.NewEncoder(b).Encode(d)
 
 	//panic(b)
   //build and make request
