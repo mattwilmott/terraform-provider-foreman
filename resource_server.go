@@ -7,7 +7,7 @@ import (
 	//"reflect"
 	"fmt"
 	"net/http"
-	//"encoding/json"
+	"encoding/json"
 	"io/ioutil"
 	//"os"
 	"bytes"
@@ -319,9 +319,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 	println("JPB - Made it to create method")
 	d.SetId(d.Get("name").(string))
-        h := host{
-          name: d.Get("name").(string),
-        }
+        h := new(host)
 
 				u := userAccess{}
 
@@ -339,6 +337,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 
 /* build subtree level stuff first */
 /* build compute_attributes now */
+				if v, ok := d.GetOk("name"); ok {
+					h.Name = v.(string)
+				}
 				if v, ok := d.GetOk("compute_attributes.cpus"); ok {
 					h.compute_attributes.Cpus = v.(string)
 				}
