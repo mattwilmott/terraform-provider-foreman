@@ -472,7 +472,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
         if v,ok := d.GetOk("subnet_id"); ok{
           h.Subnet_id = v.(int)
         }
-        if v,ok := d.GetOk("computer_resource_id"); ok{
+        if v,ok := d.GetOk("compute_resource_id"); ok{
           h.Compute_resource_id = v.(int)
         }
         if v,ok := d.GetOk("root_pass"); ok{
