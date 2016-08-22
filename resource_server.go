@@ -327,7 +327,6 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("url"); ok {
 					u.url	= v.(string)
 				}
-				println("JPB - Built u struct instance")
 
 /* build subtree level stuff first */
 /* build compute_attributes now */
