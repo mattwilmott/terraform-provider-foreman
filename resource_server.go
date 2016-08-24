@@ -333,8 +333,8 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("name"); ok {
 					h.Name = v.(string)
 				}
-		caCount, ok := d.GetOk("compute_attributes.#").(int); ok {
-			for i := 0; i<caCount; i++ {
+		caCount := d.Get("compute_attributes.#").(int)
+			for i := 0; i < caCount; i++ {
 				prefix := fmt.Sprintf("compute_attributes.%d",i)
 				if v, ok := d.GetOk(prefix+".cpus"); ok {
 					h.Lcompute_attributes[i].Cpus = v.(string)
@@ -349,9 +349,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Lcompute_attributes[i].Guest_id = v.(string)
 				}
 			}
-		}
+
 /* build volumes_attributes now */
-	 vaCount, ok := d.GetOk("volumes_attributes.#").(int); ok {
+	 vaCount := d.Get("volumes_attributes.#").(int)
 		 for i := 0; i<vaCount; i++ {
 			 prefix := fmt.Sprintf("volumes_attributes.%d",i)
 				if v, ok := d.GetOk(prefix+".name"); ok {
@@ -368,10 +368,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Lvolumes_attributes[i].Datastore = v.(string)
 				}
 		  }
-	  }
 
 /* build interfaces_attributes now */
-		iaCount, ok := d.GetOk("interfaces_attributes.#").(int); ok {
+		iaCount := d.GetOk("interfaces_attributes.#").(int)
 			for i := 0; i<iaCount; i++ {
 				prefix := fmt.Sprintf("interfaces_attributes.%d",i)
 				if v, ok := d.GetOk(prefix+".mac"); ok {
@@ -429,10 +428,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Linterfaces_attributes[i].Bond_options = v.(string)
 				}
 			}
-		}
 
-/* pupulate host_parameters_attributes now */
-		hpaCount, ok := d.GetOk("host_parameters_attributes.#").(int); ok {
+/* populate host_parameters_attributes now */
+		hpaCount := d.Get("host_parameters_attributes.#").(int)
 			for i := 0; i<hpaCount; i++ {
 				prefix := fmt.Sprintf("host_parameters_attributes.%d",i)
 				if v, ok := d.GetOk(prefix+".roles"); ok {
@@ -448,7 +446,6 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Lhost_parameters_attributes[i].JIRA_Ticket = v.(string)
 				}
 			}
-		}
 
 /* populate h struct instance for regular level data */
         if v, ok := d.GetOk("environment-id"); ok {
