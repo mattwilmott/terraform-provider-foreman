@@ -542,6 +542,8 @@ print("JPB-Building volumes attributes")
 			 print("In vol for loop")
 			 h.Lvolumes_attributes = append(h.Lvolumes_attributes,volumes_attributes{})
 			 //h.Lvolumes_attributes = append(h.Lvolumes_attributes,volumes_attributes{})
+			 strVol = fmt.Sprintf("JPB - volattr struct [0] is %+v",h.Lvolumes_attributes[0])
+			 print(strVol)
 			 print(len(h.Lvolumes_attributes))
 
 			 prefix := fmt.Sprintf("volumes_attributes.%d",i)
