@@ -344,7 +344,7 @@ func resourceServer() *schema.Resource {
 							ForceNew: false,
 						},
 					},
-				}
+				},
 			},
 			"volumes_attributes": &schema.Schema{
 				Type:     schema.TypeList,
@@ -372,7 +372,7 @@ func resourceServer() *schema.Resource {
 								ForceNew: false,
 							},
 						},
-					}
+					},
 			},
 			"compute_attributes": &schema.Schema{
 				Type:     schema.TypeList,
@@ -400,7 +400,7 @@ func resourceServer() *schema.Resource {
 								ForceNew: false,
 							},
 						},
-					}
+					},
 			},
 			"host_parameters_attributes": &schema.Schema{
 				Type:     schema.TypeList,
@@ -427,8 +427,8 @@ func resourceServer() *schema.Resource {
 								Optional: true,
 								ForceNew: false,
 							},
-						}
-					}
+						},
+					},
 			},
 		},
 	}
