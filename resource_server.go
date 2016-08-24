@@ -333,107 +333,122 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("name"); ok {
 					h.Name = v.(string)
 				}
-				if v, ok := d.GetOk("compute_attributes.cpus"); ok {
-					h.compute_attributes.Cpus = v.(string)
+		caCount, ok := d.GetOk("compute_attributes.#").(int); ok {
+			for i := 0; i<caCount; i++ {
+				prefix := fmt.Sprintf("compute_attributes.%d",i)
+				if v, ok := d.GetOk(prefix+".cpus"); ok {
+					h.Lcompute_attributes[i].Cpus = v.(string)
 				}
-				if v, ok := d.GetOk("compute_attributes.start"); ok {
-					h.compute_attributes.Cluster = v.(string)
+				if v, ok := d.GetOk(prefix+".start"); ok {
+					h.Lcompute_attributes[i].Cluster = v.(string)
 				}
-				if v, ok := d.GetOk("compute_attributes.memory_mb"); ok {
-					h.compute_attributes.Memory_mb = v.(string)
+				if v, ok := d.GetOk(prefix+".memory_mb"); ok {
+					h.Lcompute_attributes[i].Memory_mb = v.(string)
 				}
-				if v, ok := d.GetOk("compute_attributes.guest_id"); ok {
-					h.compute_attributes.Guest_id = v.(string)
+				if v, ok := d.GetOk(prefix+".guest_id"); ok {
+					h.Lcompute_attributes[i].Guest_id = v.(string)
 				}
+			}
+		}
 /* build volumes_attributes now */
-				if v, ok := d.GetOk("volumes_attributes.name"); ok {
-					h.volumes_attributes.Name = v.(string)
+	 vaCount, ok := d.GetOk("volumes_attributes.#").(int); ok {
+		 for i := 0; i<vaCount; i++ {
+			 prefix := fmt.Sprintf("volumes_attributes.%d",i)
+				if v, ok := d.GetOk(prefix+".name"); ok {
+					h.Lvolumes_attributes[i].Name = v.(string)
 				}
-				if v, ok := d.GetOk("volumes_attributes.size_gb"); ok {
+				if v, ok := d.GetOk(prefix+".size_gb"); ok {
 					i, _ := strconv.Atoi(v.(string))
-					h.volumes_attributes.Size_gb = i
+					h.Lvolumes_attributes[i].Size_gb = i
 				}
-				if v, ok := d.GetOk("volumes_attributes._delete"); ok {
-					h.volumes_attributes._delete = v.(string)
+				if v, ok := d.GetOk(prefix+"._delete"); ok {
+					h.Lvolumes_attributes[i]._delete = v.(string)
 				}
-				if v, ok := d.GetOk("volumes_attributes.datastore"); ok {
-					h.volumes_attributes.Datastore = v.(string)
+				if v, ok := d.GetOk(prefix+".datastore"); ok {
+					h.Lvolumes_attributes[i].Datastore = v.(string)
 				}
+		  }
+	  }
 
 /* build interfaces_attributes now */
-				if v, ok := d.GetOk("interfaces_attributes.mac"); ok {
-					h.interfaces_attributes.Mac = v.(string)
+		iaCount, ok := d.GetOk("interfaces_attributes.#").(int); ok {
+			for i := 0; i<iaCount; i++ {
+				prefix := fmt.Sprintf("interfaces_attributes.%d",i)
+				if v, ok := d.GetOk(prefix+".mac"); ok {
+					h.Linterfaces_attributes[i].Mac = v.(string)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.ip"); ok {
-					h.interfaces_attributes.Ip = v.(string)
+				if v, ok := d.GetOk(prefix+".ip"); ok {
+					h.Linterfaces_attributes[i].Ip = v.(string)
 				}
-				/* removing the following bit since type is a keyword
-				if v, ok := d.GetOk("interfaces_attributes.type"); ok {
-					h.interfaces_attributes.type = v.(string)
+				if v, ok := d.GetOk(prefix+".name"); ok {
+					h.Linterfaces_attributes[i].Name = v.(string)
 				}
-				*/
-				if v, ok := d.GetOk("interfaces_attributes.name"); ok {
-					h.interfaces_attributes.Name = v.(string)
+				if v, ok := d.GetOk(prefix+".subnet_id"); ok {
+					h.Linterfaces_attributes[i].Subnet_id = v.(int)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.subnet_id"); ok {
-					h.interfaces_attributes.Subnet_id = v.(int)
+				if v, ok := d.GetOk(prefix+".domain_id"); ok {
+					h.Linterfaces_attributes[i].Domain_id = v.(int)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.domain_id"); ok {
-					h.interfaces_attributes.Domain_id = v.(int)
+				if v, ok := d.GetOk(prefix+".identifier"); ok {
+					h.Linterfaces_attributes[i].Identifier = v.(string)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.identifier"); ok {
-					h.interfaces_attributes.Identifier = v.(string)
+				if v, ok := d.GetOk(prefix+".managed"); ok {
+					h.Linterfaces_attributes[i].Managed = v.(bool)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.managed"); ok {
-					h.interfaces_attributes.Managed = v.(bool)
+				if v, ok := d.GetOk(prefix+".primary"); ok {
+					h.Linterfaces_attributes[i].Primary = v.(bool)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.primary"); ok {
-					h.interfaces_attributes.Primary = v.(bool)
+				if v, ok := d.GetOk(prefix+".provision"); ok {
+					h.Linterfaces_attributes[i].Provision = v.(bool)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.provision"); ok {
-					h.interfaces_attributes.Provision = v.(bool)
+				if v, ok := d.GetOk(prefix+".username"); ok {
+					h.Linterfaces_attributes[i].Username = v.(string)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.username"); ok {
-					h.interfaces_attributes.Username = v.(string)
+				if v, ok := d.GetOk(prefix+".password"); ok {
+					h.Linterfaces_attributes[i].Password = v.(string)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.password"); ok {
-					h.interfaces_attributes.Password = v.(string)
+				if v, ok := d.GetOk(prefix+".provider"); ok {
+					h.Linterfaces_attributes[i].Provider = v.(string)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.provider"); ok {
-					h.interfaces_attributes.Provider = v.(string)
+				if v, ok := d.GetOk(prefix+".virtual"); ok{
+					h.Linterfaces_attributes[i].Virtual = v.(bool)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.virtual"); ok{
-					h.interfaces_attributes.Virtual = v.(bool)
+				if v, ok := d.GetOk(prefix+".tag"); ok {
+					h.Linterfaces_attributes[i].Tag = v.(string)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.tag"); ok {
-					h.interfaces_attributes.Tag = v.(string)
+				if v, ok := d.GetOk(prefix+".attached_to"); ok {
+					h.Linterfaces_attributes[i].Attached_to = v.(string)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.attached_to"); ok {
-					h.interfaces_attributes.Attached_to = v.(string)
+				if v, ok := d.GetOk(prefix+".mode"); ok {
+					h.Linterfaces_attributes[i].Mode = v.(string)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.mode"); ok {
-					h.interfaces_attributes.Mode = v.(string)
+				if v, ok := d.GetOk(prefix+".attached_devices"); ok {
+					h.Linterfaces_attributes[i].Attached_devices = v.([]string)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.attached_devices"); ok {
-					h.interfaces_attributes.Attached_devices = v.([]string)
+				if v, ok := d.GetOk(prefix+".bond_options"); ok {
+					h.Linterfaces_attributes[i].Bond_options = v.(string)
 				}
-				if v, ok := d.GetOk("interfaces_attributes.bond_options"); ok {
-					h.interfaces_attributes.Bond_options = v.(string)
-				}
+			}
+		}
 
 /* pupulate host_parameters_attributes now */
-				if v, ok := d.GetOk("host_parameters_attributes.roles"); ok {
-					h.host_parameters_attributes.Roles = v.(string)
+		hpaCount, ok := d.GetOk("host_parameters_attributes.#").(int); ok {
+			for i := 0; i<hpaCount; i++ {
+				prefix := fmt.Sprintf("host_parameters_attributes.%d",i)
+				if v, ok := d.GetOk(prefix+".roles"); ok {
+					h.Lhost_parameters_attributes[i].Roles = v.(string)
 				}
-				if v, ok := d.GetOk("host_parameters_attributes.puppet"); ok {
-					h.host_parameters_attributes.Puppet = v.(string)
+				if v, ok := d.GetOk(prefix+".puppet"); ok {
+					h.Lhost_parameters_attributes[i].Puppet = v.(string)
 				}
-				if v, ok := d.GetOk("host_parameters_attributes.chef"); ok {
-					h.host_parameters_attributes.Chef = v.(string)
+				if v, ok := d.GetOk(prefix+".chef"); ok {
+					h.Lhost_parameters_attributes[i].Chef = v.(string)
 				}
-				if v, ok := d.GetOk("host_parameters_attributes.JIRA_Ticket"); ok {
-					h.host_parameters_attributes.JIRA_Ticket = v.(string)
+				if v, ok := d.GetOk(prefix+".JIRA_Ticket"); ok {
+					h.Lhost_parameters_attributes[i].JIRA_Ticket = v.(string)
 				}
+			}
+		}
 
 /* populate h struct instance for regular level data */
         if v, ok := d.GetOk("environment-id"); ok {
