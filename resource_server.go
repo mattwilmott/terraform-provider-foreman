@@ -343,7 +343,7 @@ func resourceServer() *schema.Resource {
 							Optional: true,
 							ForceNew: false,
 						},
-					}
+					},
 				}
 			},
 			"volumes_attributes": &schema.Schema{
@@ -371,7 +371,7 @@ func resourceServer() *schema.Resource {
 								Optional: true,
 								ForceNew: false,
 							},
-						}
+						},
 					}
 			},
 			"compute_attributes": &schema.Schema{
@@ -399,7 +399,7 @@ func resourceServer() *schema.Resource {
 								Optional: true,
 								ForceNew: false,
 							},
-						}
+						},
 					}
 			},
 			"host_parameters_attributes": &schema.Schema{
