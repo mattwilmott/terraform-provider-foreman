@@ -335,7 +335,7 @@ func resourceServer() *schema.Resource {
 						"attached_devices": &schema.Schema{
 							Type:	schema.TypeList,
 							Optional: true,
-							Elem: &schema.Schema{Type: schema.TypeString}
+							Elem: &schema.Schema{Type: schema.TypeString},
 							ForceNew: false,
 						},
 						"bond_options": &schema.Schema{
