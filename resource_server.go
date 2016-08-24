@@ -85,10 +85,10 @@ type host struct {
   Comment								string	`json:"comment,omitempty"`
   Capabilities					string	`json:"capabilities,omitempty"`
   Compute_profile_id		int			`json:"compute_profile_id,omitempty"`
-	host_parameters_attributes
-  interfaces_attributes
-  compute_attributes
-	volumes_attributes
+	Lhost_parameters_attributes []host_parameters_attributes	`json:"host_parameters_attributes,omitempty"`
+  Linterfaces_attributes	[]interfaces_attributes	`json:"interfaces_attributes,omitempty"`
+  Lcompute_attributes		[]compute_attributes	`json:"compute_attributes,omitempty"`
+	Lvolumes_attributes	[]volumes_attributes	`json:"volumes_attributes,omitempty"`
 }
 
 type userAccess struct {
