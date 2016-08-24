@@ -48,7 +48,7 @@ type compute_attributes	struct {
 	Memory_mb string	`json:"memory_mb,omitempty"`
 	Guest_id 	string	`json:"guest_id,omitempty"`
 }
-type	volumes_attributes struct {
+type volumes_attributes struct {
 	Name		  string	`json:"name,omitempty"`
 	Size_gb	  int			`json:"size_gb,omitempty"`
 	_delete	  string	`json:",omitempty"`
