@@ -552,8 +552,8 @@ print("JPB-Building volumes attributes")
 					h.Lvolumes_attributes[i].Name = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".size_gb"); ok {
-					i, _ := strconv.Atoi(v.(string))
-					h.Lvolumes_attributes[i].Size_gb = i
+					num, _ := strconv.Atoi(v.(string))
+					h.Lvolumes_attributes[i].Size_gb = num
 				}
 				if v, ok := d.GetOk(prefix+"._delete"); ok {
 					h.Lvolumes_attributes[i]._delete = v.(string)
