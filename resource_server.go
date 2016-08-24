@@ -618,7 +618,7 @@ print("JPB-Building volumes attributes")
 	print("JPB-Building host parameter attributes")
 		hpaCount := d.Get("host_parameters_attributes.#").(int)
 			for i := 0; i<hpaCount; i++ {
-				Lhost_parameters_attributes = append(Lhost_parameters_attributes,host_parameters_attributes{})
+				h.Lhost_parameters_attributes = append(h.Lhost_parameters_attributes,host_parameters_attributes{})
 				prefix := fmt.Sprintf("host_parameters_attributes.%d",i)
 				if v, ok := d.GetOk(prefix+".roles"); ok {
 					h.Lhost_parameters_attributes[i].Roles = v.(string)
