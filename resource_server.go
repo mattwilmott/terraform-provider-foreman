@@ -504,16 +504,22 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 		caCount := d.Get("compute_attributes.#").(int)
 		cacnt := fmt.Sprintf("JPB - number of compute_attributes is: %d",caCount)
 		print(cacnt)
-		if caCount <= 1 {
+		if caCount > 0 {
+			print("JPB- Passed if statement")
 			for i := 0; i < caCount; i++ {
+				print("JPB - Inside for loop")
 				prefix := fmt.Sprintf("compute_attributes.%d",i)
+				print("JPB - Set prefix as"+prefix)
 				if v, ok := d.GetOk(prefix+".cpus"); ok {
+					print("JPB - Setting cpu value")
 					h.Lcompute_attributes[i].Cpus = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".start"); ok {
+					print("JPB - Setting start value")
 					h.Lcompute_attributes[i].Cluster = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".memory_mb"); ok {
+					print("JPB - Setting memory_mb value")
 					h.Lcompute_attributes[i].Memory_mb = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".guest_id"); ok {
