@@ -534,10 +534,15 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 /* build volumes_attributes now */
 print("JPB-Building volumes attributes")
 	 vaCount := d.Get("volumes_attributes.#").(int)
+	 vacnt := fmt.Sprintf("JPB - Number of volumes_attributes is : %d", vaCount)
+	 print(vacnt)
 	 if vaCount > 0 {
+		 print("JPB - in vol if statement loop")
 		 for i := 0; i<vaCount; i++ {
+			 print("In vol for loop")
 			 h.Lvolumes_attributes = append(h.Lvolumes_attributes,volumes_attributes{})
 			 prefix := fmt.Sprintf("volumes_attributes.%d",i)
+			 print("Prefix is "+prefix)
 				if v, ok := d.GetOk(prefix+".name"); ok {
 					h.Lvolumes_attributes[i].Name = v.(string)
 				}
