@@ -723,11 +723,11 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 
 	resp, err := httpClient("POST", &h, &u, debug)
 	if resp != nil {
-		fResp = fmt.Sprintf("The server responded with: %v",resp)
+		fResp := fmt.Sprintf("The server responded with: %v",resp)
 		print(fResp)
 	}
 	if err != nil {
-		print(err)
+		panic(err)
 	}
 	return nil
 }
