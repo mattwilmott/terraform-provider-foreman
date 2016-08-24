@@ -13,6 +13,11 @@ import (
 	"bytes"
 	"strconv"
 )
+
+type reqHost struct {
+	Lhost host `json:"host,omitempty"`
+}
+
 type host_parameters_attributes	struct {
   Roles 			string	`json:"roles,omitempty"`
 	Puppet 			string	`json:"puppet,omitempty"`
@@ -439,10 +444,11 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) ([]byte, error
   //setup local vars
   r := strings.ToUpper(rType)
   lUserAccess := u
-
+  rHost := reqHost{}
+	rHost.Lhost = d
 
   b := new(bytes.Buffer)
-	json.NewEncoder(b).Encode(d)
+	json.NewEncoder(b).Encode(rHost)
 
 	//panic(b)
   //build and make request
