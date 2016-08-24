@@ -541,6 +541,9 @@ print("JPB-Building volumes attributes")
 		 for i := 0; i<vaCount; i++ {
 			 print("In vol for loop")
 			 h.Lvolumes_attributes = append(h.Lvolumes_attributes,volumes_attributes{})
+			 //h.Lvolumes_attributes = append(h.Lvolumes_attributes,volumes_attributes{})
+			 print(len(h.Lvolumes_attributes))
+
 			 prefix := fmt.Sprintf("volumes_attributes.%d",i)
 			 print("Prefix is "+prefix)
 				if v, ok := d.GetOk(prefix+".name"); ok {
