@@ -248,19 +248,19 @@ func resourceServer() *schema.Resource {
 				Optional: true,
 			},
 			"interfaces_attributes": &schema.Schema{
-				Type:     schema.TypeMap,
+				Type:     schema.TypeList,
 				Optional: true,
 			},
 			"volumes_attributes": &schema.Schema{
-				Type:     schema.TypeMap,
+				Type:     schema.TypeList,
 				Optional: true,
 			},
 			"compute_attributes": &schema.Schema{
-				Type:     schema.TypeMap,
+				Type:     schema.TypeList,
 				Optional: true,
 			},
 			"host_parameters_attributes": &schema.Schema{
-				Type:     schema.TypeMap,
+				Type:     schema.TypeList,
 				Optional: true,
 			},
 		},
@@ -334,9 +334,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Name = v.(string)
 				}
 		print("JPB-Building compute attributes")
-		caCount := type(d.Get("compute_attributes.#"))
-		hjkg := fmt.Sprintf("%s compute_attributes",caCount)
-		print(hjkg)
+		caCount := d.Get("compute_attributes.#").(int)
 			for i := 0; i < caCount; i++ {
 				prefix := fmt.Sprintf("compute_attributes.%d",i)
 				if v, ok := d.GetOk(prefix+".cpus"); ok {
