@@ -435,7 +435,7 @@ func resourceServer() *schema.Resource {
 }
 
 // Setup a function to make api calls
-func httpClient(rType string, d *host, u *userAccess, debug bool) error {
+func httpClient(rType string, d *host, u *userAccess, debug bool) ([]byte, error ) {
   //setup local vars
   r := strings.ToUpper(rType)
   lUserAccess := u
@@ -474,7 +474,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) error {
 		fmt.Println("%v",content)
 	}
 
-	return nil
+	return content, err
 }
 
 
@@ -502,27 +502,17 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				}
 		print("JPB-Building compute attributes")
 		caCount := d.Get("compute_attributes.#").(int)
-		cacnt := fmt.Sprintf("JPB - number of compute_attributes is: %d",caCount)
-		print(cacnt)
 		if caCount > 0 {
-			print("JPB- Passed if statement")
 			for i := 0; i < caCount; i++ {
-				print("JPB - Inside for loop")
 				prefix := fmt.Sprintf("compute_attributes.%d",i)
-				print("JPB - Set prefix as"+prefix)
-				print("JPB - Setup nested struct")
 				h.Lcompute_attributes = append(h.Lcompute_attributes,compute_attributes{})
-				print("JPB - Completed Setup of nested struct")
 				if v, ok := d.GetOk(prefix+".cpus"); ok {
-					print("JPB - Setting cpu value")
 					h.Lcompute_attributes[i].Cpus = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".start"); ok {
-					print("JPB - Setting start value")
 					h.Lcompute_attributes[i].Cluster = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".memory_mb"); ok {
-					print("JPB - Setting memory_mb value")
 					h.Lcompute_attributes[i].Memory_mb = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".guest_id"); ok {
@@ -530,24 +520,13 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				}
 			}
 		}
-    print("JPB-Completed compute attributes")
 /* build volumes_attributes now */
-print("JPB-Building volumes attributes")
 	 vaCount := d.Get("volumes_attributes.#").(int)
-	 vacnt := fmt.Sprintf("JPB - Number of volumes_attributes is : %d", vaCount)
-	 print(vacnt)
 	 if vaCount > 0 {
-		 print("JPB - in vol if statement loop")
 		 for i := 0; i<vaCount; i++ {
-			 print("In vol for loop")
 			 h.Lvolumes_attributes = append(h.Lvolumes_attributes,volumes_attributes{})
 			 //h.Lvolumes_attributes = append(h.Lvolumes_attributes,volumes_attributes{})
-			 strVol := fmt.Sprintf("JPB - volattr struct [0] is %+v",h.Lvolumes_attributes[0])
-			 print(strVol)
-			 print(len(h.Lvolumes_attributes))
-
 			 prefix := fmt.Sprintf("volumes_attributes.%d",i)
-			 print("Prefix is "+prefix)
 				if v, ok := d.GetOk(prefix+".name"); ok {
 					h.Lvolumes_attributes[i].Name = v.(string)
 				}
@@ -563,9 +542,8 @@ print("JPB-Building volumes attributes")
 				}
 			}
 		}
-  print("JPB-Completed volumes attributes")
+
 /* build interfaces_attributes now */
-  print("JPB-Building interfaces attributes")
 		iaCount := d.Get("interfaces_attributes.#").(int)
 		  if iaCount >0 {
 			for i := 0; i<iaCount; i++ {
@@ -627,9 +605,8 @@ print("JPB-Building volumes attributes")
 				}
 				}
 			}
-  print("JPB-completed interfaces attributes")
+
 /* populate host_parameters_attributes now */
-	print("JPB-Building host parameter attributes")
 		hpaCount := d.Get("host_parameters_attributes.#").(int)
 		if hpaCount > 0 {
 			for i := 0; i<hpaCount; i++ {
@@ -649,9 +626,8 @@ print("JPB-Building volumes attributes")
 				}
 			}
 		}
-print("JPB-Completed host parameter attributes")
+
 /* populate h struct instance for regular level data */
-print("JPB-Building top level attributes")
         if v, ok := d.GetOk("environment-id"); ok {
           h.Environment_id = v.(string)
         }
@@ -738,14 +714,21 @@ print("JPB-Building top level attributes")
         if v,ok := d.GetOk("compute_profile_id"); ok{
           h.Compute_profile_id = v.(int)
         }
-	print("JPB-Completed top level attributes")
+
 	/* check debug flag */
 	debug := false
 	if v, ok := d.GetOk("debug"); ok {
 		debug = v.(bool)
 	}
 
-	httpClient("POST", &h, &u, debug)
+	resp, err := httpClient("POST", &h, &u, debug)
+	if resp != nil {
+		fResp = fmt.Sprintf("The server responded with: %v",resp)
+		print(fResp)
+	}
+	if err != nil {
+		print(err)
+	}
 	return nil
 }
 
