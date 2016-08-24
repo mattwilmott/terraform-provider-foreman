@@ -357,7 +357,7 @@ func resourceServer() *schema.Resource {
 								ForceNew: false,
 							},
 							"size_gb" : &schema.Schema{
-								Type: schema.TypeInt,
+								Type: schema.TypeString,
 								Optional: true,
 								ForceNew: false,
 							},
