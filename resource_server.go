@@ -445,7 +445,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) ([]byte, error
   r := strings.ToUpper(rType)
   lUserAccess := u
   rHost := reqHost{}
-	rHost.Lhost = d
+	rHost.Lhost = *d
 
   b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(rHost)
