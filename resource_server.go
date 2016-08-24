@@ -55,7 +55,7 @@ type volumes_attributes struct {
 	Datastore	string	`json:"datastore,omitempty"`
 }
 
-type host struct `json:"host,omitempty"`{
+type host struct {
   Name									string	`json:"name,omitempty"`
   Environment_id				string	`json:"environment_id,omitempty"`
   Ip										string	`json:"ip,omitempty"`
