@@ -333,6 +333,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("name"); ok {
 					h.Name = v.(string)
 				}
+		print("JPB-Building compute attributes")
 		caCount := d.Get("compute_attributes.#").(int)
 			for i := 0; i < caCount; i++ {
 				prefix := fmt.Sprintf("compute_attributes.%d",i)
@@ -349,8 +350,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Lcompute_attributes[i].Guest_id = v.(string)
 				}
 			}
-
+    print("JPB-Completed compute attributes")
 /* build volumes_attributes now */
+print("JPB-Building volumes attributes")
 	 vaCount := d.Get("volumes_attributes.#").(int)
 		 for i := 0; i<vaCount; i++ {
 			 prefix := fmt.Sprintf("volumes_attributes.%d",i)
@@ -368,8 +370,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Lvolumes_attributes[i].Datastore = v.(string)
 				}
 		  }
-
+  print("JPB-Completed volumes attributes")
 /* build interfaces_attributes now */
+  print("JPB-Building interfaces attributes")
 		iaCount := d.Get("interfaces_attributes.#").(int)
 			for i := 0; i<iaCount; i++ {
 				prefix := fmt.Sprintf("interfaces_attributes.%d",i)
@@ -428,8 +431,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Linterfaces_attributes[i].Bond_options = v.(string)
 				}
 			}
-
+  print("JPB-completed interfaces attributes")
 /* populate host_parameters_attributes now */
+	print("JPB-Building host parameter attributes")
 		hpaCount := d.Get("host_parameters_attributes.#").(int)
 			for i := 0; i<hpaCount; i++ {
 				prefix := fmt.Sprintf("host_parameters_attributes.%d",i)
@@ -446,8 +450,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Lhost_parameters_attributes[i].JIRA_Ticket = v.(string)
 				}
 			}
-
+print("JPB-Completed host parameter attributes")
 /* populate h struct instance for regular level data */
+print("JPB-Building top level attributes")
         if v, ok := d.GetOk("environment-id"); ok {
           h.Environment_id = v.(string)
         }
@@ -534,6 +539,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
         if v,ok := d.GetOk("compute_profile_id"); ok{
           h.Compute_profile_id = v.(int)
         }
+	print("JPB-Completed top level attributes")
 	/* check debug flag */
 	debug := false
 	if v, ok := d.GetOk("debug"); ok {

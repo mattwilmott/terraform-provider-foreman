@@ -9,6 +9,7 @@ import (
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
+			/* Removing annoying questions at the beginning
 			"url": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -24,6 +25,7 @@ func Provider() terraform.ResourceProvider {
 				Optional:    true,
 				Description: descriptions["password"],
 			},
+			*/
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
