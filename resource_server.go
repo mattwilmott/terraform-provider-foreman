@@ -504,6 +504,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 		caCount := d.Get("compute_attributes.#").(int)
 		cacnt := fmt.Sprintf("JPB - number of compute_attributes is: %d",caCount)
 		print(cacnt)
+		if caCount <= 1 {
 			for i := 0; i < caCount; i++ {
 				prefix := fmt.Sprintf("compute_attributes.%d",i)
 				if v, ok := d.GetOk(prefix+".cpus"); ok {
@@ -519,6 +520,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Lcompute_attributes[i].Guest_id = v.(string)
 				}
 			}
+		}
     print("JPB-Completed compute attributes")
 /* build volumes_attributes now */
 print("JPB-Building volumes attributes")
