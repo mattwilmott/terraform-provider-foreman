@@ -250,18 +250,185 @@ func resourceServer() *schema.Resource {
 			"interfaces_attributes": &schema.Schema{
 				Type:     schema.TypeList,
 				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"mac": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+						"ip": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+						"name": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+						"subnet_id": &schema.Schema{
+							Type:	schema.TypeInt,
+							Optional: true,
+							ForceNew: false,
+						},
+						"domain_id": &schema.Schema{
+							Type:	schema.TypeInt,
+							Optional: true,
+							ForceNew: false,
+						},
+						"identifier": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+						"managed": &schema.Schema{
+							Type:	schema.TypeBool,
+							Optional: true,
+							ForceNew: false,
+						},
+						"primary": &schema.Schema{
+							Type:	schema.TypeBool,
+							Optional: true,
+							ForceNew: false,
+						},
+						"provision": &schema.Schema{
+							Type:	schema.TypeBool,
+							Optional: true,
+							ForceNew: false,
+						},
+						"username": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+						"password": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+						"provider": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+						"virtual": &schema.Schema{
+							Type:	schema.TypeBool,
+							Optional: true,
+							ForceNew: false,
+						},
+						"tag": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+						"attached_to": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+						"mode": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+						"attached_devices": &schema.Schema{
+							Type:	schema.TypeList,
+							Optional: true,
+							Elem: &schema.Schema{Type: schema.TypeString}
+							ForceNew: false,
+						},
+						"bond_options": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+					}
+				}
 			},
 			"volumes_attributes": &schema.Schema{
 				Type:     schema.TypeList,
 				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+							"name" : &schema.Schema{
+								Type: schema.TypeString,
+								Optional: true,
+								ForceNew: false,
+							},
+							"size_gb" : &schema.Schema{
+								Type: schema.TypeInt,
+								Optional: true,
+								ForceNew: false,
+							},
+							"_delete" : &schema.Schema{
+								Type: schema.TypeString,
+								Optional: true,
+								ForceNew: false,
+							},
+							"datastore" : &schema.Schema{
+								Type: schema.TypeString,
+								Optional: true,
+								ForceNew: false,
+							},
+						}
+					}
 			},
 			"compute_attributes": &schema.Schema{
 				Type:     schema.TypeList,
 				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+							"cpus" : &schema.Schema{
+								Type: schema.TypeString,
+								Optional: true,
+								ForceNew: false,
+							},
+							"cluster" : &schema.Schema{
+								Type: schema.TypeString,
+								Optional: true,
+								ForceNew: false,
+							},
+							"memory_mb" : &schema.Schema{
+								Type: schema.TypeString,
+								Optional: true,
+								ForceNew: false,
+							},
+							"guest_id" : &schema.Schema{
+								Type: schema.TypeString,
+								Optional: true,
+								ForceNew: false,
+							},
+						}
+					}
 			},
 			"host_parameters_attributes": &schema.Schema{
 				Type:     schema.TypeList,
 				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+							"roles" : &schema.Schema{
+								Type: schema.TypeString,
+								Optional: true,
+								ForceNew: false,
+							},
+							"puppet" : &schema.Schema{
+								Type: schema.TypeString,
+								Optional: true,
+								ForceNew: false,
+							},
+							"chef" : &schema.Schema{
+								Type: schema.TypeString,
+								Optional: true,
+								ForceNew: false,
+							},
+							"JIRA_Ticket" : &schema.Schema{
+								Type: schema.TypeString,
+								Optional: true,
+								ForceNew: false,
+							},
+						}
+					}
 			},
 		},
 	}
