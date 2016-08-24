@@ -535,6 +535,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 print("JPB-Building volumes attributes")
 	 vaCount := d.Get("volumes_attributes.#").(int)
 		 for i := 0; i<vaCount; i++ {
+			 h.Lvolumes_attributes = append(h.Lvolumes_attributes,volumes_attributes{})
 			 prefix := fmt.Sprintf("volumes_attributes.%d",i)
 				if v, ok := d.GetOk(prefix+".name"); ok {
 					h.Lvolumes_attributes[i].Name = v.(string)
@@ -555,6 +556,7 @@ print("JPB-Building volumes attributes")
   print("JPB-Building interfaces attributes")
 		iaCount := d.Get("interfaces_attributes.#").(int)
 			for i := 0; i<iaCount; i++ {
+				h.Linterfaces_attributes = append(h.Linterfaces_attributes,interfaces_attributes{})
 				prefix := fmt.Sprintf("interfaces_attributes.%d",i)
 				if v, ok := d.GetOk(prefix+".mac"); ok {
 					h.Linterfaces_attributes[i].Mac = v.(string)
@@ -616,6 +618,7 @@ print("JPB-Building volumes attributes")
 	print("JPB-Building host parameter attributes")
 		hpaCount := d.Get("host_parameters_attributes.#").(int)
 			for i := 0; i<hpaCount; i++ {
+				Lhost_parameters_attributes = append(Lhost_parameters_attributes,host_parameters_attributes{})
 				prefix := fmt.Sprintf("host_parameters_attributes.%d",i)
 				if v, ok := d.GetOk(prefix+".roles"); ok {
 					h.Lhost_parameters_attributes[i].Roles = v.(string)
