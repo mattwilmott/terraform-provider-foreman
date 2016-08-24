@@ -370,7 +370,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 		  }
 
 /* build interfaces_attributes now */
-		iaCount := d.GetOk("interfaces_attributes.#").(int)
+		iaCount := d.Get("interfaces_attributes.#").(int)
 			for i := 0; i<iaCount; i++ {
 				prefix := fmt.Sprintf("interfaces_attributes.%d",i)
 				if v, ok := d.GetOk(prefix+".mac"); ok {
