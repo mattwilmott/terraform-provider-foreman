@@ -502,6 +502,8 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				}
 		print("JPB-Building compute attributes")
 		caCount := d.Get("compute_attributes.#").(int)
+		cacnt = fmt.Sprintf("JPB - number of compute_attributes is: %d",cacnt)
+		print(cacnt)
 			for i := 0; i < caCount; i++ {
 				prefix := fmt.Sprintf("compute_attributes.%d",i)
 				if v, ok := d.GetOk(prefix+".cpus"); ok {
