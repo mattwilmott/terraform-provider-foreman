@@ -510,6 +510,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				print("JPB - Inside for loop")
 				prefix := fmt.Sprintf("compute_attributes.%d",i)
 				print("JPB - Set prefix as"+prefix)
+				print("JPB - Setup nested struct")
+				h.Lcompute_attributes[i] = compute_attributes
+				print("JPB - Completed Setup of nested struct")
 				if v, ok := d.GetOk(prefix+".cpus"); ok {
 					print("JPB - Setting cpu value")
 					h.Lcompute_attributes[i].Cpus = v.(string)
