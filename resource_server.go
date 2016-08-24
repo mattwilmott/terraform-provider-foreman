@@ -534,6 +534,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 /* build volumes_attributes now */
 print("JPB-Building volumes attributes")
 	 vaCount := d.Get("volumes_attributes.#").(int)
+	 if vaCount > 0 {
 		 for i := 0; i<vaCount; i++ {
 			 h.Lvolumes_attributes = append(h.Lvolumes_attributes,volumes_attributes{})
 			 prefix := fmt.Sprintf("volumes_attributes.%d",i)
@@ -550,11 +551,13 @@ print("JPB-Building volumes attributes")
 				if v, ok := d.GetOk(prefix+".datastore"); ok {
 					h.Lvolumes_attributes[i].Datastore = v.(string)
 				}
-		  }
+			}
+		}
   print("JPB-Completed volumes attributes")
 /* build interfaces_attributes now */
   print("JPB-Building interfaces attributes")
 		iaCount := d.Get("interfaces_attributes.#").(int)
+		  if iaCount >0 {
 			for i := 0; i<iaCount; i++ {
 				h.Linterfaces_attributes = append(h.Linterfaces_attributes,interfaces_attributes{})
 				prefix := fmt.Sprintf("interfaces_attributes.%d",i)
@@ -612,11 +615,13 @@ print("JPB-Building volumes attributes")
 				if v, ok := d.GetOk(prefix+".bond_options"); ok {
 					h.Linterfaces_attributes[i].Bond_options = v.(string)
 				}
+				}
 			}
   print("JPB-completed interfaces attributes")
 /* populate host_parameters_attributes now */
 	print("JPB-Building host parameter attributes")
 		hpaCount := d.Get("host_parameters_attributes.#").(int)
+		if hpaCount > 0 {
 			for i := 0; i<hpaCount; i++ {
 				h.Lhost_parameters_attributes = append(h.Lhost_parameters_attributes,host_parameters_attributes{})
 				prefix := fmt.Sprintf("host_parameters_attributes.%d",i)
@@ -633,6 +638,7 @@ print("JPB-Building volumes attributes")
 					h.Lhost_parameters_attributes[i].JIRA_Ticket = v.(string)
 				}
 			}
+		}
 print("JPB-Completed host parameter attributes")
 /* populate h struct instance for regular level data */
 print("JPB-Building top level attributes")
