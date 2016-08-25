@@ -459,32 +459,32 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Name = v.(string)
 				}
 		print("JPB-Building compute attributes")
-				prefix := fmt.Sprintf("compute_attributes")
-				if v, ok := d.GetOk(prefix+".cpus"); ok {
+				caprefix := fmt.Sprintf("compute_attributes")
+				if v, ok := d.GetOk(caprefix+".cpus"); ok {
 					h.Lcompute_attributes.Cpus = v.(string)
 				}
-				if v, ok := d.GetOk(prefix+".start"); ok {
+				if v, ok := d.GetOk(caprefix+".start"); ok {
 					h.Lcompute_attributes.Cluster = v.(string)
 				}
-				if v, ok := d.GetOk(prefix+".memory_mb"); ok {
+				if v, ok := d.GetOk(caprefix+".memory_mb"); ok {
 					h.Lcompute_attributes.Memory_mb = v.(string)
 				}
-				if v, ok := d.GetOk(prefix+".guest_id"); ok {
+				if v, ok := d.GetOk(caprefix+".guest_id"); ok {
 					h.Lcompute_attributes.Guest_id = v.(string)
 				}
 /* build volumes_attributes now */
-			  prefix := fmt.Sprintf("volumes_attributes")
-				if v, ok := d.GetOk(prefix+".name"); ok {
+			  vaprefix := fmt.Sprintf("volumes_attributes")
+				if v, ok := d.GetOk(vaprefix+".name"); ok {
 					h.Lvolumes_attributes.Name = v.(string)
 				}
-				if v, ok := d.GetOk(prefix+".size_gb"); ok {
+				if v, ok := d.GetOk(vaprefix+".size_gb"); ok {
 					num, _ := strconv.Atoi(v.(string))
 					h.Lvolumes_attributes.Size_gb = num
 				}
-				if v, ok := d.GetOk(prefix+"._delete"); ok {
+				if v, ok := d.GetOk(vaprefix+"._delete"); ok {
 					h.Lvolumes_attributes._delete = v.(string)
 				}
-				if v, ok := d.GetOk(prefix+".datastore"); ok {
+				if v, ok := d.GetOk(vaprefix+".datastore"); ok {
 					h.Lvolumes_attributes.Datastore = v.(string)
 				}
 			}
