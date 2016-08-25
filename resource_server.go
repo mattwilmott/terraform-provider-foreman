@@ -487,8 +487,6 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk(vaprefix+".datastore"); ok {
 					h.Lvolumes_attributes.Datastore = v.(string)
 				}
-			}
-		}
 
 /* build interfaces_attributes now */
 		iaCount := d.Get("interfaces_attributes.#").(int)
