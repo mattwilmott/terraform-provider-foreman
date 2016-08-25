@@ -92,8 +92,8 @@ type host struct {
   Compute_profile_id		int			`json:"compute_profile_id,omitempty"`
 	Lhost_parameters_attributes []host_parameters_attributes	`json:"host_parameters_attributes,omitempty"`
   Linterfaces_attributes	[]interfaces_attributes	`json:"interfaces_attributes,omitempty"`
-  Lcompute_attributes		[]compute_attributes	`json:"compute_attributes,omitempty"`
-	Lvolumes_attributes	[]volumes_attributes	`json:"volumes_attributes,omitempty"`
+  Lcompute_attributes		compute_attributes	`json:"compute_attributes,omitempty"`
+	Lvolumes_attributes		volumes_attributes	`json:"volumes_attributes,omitempty"`
 }
 
 type userAccess struct {
@@ -352,60 +352,12 @@ func resourceServer() *schema.Resource {
 				},
 			},
 			"volumes_attributes": &schema.Schema{
-				Type:     schema.TypeList,
+				Type:     schema.TypeMap,
 				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-							"name" : &schema.Schema{
-								Type: schema.TypeString,
-								Optional: true,
-								ForceNew: false,
-							},
-							"size_gb" : &schema.Schema{
-								Type: schema.TypeString,
-								Optional: true,
-								ForceNew: false,
-							},
-							"_delete" : &schema.Schema{
-								Type: schema.TypeString,
-								Optional: true,
-								ForceNew: false,
-							},
-							"datastore" : &schema.Schema{
-								Type: schema.TypeString,
-								Optional: true,
-								ForceNew: false,
-							},
-						},
-					},
 			},
 			"compute_attributes": &schema.Schema{
-				Type:     schema.TypeList,
+				Type:     schema.TypeMap,
 				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-							"cpus" : &schema.Schema{
-								Type: schema.TypeString,
-								Optional: true,
-								ForceNew: false,
-							},
-							"cluster" : &schema.Schema{
-								Type: schema.TypeString,
-								Optional: true,
-								ForceNew: false,
-							},
-							"memory_mb" : &schema.Schema{
-								Type: schema.TypeString,
-								Optional: true,
-								ForceNew: false,
-							},
-							"guest_id" : &schema.Schema{
-								Type: schema.TypeString,
-								Optional: true,
-								ForceNew: false,
-							},
-						},
-					},
 			},
 			"host_parameters_attributes": &schema.Schema{
 				Type:     schema.TypeList,
@@ -507,44 +459,33 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Name = v.(string)
 				}
 		print("JPB-Building compute attributes")
-		caCount := d.Get("compute_attributes.#").(int)
-		if caCount > 0 {
-			for i := 0; i < caCount; i++ {
-				prefix := fmt.Sprintf("compute_attributes.%d",i)
-				h.Lcompute_attributes = append(h.Lcompute_attributes,compute_attributes{})
+				prefix := fmt.Sprintf("compute_attributes")
 				if v, ok := d.GetOk(prefix+".cpus"); ok {
-					h.Lcompute_attributes[i].Cpus = v.(string)
+					h.Lcompute_attributes.Cpus = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".start"); ok {
-					h.Lcompute_attributes[i].Cluster = v.(string)
+					h.Lcompute_attributes.Cluster = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".memory_mb"); ok {
-					h.Lcompute_attributes[i].Memory_mb = v.(string)
+					h.Lcompute_attributes.Memory_mb = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".guest_id"); ok {
-					h.Lcompute_attributes[i].Guest_id = v.(string)
+					h.Lcompute_attributes.Guest_id = v.(string)
 				}
-			}
-		}
 /* build volumes_attributes now */
-	 vaCount := d.Get("volumes_attributes.#").(int)
-	 if vaCount > 0 {
-		 for i := 0; i<vaCount; i++ {
-			 h.Lvolumes_attributes = append(h.Lvolumes_attributes,volumes_attributes{})
-			 //h.Lvolumes_attributes = append(h.Lvolumes_attributes,volumes_attributes{})
-			 prefix := fmt.Sprintf("volumes_attributes.%d",i)
+			  prefix := fmt.Sprintf("volumes_attributes")
 				if v, ok := d.GetOk(prefix+".name"); ok {
-					h.Lvolumes_attributes[i].Name = v.(string)
+					h.Lvolumes_attributes.Name = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".size_gb"); ok {
 					num, _ := strconv.Atoi(v.(string))
-					h.Lvolumes_attributes[i].Size_gb = num
+					h.Lvolumes_attributes.Size_gb = num
 				}
 				if v, ok := d.GetOk(prefix+"._delete"); ok {
-					h.Lvolumes_attributes[i]._delete = v.(string)
+					h.Lvolumes_attributes._delete = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".datastore"); ok {
-					h.Lvolumes_attributes[i].Datastore = v.(string)
+					h.Lvolumes_attributes.Datastore = v.(string)
 				}
 			}
 		}
