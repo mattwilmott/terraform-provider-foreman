@@ -410,7 +410,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) ([]byte, error
 	case "POST","PUT","DELETE":
 	  req, err := http.NewRequest(r,lUserAccess.url,b)
 	default:
-		req, err := http.NewRequest(r,fmt.Sprintf("%s/%s",lUserAccess.url,rHost.host.name),b)
+		req, err := http.NewRequest(r,fmt.Sprintf("%s/%s",lUserAccess.url,rHost.Lhost.name),b)
   }
 	if err != nil {
 		panic(err)
