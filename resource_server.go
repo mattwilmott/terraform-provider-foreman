@@ -12,6 +12,7 @@ import (
 	//"os"
 	"bytes"
 	"strconv"
+	"errors"
 )
 
 type reqHost struct {
@@ -408,8 +409,8 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) ([]byte, error
 	switch r {
 	case "POST","PUT","DELETE":
 	  req, err := http.NewRequest(r,lUserAccess.url,b)
-	case "GET":
-		req, err := http.NewRequest(r,fmt.Sprintf("%s/%s",lUserAccess.url,rHost.host.name))
+	default:
+		req, err := http.NewRequest(r,fmt.Sprintf("%s/%s",lUserAccess.url,rHost.host.name),b)
   }
 	if err != nil {
 		panic(err)
