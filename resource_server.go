@@ -28,7 +28,7 @@ type host_parameters_attributes	struct {
 type interfaces_attributes	struct	{
 	Mac 								string	`json:"mac,omitempty"`
 	Ip 									string	`json:"ip,omitempty"`
-	//type 								string
+	Type 								string	`json:"type,omitempty"`
 	Name 								string	`json:"name,omitempty"`
 	Subnet_id 					int			`json:"subnet_id,omitempty"`
 	Domain_id 					int			`json:"domain_id,omitempty"`
@@ -264,6 +264,11 @@ func resourceServer() *schema.Resource {
 							ForceNew: false,
 						},
 						"ip": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+						"type": &schema.Schema{
 							Type:	schema.TypeString,
 							Optional: true,
 							ForceNew: false,
@@ -504,6 +509,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				}
 				if v, ok := d.GetOk(prefix+".ip"); ok {
 					h.Linterfaces_attributes[i].Ip = v.(string)
+				}
+				if v, ok := d.GetOk(prefix+".type"); ok {
+					h.Linterfaces_attributes[i].Type = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".name"); ok {
 					h.Linterfaces_attributes[i].Name = v.(string)
