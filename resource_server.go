@@ -405,8 +405,12 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) ([]byte, error
 	//panic(b)
   //build and make request
 	client := &http.Client{}
-	req, err := http.NewRequest(r,lUserAccess.url,b)
-
+	switch r {
+	case "POST","PUT","DELETE":
+	  req, err := http.NewRequest(r,lUserAccess.url,b)
+	case "GET":
+		req, err := http.NewRequest(r,fmt.Sprintf("%s/%s",lUserAccess.url,rHost.host.name))
+  }
 	if err != nil {
 		panic(err)
 	}
@@ -670,9 +674,12 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 	if resp != nil {
 		fResp := fmt.Sprintf("The server responded with: %v",resp)
 		print(fResp)
+		if strings.Contains(string(resp),"error"){
+			err = errors.New(string(resp))
+		}
 	}
 	if err != nil {
-		panic(err)
+		return err
 	}
 	return nil
 }
