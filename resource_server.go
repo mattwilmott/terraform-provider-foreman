@@ -442,7 +442,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) ([]byte, error
 
 
 func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
-	d.SetId(d.Get("name").(string))
+	//d.SetId(d.Get("name").(string))
         h := host{}
 
 				u := userAccess{}
@@ -682,6 +682,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return err
 	}
+	d.SetId(d.Get("name").(string))
 	return nil
 }
 
