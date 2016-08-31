@@ -411,12 +411,16 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) ([]byte, error
 	//panic(b)
   //build and make request
 	client := &http.Client{}
-	//switch r {
-	//case "POST","PUT","DELETE":
-	  req, err := http.NewRequest(r,lUserAccess.url,b)
-	//default:
-	//	req, err := http.NewRequest(r,fmt.Sprintf("%s/%s",lUserAccess.url,rHost.Lhost.name),b)
-  //}
+	reqURL := ""
+	switch r {
+	case "POST","PUT","DELETE":
+	  //req, err := http.NewRequest(r,lUserAccess.url,b)
+		reqURL = fmt.Sprintf("%s/hosts", lUserAccess.url)
+	case "GET":
+		//req, err := http.NewRequest(r,fmt.Sprintf("%s/%s",lUserAccess.url,rHost.Lhost.name),b)
+    reqURL = fmt.Sprintf("%s/hosts/%s",lUserAccess.url,rHost.Lhost.name)
+	}
+	req, err := http.NewRequest(r,reqURL,b)
 	if err != nil {
 		panic(err)
 	}
@@ -448,9 +452,9 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) ([]byte, error
 
 func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 	//d.SetId(d.Get("name").(string))
-        h := host{}
+  h := host{}
 
-				u := userAccess{}
+	u := userAccess{}
 
 /* populate u struct instance */
 				if v, ok := d.GetOk("username"); ok {
