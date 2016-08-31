@@ -418,7 +418,7 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) ([]byte, error
 		reqURL = fmt.Sprintf("%s/hosts", lUserAccess.url)
 	case "GET":
 		//req, err := http.NewRequest(r,fmt.Sprintf("%s/%s",lUserAccess.url,rHost.Lhost.name),b)
-    reqURL = fmt.Sprintf("%s/hosts/%s",lUserAccess.url,rHost.Lhost.name)
+    reqURL = fmt.Sprintf("%s/hosts/%s",lUserAccess.url,rHost.Lhost.Name)
 	}
 	req, err := http.NewRequest(r,reqURL,b)
 	if err != nil {
