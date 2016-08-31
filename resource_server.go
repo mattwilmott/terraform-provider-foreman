@@ -398,7 +398,7 @@ func resourceServer() *schema.Resource {
 }
 
 // Setup a function to make api calls
-func httpClient(rType string, d *host, u *userAccess, debug bool) ([]byte, error ) {
+func httpClient(rType string, d *host, u *userAccess, apiSection string, debug bool) ([]byte, error ) {
   //setup local vars
   r := strings.ToUpper(rType)
   lUserAccess := u
@@ -415,10 +415,10 @@ func httpClient(rType string, d *host, u *userAccess, debug bool) ([]byte, error
 	switch r {
 	case "POST","PUT","DELETE":
 	  //req, err := http.NewRequest(r,lUserAccess.url,b)
-		reqURL = fmt.Sprintf("%s/hosts", lUserAccess.url)
+		reqURL = fmt.Sprintf("%s/%s", lUserAccess.url, apiSection)
 	case "GET":
 		//req, err := http.NewRequest(r,fmt.Sprintf("%s/%s",lUserAccess.url,rHost.Lhost.name),b)
-    reqURL = fmt.Sprintf("%s/hosts/%s",lUserAccess.url,rHost.Lhost.Name)
+    reqURL = fmt.Sprintf("%s/%s/%s",lUserAccess.url, apiSection, rHost.Lhost.Name)
 	}
 	req, err := http.NewRequest(r,reqURL,b)
 	if err != nil {
@@ -683,7 +683,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 		debug = v.(bool)
 	}
 
-	resp, err := httpClient("POST", &h, &u, debug)
+	resp, err := httpClient("POST", &h, &u, "hosts", debug)
 	if resp != nil {
 		fResp := fmt.Sprintf("The server responded with: %v",resp)
 		print(fResp)
@@ -691,6 +691,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 			err = errors.New(string(resp))
 		}
 	}
+
 	if err != nil {
 		return err
 	}
