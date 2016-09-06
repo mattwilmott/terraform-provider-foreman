@@ -523,7 +523,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				//Adding some logic to auto populate primary nic because of API deferral
 				if v, ok := d.GetOk(prefix+".name"); ok {
 					h.Linterfaces_attributes[i].Name = v.(string)
-				} else if v, ok := d.GetOk("name"); ok && h.Linterfaces_attributes[i].primary {
+				} else if v, ok := d.GetOk("name"); ok && h.Linterfaces_attributes[i].Primary {
 					h.Linterfaces_attributes[i].Name = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".subnet_id"); ok {
