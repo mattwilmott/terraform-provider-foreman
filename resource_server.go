@@ -508,6 +508,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 			for i := 0; i<iaCount; i++ {
 				h.Linterfaces_attributes = append(h.Linterfaces_attributes,interfaces_attributes{})
 				prefix := fmt.Sprintf("interfaces_attributes.%d",i)
+				if v, ok := d.GetOk(prefix+".primary"); ok {
+					h.Linterfaces_attributes[i].Primary = v.(bool)
+				}
 				if v, ok := d.GetOk(prefix+".mac"); ok {
 					h.Linterfaces_attributes[i].Mac = v.(string)
 				}
@@ -517,7 +520,10 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk(prefix+".type"); ok {
 					h.Linterfaces_attributes[i].Type = v.(string)
 				}
+				//Adding some logic to auto populate primary nic because of API deferral
 				if v, ok := d.GetOk(prefix+".name"); ok {
+					h.Linterfaces_attributes[i].Name = v.(string)
+				} else if v, ok := d.GetOk("name"); ok && h.Linterfaces_attributes[i].primary {
 					h.Linterfaces_attributes[i].Name = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".subnet_id"); ok {
@@ -531,9 +537,6 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				}
 				if v, ok := d.GetOk(prefix+".managed"); ok {
 					h.Linterfaces_attributes[i].Managed = v.(bool)
-				}
-				if v, ok := d.GetOk(prefix+".primary"); ok {
-					h.Linterfaces_attributes[i].Primary = v.(bool)
 				}
 				if v, ok := d.GetOk(prefix+".provision"); ok {
 					h.Linterfaces_attributes[i].Provision = v.(bool)
