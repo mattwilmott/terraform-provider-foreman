@@ -511,16 +511,20 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk(prefix+".primary"); ok {
 					h.Linterfaces_attributes[i].Primary = v.(bool)
 				}
+				//Adding some logic to auto populate primary nic because of API deferral
 				if v, ok := d.GetOk(prefix+".mac"); ok {
+					h.Linterfaces_attributes[i].Mac = v.(string)
+				} else if v, ok := d.GetOk("mac"); ok && h.Linterfaces_attributes[i].Primary {
 					h.Linterfaces_attributes[i].Mac = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".ip"); ok {
+					h.Linterfaces_attributes[i].Ip = v.(string)
+				} else if v, ok := d.GetOk("ip"); ok && h.Linterfaces_attributes[i].Primary {
 					h.Linterfaces_attributes[i].Ip = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".type"); ok {
 					h.Linterfaces_attributes[i].Type = v.(string)
 				}
-				//Adding some logic to auto populate primary nic because of API deferral
 				if v, ok := d.GetOk(prefix+".name"); ok {
 					h.Linterfaces_attributes[i].Name = v.(string)
 				} else if v, ok := d.GetOk("name"); ok && h.Linterfaces_attributes[i].Primary {
@@ -528,9 +532,13 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				}
 				if v, ok := d.GetOk(prefix+".subnet_id"); ok {
 					h.Linterfaces_attributes[i].Subnet_id = v.(int)
+				} else if v, ok := d.GetOk("subnet_id"); ok && h.Linterfaces_attributes[i].Primary {
+					h.Linterfaces_attributes[i].Subnet_id = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".domain_id"); ok {
 					h.Linterfaces_attributes[i].Domain_id = v.(int)
+				} else if v, ok := d.GetOk("domain_id"); ok && h.Linterfaces_attributes[i].Primary {
+					h.Linterfaces_attributes[i].Domain_id = v.(string)
 				}
 				if v, ok := d.GetOk(prefix+".identifier"); ok {
 					h.Linterfaces_attributes[i].Identifier = v.(string)
