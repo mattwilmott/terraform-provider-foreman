@@ -465,8 +465,9 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 	req.SetBasicAuth(lUserAccess.username,lUserAccess.password)
 	}
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Accept", "application/json;version=2")
 	req.Header.Add("Foreman_api_version", "2")
+	req.Header.Add("Accept-Encoding": "gzip, deflate")
    //enable debugging data
 	if debug {
 		panic(req)
