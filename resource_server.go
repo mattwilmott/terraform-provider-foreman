@@ -45,14 +45,21 @@ type interfaces_attributes	struct	{
 	Mode 								string	`json:"mode,omitempty"` // with validations
 	Attached_devices 		[]string `json:"attached_devices,omitempty"`
 	Bond_options 				string	`json:"bond_options,omitempty"`
-	compute_attributes
+	Lcompute_attributes ifcompute_attributes `json:"compute_attributes,omitempty"`
 }
 type compute_attributes	struct {
 	Cpus 			string	`json:"cpus,omitempty"`
-	//start 		string
+	Start 		string	`json:"start,omitempty"`
 	Cluster 	string	`json:"cluster,omitempty"`
 	Memory_mb string	`json:"memory_mb,omitempty"`
 	Guest_id 	string	`json:"guest_id,omitempty"`
+	Lvolumes_attributes		volumes_attributes	`json:"volumes_attributes,omitempty"`
+}
+
+type ifcompute_attributes struct {
+	Network	string	`json:"network,omitempty"`
+	Type		string	`json:"type,omitempty"`
+
 }
 type volumes_attributes struct {
 	Name		  string	`json:"name,omitempty"`
@@ -94,7 +101,7 @@ type host struct {
 	Lhost_parameters_attributes []host_parameters_attributes	`json:"host_parameters_attributes,omitempty"`
   Linterfaces_attributes	[]interfaces_attributes	`json:"interfaces_attributes,omitempty"`
   Lcompute_attributes		compute_attributes	`json:"compute_attributes,omitempty"`
-	Lvolumes_attributes		volumes_attributes	`json:"volumes_attributes,omitempty"`
+
 }
 
 type userAccess struct {
@@ -354,12 +361,41 @@ func resourceServer() *schema.Resource {
 							Optional: true,
 							ForceNew: false,
 						},
+						"compute_attributes": &schema.Schema{
+							Type:     schema.TypeMap,
+							Optional: true,
+							ForceNew: false,
+						},
 					},
 				},
 			},
 			"volumes_attributes": &schema.Schema{
-				Type:     schema.TypeMap,
+				Type:     schema.TypeList,
 				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"name": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+						"size_gb": &schema.Schema{
+							Type:	schema.TypeInt,
+							Optional: true,
+							ForceNew: false,
+						},
+						"_delete": &schema.Schema{
+							Type:	schema.TypeBool,
+							Optional: true,
+							ForceNew: false,
+						},
+						"datastore": &schema.Schema{
+							Type:	schema.TypeString,
+							Optional: true,
+							ForceNew: false,
+						},
+					},
+				},
 			},
 			"compute_attributes": &schema.Schema{
 				Type:     schema.TypeMap,
@@ -487,21 +523,26 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Lcompute_attributes.Guest_id = v.(string)
 				}
 /* build volumes_attributes now */
-			  vaprefix := fmt.Sprintf("volumes_attributes")
+		vaCount := d.Get("volumes_attributes.#").(int)
+			if vaCount >0 {
+			for i := 0; i<vaCount; i++ {
+				h.Lvolumes_attributes = append(h.Lcompute_attributes.Lvolumes_attributes,volumes_attributes{})
+			  vaprefix := fmt.Sprintf("volumes_attributes.%d",i)
 				if v, ok := d.GetOk(vaprefix+".name"); ok {
-					h.Lvolumes_attributes.Name = v.(string)
+					h.Lcompute_attributes.Lvolumes_attributes[i].Name = v.(string)
 				}
 				if v, ok := d.GetOk(vaprefix+".size_gb"); ok {
 					num, _ := strconv.Atoi(v.(string))
-					h.Lvolumes_attributes.Size_gb = num
+					h.Lcompute_attributes.Lvolumes_attributes[i].Size_gb = num
 				}
 				if v, ok := d.GetOk(vaprefix+"._delete"); ok {
-					h.Lvolumes_attributes._delete = v.(string)
+					h.Lcompute_attributes.Lvolumes_attributes[i]._delete = v.(string)
 				}
 				if v, ok := d.GetOk(vaprefix+".datastore"); ok {
-					h.Lvolumes_attributes.Datastore = v.(string)
+					h.Lcompute_attributes.Lvolumes_attributes[i].Datastore = v.(string)
 				}
-
+      }
+	  }
 /* build interfaces_attributes now */
 		iaCount := d.Get("interfaces_attributes.#").(int)
 		  if iaCount >0 {
@@ -575,6 +616,13 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				}
 				if v, ok := d.GetOk(prefix+".bond_options"); ok {
 					h.Linterfaces_attributes[i].Bond_options = v.(string)
+				}
+				ifcaprefix := fmt.Sprintf("%s.compute_attributes",prefix)
+				if v, ok := d.GetOk(ifcaprefix+".network"); ok {
+					h.Linterface_attributes_attributes[i].Lcompute_attributes.Network = v.(string)
+				}
+				if v, ok := d.GetOk(ifcaprefix+".type"); ok {
+					h.Linterface_attributes_attributes[i].Lcompute_attributes.Type = v.(string)
 				}
 				}
 			}
