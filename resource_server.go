@@ -442,8 +442,8 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 	rHost.Lhost = *d
 
   b := new(bytes.Buffer)
-	json.NewEncoder(b).Encode(rHost)
-
+	b.Write([]byte("host:"))
+	json.NewEncoder(b).Encode(d)
 	//panic(b)
   //build and make request
 	client := &http.Client{}
@@ -454,7 +454,7 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 		reqURL = fmt.Sprintf("%s/%s", lUserAccess.url, apiSection)
 	case "GET":
 		//req, err := http.NewRequest(r,fmt.Sprintf("%s/%s",lUserAccess.url,rHost.Lhost.name),b)
-    reqURL = fmt.Sprintf("%s/%s/%s",lUserAccess.url, apiSection, rHost.Lhost.Name)
+    reqURL = fmt.Sprintf("%s/%s/%s",lUserAccess.url, apiSection, d.Name)
 	}
 	req, err := http.NewRequest(r,reqURL,b)
 	if err != nil {
@@ -536,8 +536,7 @@ print("JPB - in for loop, instantiated vol stuff under compute attrs")
 				}
 print("JPB - added vol name")
 				if v, ok := d.GetOk(vaprefix+".size_gb"); ok {
-					num, _ := strconv.Atoi(v.(string))
-					h.Lcompute_attributes.Lvolumes_attributes[i].Size_gb = num
+					h.Lcompute_attributes.Lvolumes_attributes[i].Size_gb = v.(int)
 				}
 print("JPB added size_gb")
 				if v, ok := d.GetOk(vaprefix+"._delete"); ok {
