@@ -442,7 +442,7 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 	rHost.Lhost = *d
 
   b := new(bytes.Buffer)
-	b.Write([]byte("host:"))
+	b.Write([]byte(`"host":`))
 	json.NewEncoder(b).Encode(d)
 	//panic(b)
   //build and make request
