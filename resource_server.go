@@ -467,7 +467,7 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json;version=2")
 	req.Header.Add("Foreman_api_version", "2")
-	req.Header.Add("Accept-Encoding": "gzip, deflate")
+	req.Header.Add("Accept-Encoding", "gzip, deflate")
    //enable debugging data
 	if debug {
 		panic(req)
