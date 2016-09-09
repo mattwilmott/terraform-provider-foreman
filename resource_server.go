@@ -516,6 +516,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Lcompute_attributes.Cpus = v.(string)
 				}
 				if v, ok := d.GetOk(caprefix+".start"); ok {
+					h.Lcompute_attributes.Start = v.(string)
+				}
+				if v, ok := d.GetOk(caprefix+".cluster"); ok {
 					h.Lcompute_attributes.Cluster = v.(string)
 				}
 				if v, ok := d.GetOk(caprefix+".memory_mb"); ok {
@@ -657,7 +660,7 @@ print("JPB - Added datastore and finished with vols")
 		}
 
 /* populate h struct instance for regular level data */
-        if v, ok := d.GetOk("environment-id"); ok {
+        if v, ok := d.GetOk("environment_id"); ok {
           h.Environment_id = v.(string)
         }
         if v,ok := d.GetOk("ip"); ok{
