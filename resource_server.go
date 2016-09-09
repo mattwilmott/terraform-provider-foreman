@@ -53,7 +53,7 @@ type compute_attributes	struct {
 	Cluster 	string	`json:"cluster,omitempty"`
 	Memory_mb string	`json:"memory_mb,omitempty"`
 	Guest_id 	string	`json:"guest_id,omitempty"`
-	Lvolumes_attributes		volumes_attributes	`json:"volumes_attributes,omitempty"`
+	Lvolumes_attributes		[]volumes_attributes	`json:"volumes_attributes,omitempty"`
 }
 
 type ifcompute_attributes struct {
@@ -526,7 +526,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 		vaCount := d.Get("volumes_attributes.#").(int)
 			if vaCount >0 {
 			for i := 0; i<vaCount; i++ {
-				h.Lvolumes_attributes = append(h.Lcompute_attributes.Lvolumes_attributes,volumes_attributes{})
+				h.Lcompute_attributes.Lvolumes_attributes = append(h.Lcompute_attributes.Lvolumes_attributes,volumes_attributes{})
 			  vaprefix := fmt.Sprintf("volumes_attributes.%d",i)
 				if v, ok := d.GetOk(vaprefix+".name"); ok {
 					h.Lcompute_attributes.Lvolumes_attributes[i].Name = v.(string)
