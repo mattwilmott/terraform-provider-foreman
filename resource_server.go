@@ -523,26 +523,33 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 					h.Lcompute_attributes.Guest_id = v.(string)
 				}
 /* build volumes_attributes now */
+print("starting to build volumes attributes")
 		vaCount := d.Get("volumes_attributes.#").(int)
 			if vaCount >0 {
+print("JPB in va if statement")
 			for i := 0; i<vaCount; i++ {
 				h.Lcompute_attributes.Lvolumes_attributes = append(h.Lcompute_attributes.Lvolumes_attributes,volumes_attributes{})
+print("JPB - in for loop, instantiated vol stuff under compute attrs")
 			  vaprefix := fmt.Sprintf("volumes_attributes.%d",i)
 				if v, ok := d.GetOk(vaprefix+".name"); ok {
 					h.Lcompute_attributes.Lvolumes_attributes[i].Name = v.(string)
 				}
+print("JPB - added vol name")
 				if v, ok := d.GetOk(vaprefix+".size_gb"); ok {
 					num, _ := strconv.Atoi(v.(string))
 					h.Lcompute_attributes.Lvolumes_attributes[i].Size_gb = num
 				}
+print("JPB added size_gb")
 				if v, ok := d.GetOk(vaprefix+"._delete"); ok {
 					h.Lcompute_attributes.Lvolumes_attributes[i]._delete = v.(string)
 				}
+print("JPB added delete")
 				if v, ok := d.GetOk(vaprefix+".datastore"); ok {
 					h.Lcompute_attributes.Lvolumes_attributes[i].Datastore = v.(string)
 				}
       }
 	  }
+print("JPB - Added datastore and finished with vols")
 /* build interfaces_attributes now */
 		iaCount := d.Get("interfaces_attributes.#").(int)
 		  if iaCount >0 {
