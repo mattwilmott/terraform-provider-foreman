@@ -574,12 +574,12 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk(prefix+".subnet_id"); ok {
 					h.Linterfaces_attributes[i].Subnet_id = v.(int)
 				} else if v, ok := d.GetOk("subnet_id"); ok && h.Linterfaces_attributes[i].Primary {
-					h.Linterfaces_attributes[i].Subnet_id = v.(string)
+					h.Linterfaces_attributes[i].Subnet_id = v.(int)
 				}
 				if v, ok := d.GetOk(prefix+".domain_id"); ok {
 					h.Linterfaces_attributes[i].Domain_id = v.(int)
 				} else if v, ok := d.GetOk("domain_id"); ok && h.Linterfaces_attributes[i].Primary {
-					h.Linterfaces_attributes[i].Domain_id = v.(string)
+					h.Linterfaces_attributes[i].Domain_id = v.(int)
 				}
 				if v, ok := d.GetOk(prefix+".identifier"); ok {
 					h.Linterfaces_attributes[i].Identifier = v.(string)
