@@ -619,10 +619,10 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				}
 				ifcaprefix := fmt.Sprintf("%s.compute_attributes",prefix)
 				if v, ok := d.GetOk(ifcaprefix+".network"); ok {
-					h.Linterface_attributes_attributes[i].Lcompute_attributes.Network = v.(string)
+					h.Linterface_attributes[i].Lcompute_attributes.Network = v.(string)
 				}
 				if v, ok := d.GetOk(ifcaprefix+".type"); ok {
-					h.Linterface_attributes_attributes[i].Lcompute_attributes.Type = v.(string)
+					h.Linterface_attributes[i].Lcompute_attributes.Type = v.(string)
 				}
 				}
 			}
