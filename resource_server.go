@@ -442,8 +442,8 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 	rHost.Lhost = *d
 
   b := new(bytes.Buffer)
-	b.Write([]byte(`"host":`))
-	json.NewEncoder(b).Encode(d)
+	//b.Write([]byte(`"host":`))
+	json.NewEncoder(b).Encode(rHost)
 	//panic(b)
   //build and make request
 	client := &http.Client{}
@@ -454,7 +454,7 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 		reqURL = fmt.Sprintf("%s/%s", lUserAccess.url, apiSection)
 	case "GET":
 		//req, err := http.NewRequest(r,fmt.Sprintf("%s/%s",lUserAccess.url,rHost.Lhost.name),b)
-    reqURL = fmt.Sprintf("%s/%s/%s",lUserAccess.url, apiSection, d.Name)
+    reqURL = fmt.Sprintf("%s/%s/%s",lUserAccess.url, apiSection, rHost.Lhost.Name)
 	}
 	req, err := http.NewRequest(r,reqURL,b)
 	if err != nil {
@@ -466,6 +466,7 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Foreman_api_version", "2")
    //enable debugging data
 	if debug {
 		panic(req)
