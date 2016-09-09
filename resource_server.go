@@ -86,22 +86,21 @@ type host struct {
   Root_pass							string	`json:"root_pass,omitempty"`
   Model_id							int			`json:"model_id,omitempty"`
   Hostgroup_id					int			`json:"hostgroup_id,omitempty"`
-  Owner_id							int			`json:"owner_id,omitempty"`
-  Owner_type						string	`json:"owner_type,omitempty"` // must be either User or Usergroup
   Puppet_ca_proxy_id		int			`json:"puppet_ca_proxy_id,omitempty"`
   Image_id							int			`json:"image_id,omitempty"`
   Build									bool		`json:"build,omitempty"`
   Enabled								bool		`json:"enabled,omitempty"`
   Provision_method			string	`json:"provision_method,omitempty"`
   Managed								bool		`json:"managed,omitempty"`
+	Lcompute_attributes		compute_attributes	`json:"compute_attributes,omitempty"`
+	Owner_id							int			`json:"owner_id,omitempty"`
+	Owner_type						string	`json:"owner_type,omitempty"` // must be either User or Usergroup
   Progress_report_id		string	`json:"progress_report_id,omitempty"`
   Comment								string	`json:"comment,omitempty"`
   Capabilities					string	`json:"capabilities,omitempty"`
   Compute_profile_id		int			`json:"compute_profile_id,omitempty"`
 	Lhost_parameters_attributes []host_parameters_attributes	`json:"host_parameters_attributes,omitempty"`
   Linterfaces_attributes	[]interfaces_attributes	`json:"interfaces_attributes,omitempty"`
-  Lcompute_attributes		compute_attributes	`json:"compute_attributes,omitempty"`
-
 }
 
 type userAccess struct {
