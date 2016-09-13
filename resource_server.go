@@ -765,8 +765,8 @@ for i := 0; i<hpaCount; i++ {
 }
 
 func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
-  h := buildHostStruct(d)
-	u := buildUserStruct(d)
+  h := buildHostStruct(d,meta)
+	u := buildUserStruct(d,meta)
 
 /* populate u struct instance */
 /*				if v, ok := d.GetOk("username"); ok {
