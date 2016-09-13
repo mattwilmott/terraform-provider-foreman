@@ -539,6 +539,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 print("starting to build volumes attributes")
 		vaCount := d.Get("volumes_attributes.#").(int)
 			if vaCount >0 {
+				h.Lcompute_attributes.Lvolumes_attributes = make(map[string]volumes_attributes)
 print("JPB in va if statement")
 			for i := 0; i<vaCount; i++ {
 				iStr:=fmt.Sprintf("%d",i)
