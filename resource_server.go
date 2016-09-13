@@ -369,7 +369,7 @@ func resourceServer() *schema.Resource {
 				},
 			},
 			"volumes_attributes": &schema.Schema{
-				Type:		schema.TypeSet,
+				Type:		schema.TypeList,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -394,15 +394,6 @@ func resourceServer() *schema.Resource {
 							ForceNew: false,
 						},
 					},
-				},
-				Set: func(v interface{}) int {
-					var buf bytes.Buffer
-					m := v.(map[string]interface{})
-					buf.WriteString(fmt.Sprintf("%s-", m["name"].(string)))
-					buf.WriteString(fmt.Sprintf("%s-", m["size_gb"].(int)))
-					buf.WriteString(fmt.Sprintf("%s-", m["_delete"].(bool)))
-					buf.WriteString(fmt.Sprintf("%s-", m["datastore"].(string)))
-					return hashcode.String(buf.String())
 				},
 			},
 			"compute_attributes": &schema.Schema{
