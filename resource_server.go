@@ -15,16 +15,19 @@ import (
 	"errors"
 )
 
+//reqHost is required to wrap the host for the foreman-api
 type reqHost struct {
 	Lhost host `json:"host,omitempty"`
 }
 
+//host_parameters_attributes parameters
 type host_parameters_attributes	struct {
   Roles 			string	`json:"roles,omitempty"`
 	Puppet 			string	`json:"puppet,omitempty"`
 	Chef 				string	`json:"chef,omitempty"`
 	JIRA_Ticket string	`json:",omitempty"`
 }
+//interfaces_attributes parameters
 type interfaces_attributes	struct	{
 	Mac 								string	`json:"mac,omitempty"`
 	Ip 									string	`json:"ip,omitempty"`
@@ -45,29 +48,33 @@ type interfaces_attributes	struct	{
 	Mode 								string	`json:"mode,omitempty"` // with validations
 	Attached_devices 		[]string `json:"attached_devices,omitempty"`
 	Bond_options 				string	`json:"bond_options,omitempty"`
+	//These are special attributes for hypervisor like vlan and whatnot
 	Lcompute_attributes ifcompute_attributes `json:"compute_attributes,omitempty"`
 }
+//These are actual compute instance attributes
 type compute_attributes	struct {
 	Cpus 			string	`json:"cpus,omitempty"`
 	Start 		string	`json:"start,omitempty"`
 	Cluster 	string	`json:"cluster,omitempty"`
 	Memory_mb string	`json:"memory_mb,omitempty"`
 	Guest_id 	string	`json:"guest_id,omitempty"`
+	//This needs to be a struct map or the foreman API will kick back the JSON
 	Lvolumes_attributes	map[string]volumes_attributes	`json:"volumes_attributes,omitempty"`
 }
 
+//struct for nested interface compute attributes
 type ifcompute_attributes struct {
 	Network	string	`json:"network,omitempty"`
 	Type		string	`json:"type,omitempty"`
-
 }
+//These are things like which datastore or cluster the virtual disks need to live on
 type volumes_attributes struct {
 	Name		  string	`json:"name,omitempty"`
 	Size_gb	  int			`json:"size_gb,omitempty"`
 	_delete	  string	`json:",omitempty"`
 	Datastore	string	`json:"datastore,omitempty"`
 }
-
+//This is the main host struct instance that later gets wrapped in reqHost for JSON/foreman API reasons
 type host struct {
   Name									string	`json:"name,omitempty"`
   Environment_id				string	`json:"environment_id,omitempty"`
@@ -102,13 +109,13 @@ type host struct {
 	Lhost_parameters_attributes []host_parameters_attributes	`json:"host_parameters_attributes,omitempty"`
   Linterfaces_attributes	[]interfaces_attributes	`json:"interfaces_attributes,omitempty"`
 }
-
+//Used for access authentication to foreman
 type userAccess struct {
 	username	string
 	password	string
 	url				string
 }
-
+//This sets up the schema, the interface between the tf file and the plugin
 func resourceServer() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceServerCreate,
@@ -375,12 +382,12 @@ func resourceServer() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"name": &schema.Schema{
 							Type:	schema.TypeString,
-							Required: true,
+							Optional: true,
 							ForceNew: false,
 						},
 						"size_gb": &schema.Schema{
 							Type:	schema.TypeInt,
-							Required: true,
+							Optional: true,
 							ForceNew: false,
 						},
 						"_delete": &schema.Schema{
@@ -441,18 +448,14 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 	rHost.Lhost = *d
 
   b := new(bytes.Buffer)
-	//b.Write([]byte(`"host":`))
 	json.NewEncoder(b).Encode(rHost)
-	//panic(b)
   //build and make request
 	client := &http.Client{}
 	reqURL := ""
 	switch r {
 	case "POST","PUT","DELETE":
-	  //req, err := http.NewRequest(r,lUserAccess.url,b)
 		reqURL = fmt.Sprintf("%s/%s", lUserAccess.url, apiSection)
 	case "GET":
-		//req, err := http.NewRequest(r,fmt.Sprintf("%s/%s",lUserAccess.url,rHost.Lhost.name),b)
     reqURL = fmt.Sprintf("%s/%s/%s",lUserAccess.url, apiSection, rHost.Lhost.Name)
 	}
 	req, err := http.NewRequest(r,reqURL,b)
@@ -488,7 +491,6 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 
 
 func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
-	//d.SetId(d.Get("name").(string))
   h := host{}
 
 	u := userAccess{}
@@ -509,7 +511,6 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("name"); ok {
 					h.Name = v.(string)
 				}
-		print("JPB-Building compute attributes")
 				caprefix := fmt.Sprintf("compute_attributes")
 				if v, ok := d.GetOk(caprefix+".cpus"); ok {
 					h.Lcompute_attributes.Cpus = v.(string)
@@ -526,38 +527,32 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk(caprefix+".guest_id"); ok {
 					h.Lcompute_attributes.Guest_id = v.(string)
 				}
-/* build volumes_attributes now */
-print("starting to build volumes attributes")
+/* build volumes_attributes now, this needs to be mapped so I build structs and then add them to the mapped value */
 		vaCount := d.Get("volumes_attributes.#").(int)
 			if vaCount >0 {
 				h.Lcompute_attributes.Lvolumes_attributes = make(map[string]volumes_attributes)
-print("JPB in va if statement")
 			for i := 0; i<vaCount; i++ {
+				// setup iterator market and instantiate local struct to append to maps
 				iStr:=fmt.Sprintf("%d",i)
 				lStruct := volumes_attributes{}
-				//h.Lcompute_attributes.Lvolumes_attributes = append(h.Lcompute_attributes.Lvolumes_attributes,volumes_attributes{})
-
-print("JPB - in for loop, instantiated vol stuff under compute attrs")
+				//setup lStruct values
 			  vaprefix := fmt.Sprintf("volumes_attributes.%d",i)
 				if v, ok := d.GetOk(vaprefix+".name"); ok {
 					lStruct.Name = v.(string)
 				}
-print("JPB - added vol name")
 				if v, ok := d.GetOk(vaprefix+".size_gb"); ok {
 					lStruct.Size_gb = v.(int)
 				}
-print("JPB added size_gb")
 				if v, ok := d.GetOk(vaprefix+"._delete"); ok {
 					lStruct._delete = v.(string)
 				}
-print("JPB added delete")
 				if v, ok := d.GetOk(vaprefix+".datastore"); ok {
 					lStruct.Datastore = v.(string)
 				}
+				//add in lStruct to the main host struct
 				h.Lcompute_attributes.Lvolumes_attributes[iStr] = lStruct
       }
 	  }
-print("JPB - Added datastore and finished with vols")
 /* build interfaces_attributes now */
 		iaCount := d.Get("interfaces_attributes.#").(int)
 		  if iaCount >0 {
