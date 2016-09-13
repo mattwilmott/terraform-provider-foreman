@@ -506,7 +506,7 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 }
 
 func getDomain(h *host, u *userAccess) string {
-	dStruct new(fRespDomain)
+	dStruct = new(fRespDomain)
 	resp, err := httpClient("GET", &h, &u, "domains", false,"")
 	if resp != nil {
 		fResp := fmt.Sprintf("The server responded with: %v",resp)
