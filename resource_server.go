@@ -115,6 +115,11 @@ type userAccess struct {
 	password	string
 	url				string
 }
+
+type fRespDomain struct {
+ Id		int			`json:"id"`
+ Name	string	`json:"name"`
+}
 //This sets up the schema, the interface between the tf file and the plugin
 func resourceServer() *schema.Resource {
 	return &schema.Resource{
@@ -500,11 +505,27 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 	return content, err
 }
 
-/*
-func getDomain(domain_id int) int {
+func getDomain(h *host, u *userAccess) string {
+	dStruct new(fRespDomain)
+	resp, err := httpClient("GET", &h, &u, "domains", false,"")
+	if resp != nil {
+		fResp := fmt.Sprintf("The server responded with: %v",resp)
+		print(fResp)
+		if strings.Contains(string(resp),"error"){
+			err = errors.New(string(resp))
+		}
+	}
 
+	if err != nil {
+		return err
+	}
+
+	unerr := json.Unmarshal(resp,&dStruct)
+	if unerr != nil {
+		return unerr
+	}
+	return dStruct.Name
 }
-*/
 
 func buildUserStruct(d *schema.ResourceData, meta interface{}) userAccess {
 	u := userAccess{}
@@ -793,10 +814,10 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 func resourceServerRead(d *schema.ResourceData, m interface{}) error {
 	h := buildHostStruct(d)
 	u := buildUserStruct(d)
+  dom := getDomain(&h,&u)
+	fqdn := fmt.Sprintf("%s.%s",h.Name,dom)
 
-
-
-	resp, err := httpClient("GET", &h, &u, "hosts", debug,"")
+	resp, err := httpClient("GET", &h, &u, "hosts", debug,fqdn)
 	if resp != nil {
 		fResp := fmt.Sprintf("The server responded with: %v",resp)
 		print(fResp)
@@ -808,6 +829,8 @@ func resourceServerRead(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
+	d.SetId(d.Get("name").(string))
+	d.Set("ip",h.Ip)
 	return nil
 }
 
