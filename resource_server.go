@@ -506,8 +506,8 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 }
 
 func getDomain(h *host, u *userAccess) string {
-	dStruct = new(fRespDomain)
-	resp, err := httpClient("GET", &h, &u, "domains", false,"")
+	dStruct := new(fRespDomain)
+	resp, err := httpClient("GET", h, u, "domains", false,"")
 	if resp != nil {
 		fResp := fmt.Sprintf("The server responded with: %v",resp)
 		print(fResp)
@@ -517,12 +517,12 @@ func getDomain(h *host, u *userAccess) string {
 	}
 
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	unerr := json.Unmarshal(resp,&dStruct)
 	if unerr != nil {
-		return unerr
+		panic(unerr)
 	}
 	return dStruct.Name
 }
@@ -812,12 +812,12 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceServerRead(d *schema.ResourceData, m interface{}) error {
-	h := buildHostStruct(d)
-	u := buildUserStruct(d)
+	h := buildHostStruct(d,m)
+	u := buildUserStruct(d,m)
   dom := getDomain(&h,&u)
 	fqdn := fmt.Sprintf("%s.%s",h.Name,dom)
 
-	resp, err := httpClient("GET", &h, &u, "hosts", debug,fqdn)
+	resp, err := httpClient("GET", &h, &u, "hosts", false,fqdn)
 	if resp != nil {
 		fResp := fmt.Sprintf("The server responded with: %v",resp)
 		print(fResp)
