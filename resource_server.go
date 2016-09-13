@@ -543,7 +543,7 @@ print("starting to build volumes attributes")
 print("JPB in va if statement")
 			for i := 0; i<vaCount; i++ {
 				iStr:=fmt.Sprintf("%d",i)
-				lStruct := volumes_attributes
+				lStruct := volumes_attributes{}
 				//h.Lcompute_attributes.Lvolumes_attributes = append(h.Lcompute_attributes.Lvolumes_attributes,volumes_attributes{})
 
 print("JPB - in for loop, instantiated vol stuff under compute attrs")
@@ -563,8 +563,8 @@ print("JPB added delete")
 				if v, ok := d.GetOk(vaprefix+".datastore"); ok {
 					lStruct.Datastore = v.(string)
 				}
+				h.Lcompute_attributes.Lvolumes_attributes[iStr] = lStruct
       }
-			h.Lcompute_attributes.Lvolumes_attributes[iStr] = lStruct
 	  }
 print("JPB - Added datastore and finished with vols")
 /* build interfaces_attributes now */
