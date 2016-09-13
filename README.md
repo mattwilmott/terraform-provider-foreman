@@ -4,8 +4,8 @@ Foreman provider for Terraform - !Please note that this is by no means productio
 ** Note, I am a sysops guy and have never touched golang in my life. I started this project to see if I could provision machines in foreman with terraform.
 
 ## What is Terraform
-Terraform is an orchestration tool that can be used to deploy and manage the lifecycle of cloud resources such as virtual machines, DNS records etc.
-That probably isn't giving it enough credit so check it out at https://terraform.io/
+Terraform is an orchestration tool that can be used to deploy and manage the lifecycle of cloud resources, virtual machines, physical machines, DNS records. Effectively, if you can code it you can provision it.
+You can find more information at https://terraform.io/
 
 ## What is Foreman
 Foreman (or more accurately TheForeman) is a Red Hat sponsored open source tool used to manage infrastructure in a Private Cloud. Foreman can provision for instance Docker instances, Virtual Machines in OpenStack or VMWare and it can even deploy to bare metal. Foreman ties into PuppetLabs Puppet infrastructure and provides ENC data regarding the servers it manages. Check it out at http://theforeman.org/
@@ -26,7 +26,7 @@ Sample terraform config. Save this as a example.tf or similar
 resource "foreman_server" "myVM" {
   username = "username"
   password = "password"
-  url = "https://foreman.domain.com/api/v2/hosts"
+  url = "https://foreman.domain.com/api"
   name = "hostname"
   environment_id = "environment_id"
   ip = "10.0.0.2"
@@ -97,17 +97,16 @@ resource "foreman_server" "myVM" {
 }
 ```
 
-This will interrogate the provider and should output something similar to
 **TODO**
 
 
 if you have already planned the terraform resources you can taint them essentially marking them to be rebuilt
 
-Now you can write your own plan similar to the example. Reference the terraform documentation at https://terraform.io/intro/getting-started/build.html
+Now you can write your own main.tf similar to the example. Reference the terraform documentation at https://terraform.io/intro/getting-started/build.html
 
 Once a plan has been created you are ready to apply the plan and actually deploy.
 
-**So far I have implemented this as a simple call to the hammer command. Terraform providers are typically fully CRUD designed but so far I have only made the create functionality.**
+**This provider is an interface between terraform and the Foreman API. Terraform providers are typically fully CRUD designed but so far I have only made the create functionality. I will work on the others as necessary.**
 
 ```
 # In the directory of your my_custom_terraform.tf file
@@ -120,5 +119,6 @@ In order to build/install the source, navigate to the checked out directory and 
 
 Execute
 ```
+go get
 go build
 ```
