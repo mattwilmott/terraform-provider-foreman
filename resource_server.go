@@ -53,7 +53,7 @@ type compute_attributes	struct {
 	Cluster 	string	`json:"cluster,omitempty"`
 	Memory_mb string	`json:"memory_mb,omitempty"`
 	Guest_id 	string	`json:"guest_id,omitempty"`
-	Lvolumes_attributes		[]volumes_attributes	`json:"volumes_attributes,omitempty"`
+	Lvolumes_attributes	map[string]volumes_attributes	`json:"volumes_attributes,omitempty"`
 }
 
 type ifcompute_attributes struct {
@@ -375,12 +375,12 @@ func resourceServer() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"name": &schema.Schema{
 							Type:	schema.TypeString,
-							Optional: true,
+							Required: true,
 							ForceNew: false,
 						},
 						"size_gb": &schema.Schema{
 							Type:	schema.TypeInt,
-							Optional: true,
+							Required: true,
 							ForceNew: false,
 						},
 						"_delete": &schema.Schema{
@@ -542,22 +542,23 @@ print("starting to build volumes attributes")
 print("JPB in va if statement")
 			for i := 0; i<vaCount; i++ {
 				h.Lcompute_attributes.Lvolumes_attributes = append(h.Lcompute_attributes.Lvolumes_attributes,volumes_attributes{})
+				iStr:=fmt.Sprintf("%d",i)
 print("JPB - in for loop, instantiated vol stuff under compute attrs")
 			  vaprefix := fmt.Sprintf("volumes_attributes.%d",i)
 				if v, ok := d.GetOk(vaprefix+".name"); ok {
-					h.Lcompute_attributes.Lvolumes_attributes[i].Name = v.(string)
+					h.Lcompute_attributes.Lvolumes_attributes[iStr].Name = v.(string)
 				}
 print("JPB - added vol name")
 				if v, ok := d.GetOk(vaprefix+".size_gb"); ok {
-					h.Lcompute_attributes.Lvolumes_attributes[i].Size_gb = v.(int)
+					h.Lcompute_attributes.Lvolumes_attributes[iStr].Size_gb = v.(int)
 				}
 print("JPB added size_gb")
 				if v, ok := d.GetOk(vaprefix+"._delete"); ok {
-					h.Lcompute_attributes.Lvolumes_attributes[i]._delete = v.(string)
+					h.Lcompute_attributes.Lvolumes_attributes[iStr]._delete = v.(string)
 				}
 print("JPB added delete")
 				if v, ok := d.GetOk(vaprefix+".datastore"); ok {
-					h.Lcompute_attributes.Lvolumes_attributes[i].Datastore = v.(string)
+					h.Lcompute_attributes.Lvolumes_attributes[iStr].Datastore = v.(string)
 				}
       }
 	  }
