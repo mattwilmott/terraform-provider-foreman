@@ -839,5 +839,23 @@ func resourceServerUpdate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceServerDelete(d *schema.ResourceData, m interface{}) error {
+	h := buildHostStruct(d,m)
+	u := buildUserStruct(d,m)
+	dom := getDomain(&h,&u)
+	fqdn := fmt.Sprintf("%s.%s",h.Name,dom)
+
+	resp, err := httpClient("DELETE", &h, &u, "hosts", false,fqdn)
+	if resp != nil {
+		fResp := fmt.Sprintf("The server responded with: %v",resp)
+		print(fResp)
+		if strings.Contains(string(resp),"error"){
+			err = errors.New(string(resp))
+		}
+	}
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
