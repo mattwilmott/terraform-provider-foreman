@@ -440,7 +440,7 @@ func resourceServer() *schema.Resource {
 }
 
 // Setup a function to make api calls
-func httpClient(rType string, d *host, u *userAccess, apiSection string, debug bool) ([]byte, error ) {
+func httpClient(rType string, d *host, u *userAccess, apiSection string, debug bool, fqdn string) ([]byte, error ) {
   //setup local vars
   r := strings.ToUpper(rType)
   lUserAccess := u
@@ -452,12 +452,23 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
   //build and make request
 	client := &http.Client{}
 	reqURL := ""
-	switch r {
-	case "POST","PUT","DELETE":
-		reqURL = fmt.Sprintf("%s/%s", lUserAccess.url, apiSection)
-	case "GET":
-    reqURL = fmt.Sprintf("%s/%s/%s",lUserAccess.url, apiSection, rHost.Lhost.Name)
-	}
+	//Need to account for different parts of the API
+	switch apiSection{
+		//If i want to work on hosts API
+		case "hosts":
+	  	switch r {
+				case "POST","PUT":
+					reqURL = fmt.Sprintf("%s/%s", lUserAccess.url, apiSection)
+				case "GET","DELETE":
+					reqURL = fmt.Sprintf("%s/%s/%s", lUserAccess.url, apiSection, fqdn)
+				}
+		//If I want to work on domains API
+		case "domains":
+			switch r {
+			case "GET":
+				reqURL = fmt.Sprintf("%s/%s/%d",lUserAccess.url, apiSection, rHost.Lhost.Domain_id)
+			}
+		}
 	req, err := http.NewRequest(r,reqURL,b)
 	if err != nil {
 		panic(err)
@@ -489,14 +500,276 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 	return content, err
 }
 
+/*
+func getDomain(domain_id int) int {
+
+}
+*/
+
+func buildUserStruct(d *schema.ResourceData, meta interface{}) userAccess {
+	u := userAccess{}
+	/* populate u struct instance */
+	if v, ok := d.GetOk("username"); ok {
+		u.username = v.(string)
+	}
+	if v, ok := d.GetOk("password"); ok {
+		u.password = v.(string)
+	}
+	if v, ok := d.GetOk("url"); ok {
+		u.url	= v.(string)
+	}
+  return *u
+}
+
+func buildHostStruct(d *schema.ResourceData, meta interface{}) host {
+	h := host{}
+	if v, ok := d.GetOk("name"); ok {
+		h.Name = v.(string)
+	}
+	caprefix := fmt.Sprintf("compute_attributes")
+	if v, ok := d.GetOk(caprefix+".cpus"); ok {
+		h.Lcompute_attributes.Cpus = v.(string)
+	}
+	if v, ok := d.GetOk(caprefix+".start"); ok {
+		h.Lcompute_attributes.Start = v.(string)
+	}
+	if v, ok := d.GetOk(caprefix+".cluster"); ok {
+		h.Lcompute_attributes.Cluster = v.(string)
+	}
+	if v, ok := d.GetOk(caprefix+".memory_mb"); ok {
+		h.Lcompute_attributes.Memory_mb = v.(string)
+	}
+	if v, ok := d.GetOk(caprefix+".guest_id"); ok {
+		h.Lcompute_attributes.Guest_id = v.(string)
+	}
+/* build volumes_attributes now, this needs to be mapped so I build structs and then add them to the mapped value */
+vaCount := d.Get("volumes_attributes.#").(int)
+if vaCount >0 {
+	h.Lcompute_attributes.Lvolumes_attributes = make(map[string]volumes_attributes)
+for i := 0; i<vaCount; i++ {
+	// setup iterator market and instantiate local struct to append to maps
+	iStr:=fmt.Sprintf("%d",i)
+	lStruct := volumes_attributes{}
+	//setup lStruct values
+	vaprefix := fmt.Sprintf("volumes_attributes.%d",i)
+	if v, ok := d.GetOk(vaprefix+".name"); ok {
+		lStruct.Name = v.(string)
+	}
+	if v, ok := d.GetOk(vaprefix+".size_gb"); ok {
+		lStruct.Size_gb = v.(int)
+	}
+	if v, ok := d.GetOk(vaprefix+"._delete"); ok {
+		lStruct._delete = v.(string)
+	}
+	if v, ok := d.GetOk(vaprefix+".datastore"); ok {
+		lStruct.Datastore = v.(string)
+	}
+	//add in lStruct to the main host struct
+	h.Lcompute_attributes.Lvolumes_attributes[iStr] = lStruct
+}
+}
+/* build interfaces_attributes now */
+iaCount := d.Get("interfaces_attributes.#").(int)
+if iaCount >0 {
+for i := 0; i<iaCount; i++ {
+	h.Linterfaces_attributes = append(h.Linterfaces_attributes,interfaces_attributes{})
+	prefix := fmt.Sprintf("interfaces_attributes.%d",i)
+	if v, ok := d.GetOk(prefix+".primary"); ok {
+		h.Linterfaces_attributes[i].Primary = v.(bool)
+	}
+	//Adding some logic to auto populate primary nic because of API deferral
+	if v, ok := d.GetOk(prefix+".mac"); ok {
+		h.Linterfaces_attributes[i].Mac = v.(string)
+	} /* else if v, ok := d.GetOk("mac"); ok && h.Linterfaces_attributes[i].Primary {
+		h.Linterfaces_attributes[i].Mac = v.(string)
+	} */
+	if v, ok := d.GetOk(prefix+".ip"); ok {
+		h.Linterfaces_attributes[i].Ip = v.(string)
+	} /* else if v, ok := d.GetOk("ip"); ok && h.Linterfaces_attributes[i].Primary {
+		h.Linterfaces_attributes[i].Ip = v.(string)
+	} */
+	if v, ok := d.GetOk(prefix+".type"); ok {
+		h.Linterfaces_attributes[i].Type = v.(string)
+	}
+	if v, ok := d.GetOk(prefix+".name"); ok {
+		h.Linterfaces_attributes[i].Name = v.(string)
+	} /* else if v, ok := d.GetOk("name"); ok && h.Linterfaces_attributes[i].Primary {
+		h.Linterfaces_attributes[i].Name = v.(string)
+	} */
+	if v, ok := d.GetOk(prefix+".subnet_id"); ok {
+		h.Linterfaces_attributes[i].Subnet_id = v.(int)
+	} /* else if v, ok := d.GetOk("subnet_id"); ok && h.Linterfaces_attributes[i].Primary {
+		h.Linterfaces_attributes[i].Subnet_id = v.(int)
+	} */
+	if v, ok := d.GetOk(prefix+".domain_id"); ok {
+		h.Linterfaces_attributes[i].Domain_id = v.(int)
+	} /*else if v, ok := d.GetOk("domain_id"); ok && h.Linterfaces_attributes[i].Primary {
+		h.Linterfaces_attributes[i].Domain_id = v.(int)
+	} */
+	if v, ok := d.GetOk(prefix+".identifier"); ok {
+		h.Linterfaces_attributes[i].Identifier = v.(string)
+	}
+	if v, ok := d.GetOk(prefix+".managed"); ok {
+		h.Linterfaces_attributes[i].Managed = v.(bool)
+	}
+	if v, ok := d.GetOk(prefix+".provision"); ok {
+		h.Linterfaces_attributes[i].Provision = v.(bool)
+	}
+	if v, ok := d.GetOk(prefix+".username"); ok {
+		h.Linterfaces_attributes[i].Username = v.(string)
+	}
+	if v, ok := d.GetOk(prefix+".password"); ok {
+		h.Linterfaces_attributes[i].Password = v.(string)
+	}
+	if v, ok := d.GetOk(prefix+".provider"); ok {
+		h.Linterfaces_attributes[i].Provider = v.(string)
+	}
+	if v, ok := d.GetOk(prefix+".virtual"); ok{
+		h.Linterfaces_attributes[i].Virtual = v.(bool)
+	}
+	if v, ok := d.GetOk(prefix+".tag"); ok {
+		h.Linterfaces_attributes[i].Tag = v.(string)
+	}
+	if v, ok := d.GetOk(prefix+".attached_to"); ok {
+		h.Linterfaces_attributes[i].Attached_to = v.(string)
+	}
+	if v, ok := d.GetOk(prefix+".mode"); ok {
+		h.Linterfaces_attributes[i].Mode = v.(string)
+	}
+	if v, ok := d.GetOk(prefix+".attached_devices"); ok {
+		h.Linterfaces_attributes[i].Attached_devices = v.([]string)
+	}
+	if v, ok := d.GetOk(prefix+".bond_options"); ok {
+		h.Linterfaces_attributes[i].Bond_options = v.(string)
+	}
+	ifcaprefix := fmt.Sprintf("%s.compute_attributes",prefix)
+	if v, ok := d.GetOk(ifcaprefix+".network"); ok {
+		h.Linterfaces_attributes[i].Lcompute_attributes.Network = v.(string)
+	}
+	if v, ok := d.GetOk(ifcaprefix+".type"); ok {
+		h.Linterfaces_attributes[i].Lcompute_attributes.Type = v.(string)
+	}
+	}
+}
+
+
+/* populate host_parameters_attributes now */
+hpaCount := d.Get("host_parameters_attributes.#").(int)
+if hpaCount > 0 {
+for i := 0; i<hpaCount; i++ {
+	h.Lhost_parameters_attributes = append(h.Lhost_parameters_attributes,host_parameters_attributes{})
+	prefix := fmt.Sprintf("host_parameters_attributes.%d",i)
+	if v, ok := d.GetOk(prefix+".roles"); ok {
+		h.Lhost_parameters_attributes[i].Roles = v.(string)
+	}
+	if v, ok := d.GetOk(prefix+".puppet"); ok {
+		h.Lhost_parameters_attributes[i].Puppet = v.(string)
+	}
+	if v, ok := d.GetOk(prefix+".chef"); ok {
+		h.Lhost_parameters_attributes[i].Chef = v.(string)
+	}
+	if v, ok := d.GetOk(prefix+".JIRA_Ticket"); ok {
+		h.Lhost_parameters_attributes[i].JIRA_Ticket = v.(string)
+	}
+}
+}
+
+/* populate h struct instance for regular level data */
+	if v, ok := d.GetOk("environment_id"); ok {
+		h.Environment_id = v.(string)
+	}
+	if v,ok := d.GetOk("ip"); ok{
+		h.Ip = v.(string)
+	}
+	if v,ok := d.GetOk("mac"); ok{
+		h.Mac = v.(string)
+	}
+	if v,ok := d.GetOk("architecture_id"); ok{
+		h.Architecture_id = v.(int)
+	}
+	if v,ok := d.GetOk("domain_id"); ok{
+		h.Domain_id = v.(int)
+	}
+	if v,ok := d.GetOk("realm_id"); ok{
+		h.Realm_id = v.(int)
+	}
+	if v,ok := d.GetOk("puppet_proxy_id"); ok{
+		h.Puppet_proxy_id = v.(int)
+	}
+	if v,ok := d.GetOk("puppet_class_ids"); ok{
+		h.Puppetclass_ids = v.([]int)
+	}
+	if v,ok := d.GetOk("operatingsystem_id"); ok{
+		h.Operatingsystem_id = v.(string)
+	}
+	if v,ok := d.GetOk("medium_id"); ok{
+		h.Medium_id = v.(string)
+	}
+	if v,ok := d.GetOk("ptable_id"); ok{
+		h.Ptable_id = v.(int)
+	}
+	if v,ok := d.GetOk("subnet_id"); ok{
+		h.Subnet_id = v.(int)
+	}
+	if v,ok := d.GetOk("compute_resource_id"); ok{
+		h.Compute_resource_id = v.(int)
+	}
+	if v,ok := d.GetOk("root_pass"); ok{
+		h.Root_pass = v.(string)
+	}
+	if v,ok := d.GetOk("model_id"); ok{
+		h.Model_id = v.(int)
+	}
+	if v,ok := d.GetOk("hostgroup_id"); ok{
+		h.Hostgroup_id = v.(int)
+	}
+	if v,ok := d.GetOk("owner_id"); ok{
+		h.Owner_id = v.(int)
+	}
+	if v,ok := d.GetOk("owner_type"); ok{
+		if v.(string) == "User" || v.(string) == "Usergroup" {
+			h.Owner_type = v.(string)
+		}
+	}
+	if v,ok := d.GetOk("puppet_ca_proxy_id"); ok{
+		h.Puppet_ca_proxy_id = v.(int)
+	}
+	if v,ok := d.GetOk("image_id"); ok{
+		h.Image_id = v.(int)
+	}
+	if v,ok := d.GetOk("build"); ok{
+		h.Build = v.(bool)
+	}
+	if v,ok := d.GetOk("enabled"); ok{
+		h.Enabled = v.(bool)
+	}
+	if v,ok := d.GetOk("provision_method"); ok{
+		h.Provision_method = v.(string)
+	}
+	if v,ok := d.GetOk("managed"); ok{
+		h.Managed = v.(bool)
+	}
+	if v,ok := d.GetOk("progress_report_id"); ok{
+		h.Progress_report_id = v.(string)
+	}
+	if v,ok := d.GetOk("comment"); ok{
+		h.Comment = v.(string)
+	}
+	if v,ok := d.GetOk("capabilities"); ok{
+		h.Capabilities = v.(string)
+	}
+	if v,ok := d.GetOk("compute_profile_id"); ok{
+		h.Compute_profile_id = v.(int)
+	}
+	return *h
+}
 
 func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
-  h := host{}
-
-	u := userAccess{}
+  h := buildHostStruct(d)
+	u := buildUserStruct(d)
 
 /* populate u struct instance */
-				if v, ok := d.GetOk("username"); ok {
+/*				if v, ok := d.GetOk("username"); ok {
 					u.username = v.(string)
 				}
 				if v, ok := d.GetOk("password"); ok {
@@ -505,9 +778,10 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk("url"); ok {
 					u.url	= v.(string)
 				}
-
+*/
 /* build subtree level stuff first */
 /* build compute_attributes now */
+/*
 				if v, ok := d.GetOk("name"); ok {
 					h.Name = v.(string)
 				}
@@ -527,7 +801,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				if v, ok := d.GetOk(caprefix+".guest_id"); ok {
 					h.Lcompute_attributes.Guest_id = v.(string)
 				}
+/*
 /* build volumes_attributes now, this needs to be mapped so I build structs and then add them to the mapped value */
+/*
 		vaCount := d.Get("volumes_attributes.#").(int)
 			if vaCount >0 {
 				h.Lcompute_attributes.Lvolumes_attributes = make(map[string]volumes_attributes)
@@ -553,7 +829,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				h.Lcompute_attributes.Lvolumes_attributes[iStr] = lStruct
       }
 	  }
+*/
 /* build interfaces_attributes now */
+/*
 		iaCount := d.Get("interfaces_attributes.#").(int)
 		  if iaCount >0 {
 			for i := 0; i<iaCount; i++ {
@@ -568,11 +846,13 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				} /* else if v, ok := d.GetOk("mac"); ok && h.Linterfaces_attributes[i].Primary {
 					h.Linterfaces_attributes[i].Mac = v.(string)
 				} */
+	/*
 				if v, ok := d.GetOk(prefix+".ip"); ok {
 					h.Linterfaces_attributes[i].Ip = v.(string)
 				} /* else if v, ok := d.GetOk("ip"); ok && h.Linterfaces_attributes[i].Primary {
 					h.Linterfaces_attributes[i].Ip = v.(string)
 				} */
+	/*
 				if v, ok := d.GetOk(prefix+".type"); ok {
 					h.Linterfaces_attributes[i].Type = v.(string)
 				}
@@ -581,16 +861,19 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				} /* else if v, ok := d.GetOk("name"); ok && h.Linterfaces_attributes[i].Primary {
 					h.Linterfaces_attributes[i].Name = v.(string)
 				} */
+	/*
 				if v, ok := d.GetOk(prefix+".subnet_id"); ok {
 					h.Linterfaces_attributes[i].Subnet_id = v.(int)
 				} /* else if v, ok := d.GetOk("subnet_id"); ok && h.Linterfaces_attributes[i].Primary {
 					h.Linterfaces_attributes[i].Subnet_id = v.(int)
 				} */
+	/*
 				if v, ok := d.GetOk(prefix+".domain_id"); ok {
 					h.Linterfaces_attributes[i].Domain_id = v.(int)
 				} /*else if v, ok := d.GetOk("domain_id"); ok && h.Linterfaces_attributes[i].Primary {
 					h.Linterfaces_attributes[i].Domain_id = v.(int)
 				} */
+	/*
 				if v, ok := d.GetOk(prefix+".identifier"); ok {
 					h.Linterfaces_attributes[i].Identifier = v.(string)
 				}
@@ -638,6 +921,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 			}
 
 /* populate host_parameters_attributes now */
+/*
 		hpaCount := d.Get("host_parameters_attributes.#").(int)
 		if hpaCount > 0 {
 			for i := 0; i<hpaCount; i++ {
@@ -657,8 +941,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 				}
 			}
 		}
-
+*/
 /* populate h struct instance for regular level data */
+/*
         if v, ok := d.GetOk("environment_id"); ok {
           h.Environment_id = v.(string)
         }
@@ -745,14 +1030,14 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
         if v,ok := d.GetOk("compute_profile_id"); ok{
           h.Compute_profile_id = v.(int)
         }
-
+  */
 	/* check debug flag */
 	debug := false
 	if v, ok := d.GetOk("debug"); ok {
 		debug = v.(bool)
 	}
 
-	resp, err := httpClient("POST", &h, &u, "hosts", debug)
+	resp, err := httpClient("POST", &h, &u, "hosts", debug,"")
 	if resp != nil {
 		fResp := fmt.Sprintf("The server responded with: %v",resp)
 		print(fResp)
@@ -769,6 +1054,23 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceServerRead(d *schema.ResourceData, m interface{}) error {
+	/*
+	h := buildHostStruct(d)
+	u := buildUserStruct(d)
+
+	resp, err := httpClient("POST", &h, &u, "hosts", debug,"")
+	if resp != nil {
+		fResp := fmt.Sprintf("The server responded with: %v",resp)
+		print(fResp)
+		if strings.Contains(string(resp),"error"){
+			err = errors.New(string(resp))
+		}
+	}
+
+	if err != nil {
+		return err
+	}
+	*/
 	return nil
 }
 
