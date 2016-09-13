@@ -29,7 +29,6 @@ func Provider() terraform.ResourceProvider {
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			"foreman_dns":    resourceDNS(),
 			"foreman_server": resourceServer(),
 		},
 
