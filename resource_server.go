@@ -541,8 +541,9 @@ print("starting to build volumes attributes")
 			if vaCount >0 {
 print("JPB in va if statement")
 			for i := 0; i<vaCount; i++ {
-				h.Lcompute_attributes.Lvolumes_attributes = append(h.Lcompute_attributes.Lvolumes_attributes,volumes_attributes{})
 				iStr:=fmt.Sprintf("%d",i)
+				//h.Lcompute_attributes.Lvolumes_attributes = append(h.Lcompute_attributes.Lvolumes_attributes,volumes_attributes{})
+				h.Lcompute_attributes.Lvolumes_attributes[iStr] = volumes_attributes{}
 print("JPB - in for loop, instantiated vol stuff under compute attrs")
 			  vaprefix := fmt.Sprintf("volumes_attributes.%d",i)
 				if v, ok := d.GetOk(vaprefix+".name"); ok {
