@@ -679,7 +679,7 @@ for i := 0; i<iaCount; i++ {
 /* populate host_parameters_attributes now */
 hpaCount := d.Get("host_parameters_attributes.#").(int)
 if hpaCount > 0 {
-	h.Lhost_parameters_attributes.Parameters = make(map[int]params_archetype)
+	h.Lhost_parameters_attributes.Parameters = make(map[string]params_archetype)
 	//h.Lhost_parameters_attributes = []params_archetype{}
 for i := 0; i<hpaCount; i++ {
 	intCnt := 0
