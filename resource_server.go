@@ -25,10 +25,7 @@ type params_archetype struct {
 	Name	string	`json:"name,omitempty"`
 	Value	string	`json:"value,omitempty"`
 }
-//host_parameters_attributes parameters
-type host_parameters_attributes	struct {
-  Parameters		map[string]params_archetype	`json:""`
-}
+
 //interfaces_attributes parameters
 type interfaces_attributes	struct	{
 	Mac 								string	`json:"mac,omitempty"`
@@ -680,32 +677,22 @@ for i := 0; i<iaCount; i++ {
 hpaCount := d.Get("host_parameters_attributes.#").(int)
 if hpaCount > 0 {
 	h.Lhost_parameters_attributes = make(map[string]params_archetype)
-	//h.Lhost_parameters_attributes = []params_archetype{}
 for i := 0; i<hpaCount; i++ {
 	intCnt := 0
-	//append(h.Lhost_parameters_attributes,host_parameters_attributes{})
 	prefix := fmt.Sprintf("host_parameters_attributes.%d",i)
 	if v, ok := d.GetOk(prefix+".roles"); ok {
 		roleStruct := params_archetype{}
 		iStr:=fmt.Sprintf("%d",intCnt)
 		roleStruct.Name="roles"
 		roleStruct.Value=v.(string)
-		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
-		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="roles"
-		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
 		h.Lhost_parameters_attributes[iStr]=roleStruct
 		intCnt++
-		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "roles",Value: v.(string)}
 	}
 	if v, ok := d.GetOk(prefix+".puppet"); ok {
 		pupStruct := params_archetype{}
 		iStr:=fmt.Sprintf("%d",intCnt)
 		pupStruct.Name="puppet"
 		pupStruct.Value=v.(string)
-		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "puppet",Value: v.(string)}
-		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
-		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="puppet"
-		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
 		h.Lhost_parameters_attributes[iStr]=pupStruct
 		intCnt++
 	}
@@ -714,10 +701,6 @@ for i := 0; i<hpaCount; i++ {
 		iStr:=fmt.Sprintf("%d",intCnt)
 		chefStruct.Name="chef"
 		chefStruct.Value=v.(string)
-		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "chef",Value: v.(string)}
-		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
-		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="chef"
-		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
 		h.Lhost_parameters_attributes[iStr]=chefStruct
 		intCnt++
 	}
@@ -726,10 +709,6 @@ for i := 0; i<hpaCount; i++ {
 		iStr:=fmt.Sprintf("%d",intCnt)
 		jStruct.Name="JIRA_Ticket"
 		jStruct.Value=v.(string)
-		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "JIRA_Ticket",Value: v.(string)}
-		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
-		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="JIRA_Ticket"
-		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
 		h.Lhost_parameters_attributes[iStr]=jStruct
 		intCnt++
 	}
