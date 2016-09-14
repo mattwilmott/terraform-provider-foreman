@@ -27,7 +27,7 @@ type params_archetype struct {
 }
 //host_parameters_attributes parameters
 type host_parameters_attributes	struct {
-  Parameters		[]params_archetype	`json:""`
+  Parameters		[]params_archetype	`json:",omitempty"`
 }
 //interfaces_attributes parameters
 type interfaces_attributes	struct	{
