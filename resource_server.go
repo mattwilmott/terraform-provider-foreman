@@ -695,14 +695,14 @@ for i := 0; i<hpaCount; i++ {
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "puppet",Value: v.(string)}
 		h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,params_archetype{})
 		h.Lhost_parameters_attributes.Parameters[intCnt].Name="puppet"
-		h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
+		h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(int)
 		intCnt++
 	}
 	if v, ok := d.GetOk(prefix+".chef"); ok {
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "chef",Value: v.(string)}
 		h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,params_archetype{})
 		h.Lhost_parameters_attributes.Parameters[intCnt].Name="chef"
-		h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
+		h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(int)
 		intCnt++
 	}
 	if v, ok := d.GetOk(prefix+".JIRA_Ticket"); ok {
