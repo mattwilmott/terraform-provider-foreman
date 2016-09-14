@@ -687,12 +687,13 @@ for i := 0; i<hpaCount; i++ {
 	prefix := fmt.Sprintf("host_parameters_attributes.%d",i)
 	if v, ok := d.GetOk(prefix+".roles"); ok {
 		roleStruct := params_archetype{}
+		iStr:=fmt.Sprintf("%d",intCnt)
 		roleStruct.Name="roles"
 		roleStruct.Value=v.(string)
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="roles"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		h.Lhost_parameters_attributes.Parameters[string(intCnt)]=roleStruct
+		h.Lhost_parameters_attributes.Parameters[iStr]=roleStruct
 		intCnt++
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "roles",Value: v.(string)}
 	}
