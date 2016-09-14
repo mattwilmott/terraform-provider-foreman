@@ -718,7 +718,7 @@ for i := 0; i<hpaCount; i++ {
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="chef"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		h.Lhost_parameters_attributes[intCnt]=chefStruct
+		h.Lhost_parameters_attributes[iStr]=chefStruct
 		intCnt++
 	}
 	if v, ok := d.GetOk(prefix+".JIRA_Ticket"); ok {
@@ -730,7 +730,7 @@ for i := 0; i<hpaCount; i++ {
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="JIRA_Ticket"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		h.Lhost_parameters_attributes[intCnt]=jStruct
+		h.Lhost_parameters_attributes[iStr]=jStruct
 		intCnt++
 	}
 }
