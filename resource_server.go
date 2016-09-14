@@ -108,7 +108,7 @@ type host struct {
   Comment								string	`json:"comment,omitempty"`
   Capabilities					string	`json:"capabilities,omitempty"`
   Compute_profile_id		int			`json:"compute_profile_id,omitempty"`
-	Lhost_parameters_attributes host_parameters_attributes	`json:"host_parameters_attributes,omitempty"`
+	Lhost_parameters_attributes map[string]params_archetype	`json:"host_parameters_attributes,omitempty"`
   Linterfaces_attributes	[]interfaces_attributes	`json:"interfaces_attributes,omitempty"`
 }
 //Used for access authentication to foreman
@@ -679,7 +679,7 @@ for i := 0; i<iaCount; i++ {
 /* populate host_parameters_attributes now */
 hpaCount := d.Get("host_parameters_attributes.#").(int)
 if hpaCount > 0 {
-	h.Lhost_parameters_attributes.Parameters = make(map[string]params_archetype)
+	h.Lhost_parameters_attributes = make(map[string]params_archetype)
 	//h.Lhost_parameters_attributes = []params_archetype{}
 for i := 0; i<hpaCount; i++ {
 	intCnt := 0
@@ -693,7 +693,7 @@ for i := 0; i<hpaCount; i++ {
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="roles"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		h.Lhost_parameters_attributes.Parameters[iStr]=roleStruct
+		h.Lhost_parameters_attributes[iStr]=roleStruct
 		intCnt++
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "roles",Value: v.(string)}
 	}
