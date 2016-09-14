@@ -699,35 +699,38 @@ for i := 0; i<hpaCount; i++ {
 	}
 	if v, ok := d.GetOk(prefix+".puppet"); ok {
 		pupStruct := params_archetype{}
+		iStr:=fmt.Sprintf("%d",intCnt)
 		pupStruct.Name="puppet"
 		pupStruct.Value=v.(string)
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "puppet",Value: v.(string)}
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="puppet"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		//h.Lhost_parameters_attributes.Parameters[intCnt]=pupStruct
+		h.Lhost_parameters_attributes[intCnt]=pupStruct
 		intCnt++
 	}
 	if v, ok := d.GetOk(prefix+".chef"); ok {
 		chefStruct := params_archetype{}
+		iStr:=fmt.Sprintf("%d",intCnt)
 		chefStruct.Name="chef"
 		chefStruct.Value=v.(string)
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "chef",Value: v.(string)}
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="chef"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		//h.Lhost_parameters_attributes.Parameters[intCnt]=chefStruct
+		h.Lhost_parameters_attributes[intCnt]=chefStruct
 		intCnt++
 	}
 	if v, ok := d.GetOk(prefix+".JIRA_Ticket"); ok {
 		jStruct := params_archetype{}
+		iStr:=fmt.Sprintf("%d",intCnt)
 		jStruct.Name="JIRA_Ticket"
 		jStruct.Value=v.(string)
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "JIRA_Ticket",Value: v.(string)}
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="JIRA_Ticket"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		//h.Lhost_parameters_attributes.Parameters[intCnt]=jStruct
+		h.Lhost_parameters_attributes[intCnt]=jStruct
 		intCnt++
 	}
 }
