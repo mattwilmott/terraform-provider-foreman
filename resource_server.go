@@ -708,7 +708,7 @@ for i := 0; i<hpaCount; i++ {
 		intCnt++
 	}
 	if v, ok := d.GetOk(prefix+".chef"); ok {
-		lStruct := params_archetype{}
+		chefStruct := params_archetype{}
 		chefStruct.Name="chef"
 		chefStruct.Value=v.(string)
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "chef",Value: v.(string)}
