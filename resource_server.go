@@ -706,7 +706,7 @@ for i := 0; i<hpaCount; i++ {
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="puppet"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		h.Lhost_parameters_attributes[intCnt]=pupStruct
+		h.Lhost_parameters_attributes[iStr]=pupStruct
 		intCnt++
 	}
 	if v, ok := d.GetOk(prefix+".chef"); ok {
