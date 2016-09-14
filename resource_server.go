@@ -20,12 +20,14 @@ type reqHost struct {
 	Lhost host `json:"host,omitempty"`
 }
 
+//setup param archetype for host params attributes
+type params_archetype struct {
+	Name	string	`json:"name,omitempty"`
+	Value	string	`json:"value,omitempty"`
+}
 //host_parameters_attributes parameters
 type host_parameters_attributes	struct {
-  Roles 			string	`json:"roles,omitempty"`
-	Puppet 			string	`json:"puppet,omitempty"`
-	Chef 				string	`json:"chef,omitempty"`
-	JIRA_Ticket string	`json:",omitempty"`
+  Parameter		[]params_archetype	`json:",omitempty"`
 }
 //interfaces_attributes parameters
 type interfaces_attributes	struct	{
@@ -677,20 +679,34 @@ for i := 0; i<iaCount; i++ {
 /* populate host_parameters_attributes now */
 hpaCount := d.Get("host_parameters_attributes.#").(int)
 if hpaCount > 0 {
+	h.Lhost_parameters_attributes = []params_archetype{}
 for i := 0; i<hpaCount; i++ {
-	h.Lhost_parameters_attributes = append(h.Lhost_parameters_attributes,host_parameters_attributes{})
+	intCnt := 0
+	//append(h.Lhost_parameters_attributes,host_parameters_attributes{})
 	prefix := fmt.Sprintf("host_parameters_attributes.%d",i)
 	if v, ok := d.GetOk(prefix+".roles"); ok {
-		h.Lhost_parameters_attributes[i].Roles = v.(string)
+		h.Lhost_parameters_attributes = append(h.Lhost_parameters_attributes,params_archetype{})
+		h.Lhost_parameters_attributes[i].Name="roles"
+		h.Lhost_parameters_attributes[i].Value=v.(string)
+		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "roles",Value: v.(string)}
 	}
 	if v, ok := d.GetOk(prefix+".puppet"); ok {
-		h.Lhost_parameters_attributes[i].Puppet = v.(string)
+		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "puppet",Value: v.(string)}
+		h.Lhost_parameters_attributes = append(h.Lhost_parameters_attributes,params_archetype{})
+		h.Lhost_parameters_attributes[i].Name="puppet"
+		h.Lhost_parameters_attributes[i].Value=v.(string)
 	}
 	if v, ok := d.GetOk(prefix+".chef"); ok {
-		h.Lhost_parameters_attributes[i].Chef = v.(string)
+		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "chef",Value: v.(string)}
+		h.Lhost_parameters_attributes = append(h.Lhost_parameters_attributes,params_archetype{})
+		h.Lhost_parameters_attributes[i].Name="chef"
+		h.Lhost_parameters_attributes[i].Value=v.(string)
 	}
 	if v, ok := d.GetOk(prefix+".JIRA_Ticket"); ok {
-		h.Lhost_parameters_attributes[i].JIRA_Ticket = v.(string)
+		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "JIRA_Ticket",Value: v.(string)}
+		h.Lhost_parameters_attributes = append(h.Lhost_parameters_attributes,params_archetype{})
+		h.Lhost_parameters_attributes[i].Name="JIRA_Ticket"
+		h.Lhost_parameters_attributes[i].Value=v.(string)
 	}
 }
 }
