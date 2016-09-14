@@ -461,9 +461,9 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
 		//If i want to work on hosts API
 		case "hosts":
 	  	switch r {
-				case "POST","PUT":
+				case "POST":
 					reqURL = fmt.Sprintf("%s/%s", lUserAccess.url, apiSection)
-				case "GET","DELETE":
+				case "GET","DELETE","PUT":
 					reqURL = fmt.Sprintf("%s/%s/%s", lUserAccess.url, apiSection, fqdn)
 				}
 		//If I want to work on domains API
@@ -851,10 +851,30 @@ func resourceServerRead(d *schema.ResourceData, m interface{}) error {
 	}
 	d.SetId(d.Get("name").(string))
 	d.Set("ip",h.Ip)
+	d.Set("comment",h.Comment)
 	return nil
 }
 
 func resourceServerUpdate(d *schema.ResourceData, m interface{}) error {
+	h := buildHostStruct(d,m)
+	u := buildUserStruct(d,m)
+	hChanges := new(host)
+	dom := getDomain(&h,&u)
+	fqdn := fmt.Sprintf("%s.%s",h.Name,dom)
+/*
+	resp, err := httpClient("PUT", &h, &u, "hosts", false,fqdn)
+	if resp != nil {
+		fResp := fmt.Sprintf("The server responded with: %v",resp)
+		print(fResp)
+		if strings.Contains(string(resp),"error"){
+			err = errors.New(string(resp))
+		}
+	}
+
+	if err != nil {
+		return err
+	}
+*/
 	return nil
 }
 
