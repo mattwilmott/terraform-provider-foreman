@@ -679,7 +679,7 @@ for i := 0; i<iaCount; i++ {
 /* populate host_parameters_attributes now */
 hpaCount := d.Get("host_parameters_attributes.#").(int)
 if hpaCount > 0 {
-	h.Lhost_parameters_attributes.Parameters = make(map[int]params_archetype)
+	//h.Lhost_parameters_attributes.Parameters = make(map[int]params_archetype)
 	//h.Lhost_parameters_attributes = []params_archetype{}
 for i := 0; i<hpaCount; i++ {
 	intCnt := 0
@@ -692,7 +692,7 @@ for i := 0; i<hpaCount; i++ {
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="roles"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		h.Lhost_parameters_attributes.Parameters[intCnt]=roleStruct
+		//h.Lhost_parameters_attributes.Parameters[intCnt]=roleStruct
 		intCnt++
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "roles",Value: v.(string)}
 	}
@@ -704,7 +704,7 @@ for i := 0; i<hpaCount; i++ {
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="puppet"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		h.Lhost_parameters_attributes.Parameters[intCnt]=pupStruct
+		//h.Lhost_parameters_attributes.Parameters[intCnt]=pupStruct
 		intCnt++
 	}
 	if v, ok := d.GetOk(prefix+".chef"); ok {
@@ -715,7 +715,7 @@ for i := 0; i<hpaCount; i++ {
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="chef"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		h.Lhost_parameters_attributes.Parameters[intCnt]=chefStruct
+		//h.Lhost_parameters_attributes.Parameters[intCnt]=chefStruct
 		intCnt++
 	}
 	if v, ok := d.GetOk(prefix+".JIRA_Ticket"); ok {
@@ -726,7 +726,7 @@ for i := 0; i<hpaCount; i++ {
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="JIRA_Ticket"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		h.Lhost_parameters_attributes.Parameters[intCnt]=jStruct
+		//h.Lhost_parameters_attributes.Parameters[intCnt]=jStruct
 		intCnt++
 	}
 }
