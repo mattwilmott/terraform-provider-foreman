@@ -681,7 +681,6 @@ hpaCount := d.Get("host_parameters_attributes.#").(int)
 if hpaCount > 0 {
 	//h.Lhost_parameters_attributes = []params_archetype{}
 for i := 0; i<hpaCount; i++ {
-	intCnt := 0
 	//append(h.Lhost_parameters_attributes,host_parameters_attributes{})
 	prefix := fmt.Sprintf("host_parameters_attributes.%d",i)
 	if v, ok := d.GetOk(prefix+".roles"); ok {
