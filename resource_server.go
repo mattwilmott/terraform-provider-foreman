@@ -692,7 +692,7 @@ for i := 0; i<hpaCount; i++ {
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="roles"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		//h.Lhost_parameters_attributes.Parameters[intCnt]=roleStruct
+		h.Lhost_parameters_attributes.Parameters[intCnt]=roleStruct
 		intCnt++
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "roles",Value: v.(string)}
 	}
