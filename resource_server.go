@@ -27,7 +27,7 @@ type params_archetype struct {
 }
 //host_parameters_attributes parameters
 type host_parameters_attributes	struct {
-  Parameters		map[int]params_archetype	`json:",omitempty"`
+  Parameters		map[string]params_archetype	`json:",omitempty"`
 }
 //interfaces_attributes parameters
 type interfaces_attributes	struct	{
@@ -692,7 +692,7 @@ for i := 0; i<hpaCount; i++ {
 		//h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,lStruct)
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Name="roles"
 		//h.Lhost_parameters_attributes.Parameters[intCnt].Value=v.(string)
-		h.Lhost_parameters_attributes.Parameters[intCnt]=roleStruct
+		h.Lhost_parameters_attributes.Parameters[string(intCnt)]=roleStruct
 		intCnt++
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "roles",Value: v.(string)}
 	}
