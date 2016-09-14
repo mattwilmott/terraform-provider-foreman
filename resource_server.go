@@ -685,26 +685,26 @@ for i := 0; i<hpaCount; i++ {
 	//append(h.Lhost_parameters_attributes,host_parameters_attributes{})
 	prefix := fmt.Sprintf("host_parameters_attributes.%d",i)
 	if v, ok := d.GetOk(prefix+".roles"); ok {
-		h.Lhost_parameters_attributes = append(h.Lhost_parameters_attributes.Parameters,params_archetype{})
+		h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,params_archetype{})
 		h.Lhost_parameters_attributes.Parameters[i].Name="roles"
 		h.Lhost_parameters_attributes.Parameters[i].Value=v.(string)
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "roles",Value: v.(string)}
 	}
 	if v, ok := d.GetOk(prefix+".puppet"); ok {
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "puppet",Value: v.(string)}
-		h.Lhost_parameters_attributes = append(h.Lhost_parameters_attributes.Parameters,params_archetype{})
+		h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,params_archetype{})
 		h.Lhost_parameters_attributes.Parameters[i].Name="puppet"
 		h.Lhost_parameters_attributes.Parameters[i].Value=v.(string)
 	}
 	if v, ok := d.GetOk(prefix+".chef"); ok {
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "chef",Value: v.(string)}
-		h.Lhost_parameters_attributes = append(h.Lhost_parameters_attributes.Parameters,params_archetype{})
+		h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,params_archetype{})
 		h.Lhost_parameters_attributes.Parameters[i].Name="chef"
 		h.Lhost_parameters_attributes.Parameters[i].Value=v.(string)
 	}
 	if v, ok := d.GetOk(prefix+".JIRA_Ticket"); ok {
 		//h.Lhost_parameters_attributes[i] = params_archetype{Name: "JIRA_Ticket",Value: v.(string)}
-		h.Lhost_parameters_attributes = append(h.Lhost_parameters_attributes.Parameters,params_archetype{})
+		h.Lhost_parameters_attributes.Parameters = append(h.Lhost_parameters_attributes.Parameters,params_archetype{})
 		h.Lhost_parameters_attributes.Parameters[i].Name="JIRA_Ticket"
 		h.Lhost_parameters_attributes.Parameters[i].Value=v.(string)
 	}
