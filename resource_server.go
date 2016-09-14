@@ -108,7 +108,7 @@ type host struct {
   Comment								string	`json:"comment,omitempty"`
   Capabilities					string	`json:"capabilities,omitempty"`
   Compute_profile_id		int			`json:"compute_profile_id,omitempty"`
-	Lhost_parameters_attributes []host_parameters_attributes	`json:"host_parameters_attributes,omitempty"`
+	Lhost_parameters_attributes host_parameters_attributes	`json:"host_parameters_attributes,omitempty"`
   Linterfaces_attributes	[]interfaces_attributes	`json:"interfaces_attributes,omitempty"`
 }
 //Used for access authentication to foreman
