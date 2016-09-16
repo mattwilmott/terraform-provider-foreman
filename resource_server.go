@@ -49,8 +49,8 @@ type interfaces_attributes	struct	{
 }
 //These are actual compute instance attributes
 type compute_attributes	struct {
-	Cpus                string	                     `json:"cpus,omitempty"`
-	Start               string	                     `json:"start,omitempty"`
+	Cpus                string	                      `json:"cpus,omitempty"`
+	Start               string	                      `json:"start,omitempty"`
 	Cluster             string	                      `json:"cluster,omitempty"`
 	Memory_mb           string	                      `json:"memory_mb,omitempty"`
 	Guest_id            string	                      `json:"guest_id,omitempty"`
