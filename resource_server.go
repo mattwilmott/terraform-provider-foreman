@@ -848,7 +848,7 @@ func resourceServerRead(d *schema.ResourceData, m interface{}) error {
 func resourceServerUpdate(d *schema.ResourceData, m interface{}) error {
 	h := buildHostStruct(d,m)
 	u := buildUserStruct(d,m)
-	hChanges := new(host)
+	//hChanges := new(host)
 	dom := getDomain(&h,&u)
 	fqdn := fmt.Sprintf("%s.%s",h.Name,dom)
 
