@@ -49,11 +49,11 @@ type interfaces_attributes	struct	{
 }
 //These are actual compute instance attributes
 type compute_attributes	struct {
-	Cpus                string	                      `json:"cpus,omitempty"`
-	Start               string	                      `json:"start,omitempty"`
-	Cluster             string	                      `json:"cluster,omitempty"`
-	Memory_mb           string	                      `json:"memory_mb,omitempty"`
-	Guest_id            string	                      `json:"guest_id,omitempty"`
+	Cpus                string                        `json:"cpus,omitempty"`
+	Start               string                        `json:"start,omitempty"`
+	Cluster             string                        `json:"cluster,omitempty"`
+	Memory_mb           string                        `json:"memory_mb,omitempty"`
+	Guest_id            string                        `json:"guest_id,omitempty"`
 	//This needs to be a struct map or the foreman API will kick back the JSON
 	Lvolumes_attributes map[string]volumes_attributes `json:"volumes_attributes,omitempty"`
 }
@@ -103,7 +103,7 @@ type host struct {
 	Capabilities                string                      `json:"capabilities,omitempty"`
 	Compute_profile_id          int                         `json:"compute_profile_id,omitempty"`
 	Lhost_parameters_attributes map[string]params_archetype	`json:"host_parameters_attributes,omitempty"`
-	Linterfaces_attributes      []interfaces_attributes	    `json:"interfaces_attributes,omitempty"`
+	Linterfaces_attributes      []interfaces_attributes     `json:"interfaces_attributes,omitempty"`
 }
 //Used for access authentication to foreman
 type userAccess struct {
@@ -114,7 +114,7 @@ type userAccess struct {
 
 type fRespDomain struct {
  	Id    int     `json:"id"`
- 	Name  string	`json:"name"`
+ 	Name  string  `json:"name"`
 }
 //This sets up the schema, the interface between the tf file and the plugin
 func resourceServer() *schema.Resource {
