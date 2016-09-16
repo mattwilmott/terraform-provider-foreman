@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/hashicorp/terraform/helper/hashcode"
 	"github.com/hashicorp/terraform/helper/schema"
-  "strings"
+	"strings"
 	"fmt"
 	"net/http"
 	"encoding/json"
@@ -107,14 +107,14 @@ type host struct {
 }
 //Used for access authentication to foreman
 type userAccess struct {
-	username	string
-	password	string
+	username  string
+	password  string
 	url       string
 }
 
 type fRespDomain struct {
  	Id    int     `json:"id"`
- 	Name	string	`json:"name"`
+ 	Name  string	`json:"name"`
 }
 //This sets up the schema, the interface between the tf file and the plugin
 func resourceServer() *schema.Resource {
@@ -460,16 +460,16 @@ func httpClient(rType string, d *host, u *userAccess, apiSection string, debug b
       switch r {
         case "POST":
           reqURL = fmt.Sprintf("%s/%s", lUserAccess.url, apiSection)
-				case "GET","DELETE","PUT":
-					reqURL = fmt.Sprintf("%s/%s/%s", lUserAccess.url, apiSection, fqdn)
-				}
-		//If I want to work on domains API
-		case "domains":
-			switch r {
-			case "GET":
-				reqURL = fmt.Sprintf("%s/%s/%d",lUserAccess.url, apiSection, rHost.Lhost.Domain_id)
-			}
-		}
+        case "GET","DELETE","PUT":
+          reqURL = fmt.Sprintf("%s/%s/%s", lUserAccess.url, apiSection, fqdn)
+       }
+    //If I want to work on domains API
+    case "domains":
+      switch r {
+        case "GET":
+          reqURL = fmt.Sprintf("%s/%s/%d",lUserAccess.url, apiSection, rHost.Lhost.Domain_id)
+      }
+    }
 	req, err := http.NewRequest(r,reqURL,b)
 	if err != nil {
 		panic(err)
