@@ -4,14 +4,11 @@ import (
 	"github.com/hashicorp/terraform/helper/hashcode"
 	"github.com/hashicorp/terraform/helper/schema"
   "strings"
-	//"reflect"
 	"fmt"
 	"net/http"
 	"encoding/json"
 	"io/ioutil"
-	//"os"
 	"bytes"
-	//"strconv"
 	"errors"
 )
 
@@ -75,38 +72,38 @@ type volumes_attributes struct {
 }
 //This is the main host struct instance that later gets wrapped in reqHost for JSON/foreman API reasons
 type host struct {
-  Name									string	`json:"name,omitempty"`
-  Environment_id				string	`json:"environment_id,omitempty"`
-  Ip										string	`json:"ip,omitempty"`
-  Mac										string	`json:"mac,omitempty"`
-  Architecture_id				int			`json:"architecture_id,omitempty"`
-  Domain_id							int			`json:"domain_id,omitempty"`
-  Realm_id							int			`json:"realm_id,omitempty"`
-  Puppet_proxy_id				int			`json:"puppet_proxy_id,omitempty"`
-  Puppetclass_ids				[]int		`json:"puppetclass_ids,omitempty"`
-  Operatingsystem_id		string	`json:"operatingsystem_id,omitempty"`
-  Medium_id							string	`json:"medium_id,omitempty"`
-  Ptable_id							int			`json:"ptable_id,omitempty"`
-  Subnet_id							int			`json:"subnet_id,omitempty"`
-  Compute_resource_id		int			`json:"compute_resource_id,omitempty"`
-  Root_pass							string	`json:"root_pass,omitempty"`
-  Model_id							int			`json:"model_id,omitempty"`
-  Hostgroup_id					int			`json:"hostgroup_id,omitempty"`
-  Puppet_ca_proxy_id		int			`json:"puppet_ca_proxy_id,omitempty"`
-  Image_id							int			`json:"image_id,omitempty"`
-  Build									bool		`json:"build,omitempty"`
-  Enabled								bool		`json:"enabled,omitempty"`
-  Provision_method			string	`json:"provision_method,omitempty"`
-  Managed								bool		`json:"managed,omitempty"`
+	Name									string	`json:"name,omitempty"`
+	Environment_id				string	`json:"environment_id,omitempty"`
+	Ip										string	`json:"ip,omitempty"`
+	Mac										string	`json:"mac,omitempty"`
+	Architecture_id				int			`json:"architecture_id,omitempty"`
+	Domain_id							int			`json:"domain_id,omitempty"`
+	Realm_id							int			`json:"realm_id,omitempty"`
+	Puppet_proxy_id				int			`json:"puppet_proxy_id,omitempty"`
+	Puppetclass_ids				[]int		`json:"puppetclass_ids,omitempty"`
+	Operatingsystem_id		string	`json:"operatingsystem_id,omitempty"`
+	Medium_id							string	`json:"medium_id,omitempty"`
+	Ptable_id							int			`json:"ptable_id,omitempty"`
+	Subnet_id							int			`json:"subnet_id,omitempty"`
+	Compute_resource_id		int			`json:"compute_resource_id,omitempty"`
+	Root_pass							string	`json:"root_pass,omitempty"`
+	Model_id							int			`json:"model_id,omitempty"`
+	Hostgroup_id					int			`json:"hostgroup_id,omitempty"`
+	Puppet_ca_proxy_id		int			`json:"puppet_ca_proxy_id,omitempty"`
+	Image_id							int			`json:"image_id,omitempty"`
+	Build									bool		`json:"build,omitempty"`
+	Enabled								bool		`json:"enabled,omitempty"`
+	Provision_method			string	`json:"provision_method,omitempty"`
+	Managed								bool		`json:"managed,omitempty"`
 	Lcompute_attributes		compute_attributes	`json:"compute_attributes,omitempty"`
 	Owner_id							int			`json:"owner_id,omitempty"`
 	Owner_type						string	`json:"owner_type,omitempty"` // must be either User or Usergroup
-  Progress_report_id		string	`json:"progress_report_id,omitempty"`
-  Comment								string	`json:"comment,omitempty"`
-  Capabilities					string	`json:"capabilities,omitempty"`
-  Compute_profile_id		int			`json:"compute_profile_id,omitempty"`
+	Progress_report_id		string	`json:"progress_report_id,omitempty"`
+	Comment								string	`json:"comment,omitempty"`
+	Capabilities					string	`json:"capabilities,omitempty"`
+	Compute_profile_id		int			`json:"compute_profile_id,omitempty"`
 	Lhost_parameters_attributes map[string]params_archetype	`json:"host_parameters_attributes,omitempty"`
-  Linterfaces_attributes	[]interfaces_attributes	`json:"interfaces_attributes,omitempty"`
+	Linterfaces_attributes	[]interfaces_attributes	`json:"interfaces_attributes,omitempty"`
 }
 //Used for access authentication to foreman
 type userAccess struct {
@@ -116,8 +113,8 @@ type userAccess struct {
 }
 
 type fRespDomain struct {
- Id		int			`json:"id"`
- Name	string	`json:"name"`
+ 	Id		int			`json:"id"`
+ 	Name	string	`json:"name"`
 }
 //This sets up the schema, the interface between the tf file and the plugin
 func resourceServer() *schema.Resource {
