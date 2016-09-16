@@ -600,32 +600,22 @@ for i := 0; i<iaCount; i++ {
 	//Adding some logic to auto populate primary nic because of API deferral
 	if v, ok := d.GetOk(prefix+".mac"); ok {
 		h.Linterfaces_attributes[i].Mac = v.(string)
-	} /* else if v, ok := d.GetOk("mac"); ok && h.Linterfaces_attributes[i].Primary {
-		h.Linterfaces_attributes[i].Mac = v.(string)
-	} */
+	}
 	if v, ok := d.GetOk(prefix+".ip"); ok {
 		h.Linterfaces_attributes[i].Ip = v.(string)
-	} /* else if v, ok := d.GetOk("ip"); ok && h.Linterfaces_attributes[i].Primary {
-		h.Linterfaces_attributes[i].Ip = v.(string)
-	} */
+	}
 	if v, ok := d.GetOk(prefix+".type"); ok {
 		h.Linterfaces_attributes[i].Type = v.(string)
 	}
 	if v, ok := d.GetOk(prefix+".name"); ok {
 		h.Linterfaces_attributes[i].Name = v.(string)
-	} /* else if v, ok := d.GetOk("name"); ok && h.Linterfaces_attributes[i].Primary {
-		h.Linterfaces_attributes[i].Name = v.(string)
-	} */
+	}
 	if v, ok := d.GetOk(prefix+".subnet_id"); ok {
 		h.Linterfaces_attributes[i].Subnet_id = v.(int)
-	} /* else if v, ok := d.GetOk("subnet_id"); ok && h.Linterfaces_attributes[i].Primary {
-		h.Linterfaces_attributes[i].Subnet_id = v.(int)
-	} */
+	}
 	if v, ok := d.GetOk(prefix+".domain_id"); ok {
 		h.Linterfaces_attributes[i].Domain_id = v.(int)
-	} /*else if v, ok := d.GetOk("domain_id"); ok && h.Linterfaces_attributes[i].Primary {
-		h.Linterfaces_attributes[i].Domain_id = v.(int)
-	} */
+	}
 	if v, ok := d.GetOk(prefix+".identifier"); ok {
 		h.Linterfaces_attributes[i].Identifier = v.(string)
 	}
@@ -861,20 +851,21 @@ func resourceServerUpdate(d *schema.ResourceData, m interface{}) error {
 	hChanges := new(host)
 	dom := getDomain(&h,&u)
 	fqdn := fmt.Sprintf("%s.%s",h.Name,dom)
-/*
-	resp, err := httpClient("PUT", &h, &u, "hosts", false,fqdn)
-	if resp != nil {
-		fResp := fmt.Sprintf("The server responded with: %v",resp)
-		print(fResp)
-		if strings.Contains(string(resp),"error"){
-			err = errors.New(string(resp))
-		}
-	}
 
-	if err != nil {
-		return err
-	}
-*/
+  if (fqdn != "") && (fqdn != dom) {
+	 resp, err := httpClient("PUT", &h, &u, "hosts", false,fqdn)
+	 if resp != nil {
+		 fResp := fmt.Sprintf("The server responded with: %v",resp)
+		 print(fResp)
+		 if strings.Contains(string(resp),"error"){
+			 err = errors.New(string(resp))
+		 }
+	 }
+	 if err != nil {
+		 return err
+	 }
+  }
+
 	return nil
 }
 
@@ -883,19 +874,19 @@ func resourceServerDelete(d *schema.ResourceData, m interface{}) error {
 	u := buildUserStruct(d,m)
 	dom := getDomain(&h,&u)
 	fqdn := fmt.Sprintf("%s.%s",h.Name,dom)
-
-	resp, err := httpClient("DELETE", &h, &u, "hosts", false,fqdn)
-	if resp != nil {
-		fResp := fmt.Sprintf("The server responded with: %v",resp)
-		print(fResp)
-		if strings.Contains(string(resp),"error"){
-			err = errors.New(string(resp))
+  if (fqdn != "") && (fqdn != dom) {
+	 resp, err := httpClient("DELETE", &h, &u, "hosts", false,fqdn)
+	 if resp != nil {
+		 fResp := fmt.Sprintf("The server responded with: %v",resp)
+		 print(fResp)
+	 	 if strings.Contains(string(resp),"error"){
+	 		 err = errors.New(string(resp))
+	 	 }
 		}
-	}
-
-	if err != nil {
-		return err
-	}
+		if err != nil {
+			return err
+		}
+  }
 
 	return nil
 }
