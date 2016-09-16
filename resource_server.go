@@ -38,7 +38,7 @@ type interfaces_attributes	struct	{
 	Username         string	  `json:"username,omitempty"`//only for bmc
 	Password         string	  `json:"password,omitempty"` //only for bmc
 	Provider         string	  `json:"provider,omitempty"` //only accepted IPMI
-	Virtual          bool		  `json:"virtual,omitempty"`
+	Virtual          bool     `json:"virtual,omitempty"`
 	Tag              string	  `json:"tag,omitempty"`
 	Attached_to      string	  `json:"attached_to,omitempty"`
 	Mode             string	  `json:"mode,omitempty"` // with validations
@@ -49,13 +49,13 @@ type interfaces_attributes	struct	{
 }
 //These are actual compute instance attributes
 type compute_attributes	struct {
-	Cpus               string	`json:"cpus,omitempty"`
-	Start              string	`json:"start,omitempty"`
-	Cluster            string	`json:"cluster,omitempty"`
-	Memory_mb          string	`json:"memory_mb,omitempty"`
-	Guest_id           string	`json:"guest_id,omitempty"`
+	Cpus                string	                     `json:"cpus,omitempty"`
+	Start               string	                     `json:"start,omitempty"`
+	Cluster             string	                      `json:"cluster,omitempty"`
+	Memory_mb           string	                      `json:"memory_mb,omitempty"`
+	Guest_id            string	                      `json:"guest_id,omitempty"`
 	//This needs to be a struct map or the foreman API will kick back the JSON
-	Lvolumes_attributes	map[string]volumes_attributes	`json:"volumes_attributes,omitempty"`
+	Lvolumes_attributes map[string]volumes_attributes `json:"volumes_attributes,omitempty"`
 }
 
 //struct for nested interface compute attributes
