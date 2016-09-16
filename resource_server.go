@@ -65,10 +65,10 @@ type ifcompute_attributes struct {
 }
 //These are things like which datastore or cluster the virtual disks need to live on
 type volumes_attributes struct {
-	Name      string	`json:"name,omitempty"`
+	Name      string  `json:"name,omitempty"`
 	Size_gb   int     `json:"size_gb,omitempty"`
-	_delete   string	`json:",omitempty"`
-	Datastore string	`json:"datastore,omitempty"`
+	_delete   string  `json:",omitempty"`
+	Datastore string  `json:"datastore,omitempty"`
 }
 //This is the main host struct instance that later gets wrapped in reqHost for JSON/foreman API reasons
 type host struct {
