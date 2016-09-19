@@ -820,8 +820,11 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceServerRead(d *schema.ResourceData, m interface{}) error {
 	h := buildHostStruct(d,m)
+	fmt.Println("JPB - setup host struct instance")
 	u := buildUserStruct(d,m)
+	fmt.Println("JPB - setup user struct instance")
   dom := getDomain(&h,&u)
+	fmt.Println("JPB - got domain")
 	fqdn := fmt.Sprintf("%s.%s",h.Name,dom)
 
 	resp, err := httpClient("GET", &h, &u, "hosts", false,fqdn)
