@@ -871,7 +871,7 @@ func resourceServerDelete(d *schema.ResourceData, m interface{}) error {
 	u := buildUserStruct(d,m)
 	dom := getDomain(&h,&u)
 	fqdn := fmt.Sprintf("%s.%s",h.Name,dom)
-  if (fqdn != "") && (fqdn != dom) {
+	if (fqdn != "") && (fqdn != dom) {
 	 resp, err := httpClient("DELETE", &h, &u, "hosts", false,fqdn)
 	 if resp != nil {
 		 fResp := fmt.Sprintf("The server responded with: %v",resp)
