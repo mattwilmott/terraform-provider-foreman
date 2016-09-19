@@ -819,6 +819,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceServerRead(d *schema.ResourceData, m interface{}) error {
+	fmt.Println("JPB - made it to read method")
 	h := buildHostStruct(d,m)
 	fmt.Println("JPB - setup host struct instance")
 	u := buildUserStruct(d,m)
