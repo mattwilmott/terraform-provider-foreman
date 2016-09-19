@@ -879,10 +879,10 @@ func resourceServerDelete(d *schema.ResourceData, m interface{}) error {
 	 	 if strings.Contains(string(resp),"error"){
 	 		 err = errors.New(string(resp))
 	 	 }
-		}
-		if err != nil {
-			return err
-		}
+	 }
+	 if err != nil {
+		return err
+	 }
   }
 
 	return nil
