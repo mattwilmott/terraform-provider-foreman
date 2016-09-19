@@ -793,6 +793,7 @@ for i := 0; i<hpaCount; i++ {
 }
 
 func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
+	fmt.Println("JPB - made it to create method")
   h := buildHostStruct(d,meta)
 	u := buildUserStruct(d,meta)
 
@@ -847,6 +848,7 @@ func resourceServerRead(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceServerUpdate(d *schema.ResourceData, m interface{}) error {
+	fmt.Println("JPB - made it to update method")
 	h := buildHostStruct(d,m)
 	u := buildUserStruct(d,m)
 	//hChanges := new(host)
@@ -871,6 +873,7 @@ func resourceServerUpdate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceServerDelete(d *schema.ResourceData, m interface{}) error {
+	fmt.Println("JPB - made it to delete method")
 	h := buildHostStruct(d,m)
 	u := buildUserStruct(d,m)
 	dom := getDomain(&h,&u)
