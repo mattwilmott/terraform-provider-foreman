@@ -102,7 +102,9 @@ type host struct {
 	Comment                     string                      `json:"comment,omitempty"`
 	Capabilities                string                      `json:"capabilities,omitempty"`
 	Compute_profile_id          int                         `json:"compute_profile_id,omitempty"`
+	//mapped struct array for host parameters
 	Lhost_parameters_attributes map[string]params_archetype	`json:"host_parameters_attributes,omitempty"`
+	//struct array for multiple interfaces
 	Linterfaces_attributes      []interfaces_attributes     `json:"interfaces_attributes,omitempty"`
 }
 //Used for access authentication to foreman
@@ -225,16 +227,6 @@ func resourceServer() *schema.Resource {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			/*
-			"host_parameters_attributes": &schema.Schema{
-				Type:     schema.TypeSet,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Optional: true,
-				Set: func(v interface{}) int {
-					return hashcode.String(v.(string))
-				},
-			},
-			*/
 			"build": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -525,7 +517,7 @@ func getDomain(h *host, u *userAccess) string {
 
 func buildUserStruct(d *schema.ResourceData, meta interface{}) userAccess {
 	u := userAccess{}
-	/* populate u struct instance */
+	// populate u struct instance
 	if v, ok := d.GetOk("username"); ok {
 		u.username = v.(string)
 	}
@@ -559,7 +551,7 @@ func buildHostStruct(d *schema.ResourceData, meta interface{}) host {
 	if v, ok := d.GetOk(caprefix+".guest_id"); ok {
 		h.Lcompute_attributes.Guest_id = v.(string)
 	}
-/* build volumes_attributes now, this needs to be mapped so I build structs and then add them to the mapped value */
+// build volumes_attributes now, this needs to be mapped so I build structs and then add them to the mapped value
 vaCount := d.Get("volumes_attributes.#").(int)
 if vaCount >0 {
 	h.Lcompute_attributes.Lvolumes_attributes = make(map[string]volumes_attributes)
@@ -585,7 +577,7 @@ for i := 0; i<vaCount; i++ {
 	h.Lcompute_attributes.Lvolumes_attributes[iStr] = lStruct
 }
 }
-/* build interfaces_attributes now */
+// build interfaces_attributes now
 iaCount := d.Get("interfaces_attributes.#").(int)
 if iaCount >0 {
 for i := 0; i<iaCount; i++ {
@@ -660,7 +652,7 @@ for i := 0; i<iaCount; i++ {
 }
 
 
-/* populate host_parameters_attributes now */
+// populate host_parameters_attributes now
 hpaCount := d.Get("host_parameters_attributes.#").(int)
 if hpaCount > 0 {
 	h.Lhost_parameters_attributes = make(map[string]params_archetype)
@@ -702,7 +694,7 @@ for i := 0; i<hpaCount; i++ {
 }
 }
 
-/* populate h struct instance for regular level data */
+// populate h struct instance for regular level data
 	if v, ok := d.GetOk("environment_id"); ok {
 		h.Environment_id = v.(string)
 	}
@@ -796,7 +788,7 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
   h := buildHostStruct(d,meta)
 	u := buildUserStruct(d,meta)
 
-	/* check debug flag */
+	// check debug flag
 	debug := false
 	if v, ok := d.GetOk("debug"); ok {
 		debug = v.(bool)
