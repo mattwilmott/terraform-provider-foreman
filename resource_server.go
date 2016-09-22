@@ -793,7 +793,6 @@ for i := 0; i<hpaCount; i++ {
 }
 
 func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
-	fmt.Println("JPB - made it to create method")
   h := buildHostStruct(d,meta)
 	u := buildUserStruct(d,meta)
 
@@ -820,13 +819,9 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceServerRead(d *schema.ResourceData, m interface{}) error {
-	fmt.Println("JPB - made it to read method")
 	h := buildHostStruct(d,m)
-	fmt.Println("JPB - setup host struct instance")
 	u := buildUserStruct(d,m)
-	fmt.Println("JPB - setup user struct instance")
   dom := getDomain(&h,&u)
-	fmt.Println("JPB - got domain")
 	fqdn := fmt.Sprintf("%s.%s",h.Name,dom)
 
 	resp, err := httpClient("GET", &h, &u, "hosts", false,fqdn)
@@ -848,7 +843,6 @@ func resourceServerRead(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceServerUpdate(d *schema.ResourceData, m interface{}) error {
-	fmt.Println("JPB - made it to update method")
 	h := buildHostStruct(d,m)
 	u := buildUserStruct(d,m)
 	//hChanges := new(host)
@@ -873,7 +867,7 @@ func resourceServerUpdate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceServerDelete(d *schema.ResourceData, m interface{}) error {
-	fmt.Println("JPB - made it to delete method")
+	/* commenting out till this can be properly tested
 	h := buildHostStruct(d,m)
 	u := buildUserStruct(d,m)
 	dom := getDomain(&h,&u)
@@ -891,6 +885,6 @@ func resourceServerDelete(d *schema.ResourceData, m interface{}) error {
 		return err
 	 }
 	}
-
+ */
 	return nil
 }
