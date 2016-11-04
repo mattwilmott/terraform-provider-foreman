@@ -9,25 +9,30 @@ import (
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"url": &schema.Schema{
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: descriptions["url"],
-			},
-			"username": &schema.Schema{
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: descriptions["username"],
-			},
-			"password": &schema.Schema{
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: descriptions["password"],
-			},
+		/* Removing annoying questions at the beginning
+		"url": &schema.Schema{
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: descriptions["url"],
+		},
+		"username": &schema.Schema{
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: descriptions["username"],
+		},
+		"password": &schema.Schema{
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: descriptions["password"],
+		},
+		*/
 		},
 
-		ResourcesMap: map[string]*schema.Resource{
+		/*ResourcesMap: map[string]*schema.Resource{
 			"foreman_dns":    resourceDNS(),
+		},*/
+
+		ResourcesMap: map[string]*schema.Resource{
 			"foreman_server": resourceServer(),
 		},
 
@@ -38,14 +43,16 @@ func Provider() terraform.ResourceProvider {
 var descriptions map[string]string
 
 func init() {
-	descriptions = map[string]string{
-		"url": "The Foreman server url. Example: \n" +
-			"https://foreman.example.com/api/v2/",
+	/*
+		descriptions = map[string]string{
+			"url": "The Foreman server url. Example: \n" +
+				"https://foreman.example.com/api/v2/",
 
-		"username": "Foreman username with API access",
+			"username": "Foreman username with API access",
 
-		"password": "Foreman password",
-	}
+			"password": "Foreman password",
+		}
+	*/
 }
 
 /*func providerConfigure(d *schema.ResourceData) (interface{}, error) {

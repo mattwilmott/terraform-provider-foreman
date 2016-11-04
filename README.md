@@ -61,6 +61,80 @@ resource "foreman_server" "complex_VM" {
     managed = true		
     comment = ""
 }
+
+resource "foreman_server" "myVM" {
+  username = "username"
+  password = "password"
+  url = "https://foreman.domain.com/api"
+  name = "hostname"
+  environment_id = "environment_id"
+  ip = "10.0.0.2"
+  mac	= "ff:ff:ff:ff:ff:ff"
+  architecture_id = 1
+  domain_id = 1
+  realm_id = 1
+  puppet_proxy_id	= 1
+  puppetclass_ids	= [1,2,3]
+  operatingsystem_id = 1
+  medium_id = "1" # yeah, it's a string. idk, don't ask
+  ptable_id	= 1
+  subnet_id	= 1
+  compute_resource_id	= 25
+  root_pass	= "Superawesomehash"
+  model_id = 1
+  hostgroup_id = 1
+  owner_id = 1
+  owner_type = "User" # must be either User or Usergroup
+  puppet_ca_proxy_id = 1
+  image_id = 1
+  build	= true
+  enabled	= true
+  provision_method = "build"
+  managed	= true
+  progress_report_id = "progress_report_id"
+  comment = "Build purpose"
+  capabilities = "Something"
+  compute_profile_id = 1
+	host_parameters_attributes {
+    roles = "server_role"
+    puppet = "true"
+    chef = "false"
+  }
+  interfaces_attributes{
+    mac = "ff:ff:ff:ff:ff:ff"
+    ip = "ip"
+    name = "name"
+    subnet_id = 1
+    domain_id = 1
+    identifier = "identifier"
+    managed = true
+    primary = true
+    provision = true
+    username = "username" # only for bmc
+    password = "password" # only for bmc
+    provider = "provider" # only accepted IPMI
+    virtual = false
+    tag = "tag"
+    attached_to = "something"
+    mode = "mode" # with validations
+    attached_devices 	=	[]string
+    bond_options = "bond opts"
+  }
+  compute_attributes {
+    cpus = "2"
+  	start = "1"
+  	cluster = "clustername"
+  	memory_mb = "2048"
+  	guest_id = "guest_id"
+  }
+	volumes_attributes{
+    name = "name"
+  	size_gb	= 16
+  	_delete	= "false"
+  	datastore	"Datastore_name"
+  }
+}
+
 ```
 
 if you have already built the terraform-foreman source then you are ready to test. Navigate to the directory where you saved your terraform config (example.tf) and execute:
@@ -118,6 +192,3 @@ git push origin my_awesome_feature_branch
 # Explain your changes in PR and include test instrcutions.
 # I'll hopefully accept it and we'll be on our way to shared awesomeness.
 ```
-
-
-
