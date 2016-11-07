@@ -1,5 +1,5 @@
-# terraform-foreman
-Foreman provider for Terraform
+# terraform-provider-foreman
+Foreman provider for Terraform (formerly terraform-foreman)
 
 **Note, I'm a DevOps Engineer who has come from a predominately Ops world. I have never written in Go previously instead prefering Ruby, Python, Javascript, Java or Bash. Hence this code may actually be completely wrong! Use this at your own risk! If you'd like to contribute please do, see the instructions below!**
 
@@ -23,6 +23,12 @@ providers {
 
 Sample terraform config. Save this as a example.tf or similar
 ```
+provider "foreman" {
+	username = "myusername"
+	password = "mypassword"
+	url = "https://my-foreman.fqdn"
+}
+
 resource "foreman_dns" "example" {
 	host = "example.com"
 }
@@ -63,9 +69,6 @@ resource "foreman_server" "complex_VM" {
 }
 
 resource "foreman_server" "myVM" {
-  username = "username"
-  password = "password"
-  url = "https://foreman.domain.com/api"
   name = "hostname"
   environment_id = "environment_id"
   ip = "10.0.0.2"
@@ -121,14 +124,14 @@ resource "foreman_server" "myVM" {
     bond_options = "bond opts"
   }
   compute_attributes {
-    cpus = "2"
+    	cpus = "2"
   	start = "1"
   	cluster = "clustername"
   	memory_mb = "2048"
   	guest_id = "guest_id"
   }
-	volumes_attributes{
-    name = "name"
+  volumes_attributes{
+  	name = "name"
   	size_gb	= 16
   	_delete	= "false"
   	datastore	"Datastore_name"
@@ -181,14 +184,14 @@ I would be more than pleased if you did but please remember I am not a programme
 #### Contributing Instructions
 ```
 # Fork it on GitHub
-git clone https://github.com/your_name/terraform-foreman.git
-cd terraform-foreman
+git clone https://github.com/your_name/terraform-provider-foreman.git
+cd terraform-provider-foreman
 git checkout -b my_awesome_feature_branch master
 # Make your awesome changes
 git commit -a -m "my awesome changes explained"
 # Repeat till your happy
 git push origin my_awesome_feature_branch
-# Submit a pull request at https://github.com/your_name/terraform-foreman
+# Submit a pull request at https://github.com/your_name/terraform-provider-foreman
 # Explain your changes in PR and include test instrcutions.
 # I'll hopefully accept it and we'll be on our way to shared awesomeness.
 ```
