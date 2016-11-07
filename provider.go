@@ -9,23 +9,21 @@ import (
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-		/* Removing annoying questions at the beginning
-		"url": &schema.Schema{
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: descriptions["url"],
-		},
-		"username": &schema.Schema{
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: descriptions["username"],
-		},
-		"password": &schema.Schema{
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: descriptions["password"],
-		},
-		*/
+			"url": &schema.Schema{
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: descriptions["url"],
+			},
+			"username": &schema.Schema{
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: descriptions["username"],
+			},
+			"password": &schema.Schema{
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: descriptions["password"],
+			},
 		},
 
 		/*ResourcesMap: map[string]*schema.Resource{
@@ -36,26 +34,27 @@ func Provider() terraform.ResourceProvider {
 			"foreman_server": resourceServer(),
 		},
 
-		//ConfigureFunc: providerConfigure,
+		ConfigureFunc: providerConfigure,
 	}
 }
 
 var descriptions map[string]string
 
 func init() {
-	/*
-		descriptions = map[string]string{
-			"url": "The Foreman server url. Example: \n" +
-				"https://foreman.example.com/api/v2/",
 
-			"username": "Foreman username with API access",
+	descriptions = map[string]string{
+		"url": "The Foreman server url. Example: \n" +
+			"https://foreman.example.com/api/v2/",
 
-			"password": "Foreman password",
-		}
-	*/
+		"username": "Foreman username with API access",
+
+		"password": "Foreman password",
+	}
+
 }
 
-/*func providerConfigure(d *schema.ResourceData) (interface{}, error) {
+// Returns the meta object (API connection/token)
+func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	config := Config{
 		Username: d.Get("username").(string),
 		Password: d.Get("password").(string),
@@ -63,4 +62,4 @@ func init() {
 	}
 
 	return config.Client()
-}*/
+}
