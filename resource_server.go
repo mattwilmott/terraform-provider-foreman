@@ -11,6 +11,7 @@ import (
 	//"io/ioutil"
 	//"net/http"
 	//"strings"
+	"log"
 )
 
 //reqHost is required to wrap the host for the foreman-api
@@ -39,26 +40,10 @@ func resourceServer() *schema.Resource {
 		Delete: resourceServerDelete,
 
 		Schema: map[string]*schema.Schema{
-			"debug": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			/*"username": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"password": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-			"url": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},*/
 			"environment_id": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
@@ -137,6 +122,10 @@ func resourceServer() *schema.Resource {
 			},
 			"owner_id": &schema.Schema{
 				Type:     schema.TypeInt,
+				Optional: true,
+			},
+			"owner_type": &schema.Schema{
+				Type:     schema.TypeString,
 				Optional: true,
 			},
 			"puppet_ca_proxy_id": &schema.Schema{
@@ -360,96 +349,6 @@ func resourceServer() *schema.Resource {
 	}
 }
 
-/* Hammer implementation, deprecating...
-type hammerArgs struct {
-	options    []string
-	subcommand string
-	args       []string
-}
-
-func hammerCLI(h *hammerArgs) (output []byte, err error) {
-	cmd := exec.Command("/usr/bin/hammer", h.subcommand, "list")
-	stdout, err := cmd.Output()
-
-	if err != nil {
-		println(err.Error())
-		return
-	}
-
-	print(string(stdout))
-	return stdout, err
-}
-
-func resourceServerCreate(d *schema.ResourceData, m interface{}) error {
-	d.SetId(d.Get("name").(string))
-	h := hammerArgs{subcommand: "host"}
-	output, err := hammerCLI(&h)
-	if err != nil {
-		panic(err)
-	}
-	print(string(output))
-}
-*/
-
-/* Swap out for go-foreman client code
-// Setup a function to make api calls
-func httpClient(rType string, d *host, client *ForemanClient, apiSection string, debug bool, fqdn string) ([]byte, error) {
-	//setup local vars
-	r := strings.ToUpper(rType)
-	rHost := reqHost{}
-	rHost.Lhost = *d
-
-	b := new(bytes.Buffer)
-	json.NewEncoder(b).Encode(rHost)
-	//build and make request
-	//client := &http.Client{}
-	//client := meta.(*ForemanClient).foremanconn
-	reqURL := ""
-	//Need to account for different parts of the API
-	switch apiSection {
-	//If i want to work on hosts API
-	case "hosts":
-		switch r {
-		case "POST":
-			reqURL = fmt.Sprintf("%s/%s", lUserAccess.url, apiSection)
-		case "GET", "DELETE", "PUT":
-			reqURL = fmt.Sprintf("%s/%s/%s", lUserAccess.url, apiSection, fqdn)
-		}
-	//If I want to work on domains API
-	case "domains":
-		switch r {
-		case "GET":
-			reqURL = fmt.Sprintf("%s/%s/%d", client.url, apiSection, rHost.Lhost.Domain_id)
-		}
-	}
-	req, err := http.NewRequest(r, reqURL, b)
-	if err != nil {
-		panic(err)
-	}
-	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Accept", "application/json;version=2")
-	req.Header.Add("Foreman_api_version", "2")
-	req.Header.Add("Accept-Encoding", "gzip, deflate")
-	//enable debugging data
-	if debug {
-		panic(req)
-	}
-	resp, err := client.Do(req)
-
-	if err != nil {
-		panic(err)
-	}
-
-	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
-	if content != nil {
-		fmt.Println("%v", content)
-	}
-
-	return content, err
-}
-*/
-
 /* Wrong place for this shit
 func getDomain(h *host, u *userAccess) string {
 	dStruct := new(fRespDomain)
@@ -457,7 +356,7 @@ func getDomain(h *host, u *userAccess) string {
 	client := meta.(*ForemanClient)
 	resp, err := client.getDomains()
 	if resp != nil {
-		fResp := fmt.Sprintf("The server responded with: %v", resp)
+		fResp := log.Printf("The server responded with: %v", resp)
 		print(fResp)
 		if strings.Contains(string(resp), "error") {
 			err = errors.New(string(resp))
@@ -475,22 +374,8 @@ func getDomain(h *host, u *userAccess) string {
 	return dStruct.Name
 }
 */
-/*
-func buildUserStruct(d *schema.ResourceData, meta interface{}) userAccess {
-	u := userAccess{}
-	// populate u struct instance
-	if v, ok := d.GetOk("username"); ok {
-		u.username = v.(string)
-	}
-	if v, ok := d.GetOk("password"); ok {
-		u.password = v.(string)
-	}
-	if v, ok := d.GetOk("url"); ok {
-		u.url = v.(string)
-	}
-	return u
-}
-*/
+
+// Private func to build out the Host Struct based on either the tf definition
 func buildHostStruct(d *schema.ResourceData, meta interface{}) foreman.Host {
 	h := foreman.Host{}
 	if v, ok := d.GetOk("name"); ok {
@@ -650,6 +535,12 @@ func buildHostStruct(d *schema.ResourceData, meta interface{}) foreman.Host {
 	if v, ok := d.GetOk("environment_id"); ok {
 		h.Environment_id = v.(string)
 	}
+	if v, ok := d.GetOk("organization_id"); ok {
+		h.Organization_id = v.(int)
+	}
+	if v, ok := d.GetOk("location_id"); ok {
+		h.Location_id = v.(int)
+	}
 	if v, ok := d.GetOk("ip"); ok {
 		h.Ip = v.(string)
 	}
@@ -742,49 +633,56 @@ func resourceServerCreate(d *schema.ResourceData, meta interface{}) error {
 
 	// check debug flag
 	debug := false
-	if v, ok := d.GetOk("debug"); ok {
+	if v, ok := d.GetOk("Debug"); ok {
 		debug = v.(bool)
 	}
 
 	//resp, err := httpClient("POST", &h, &client, "hosts", debug, "")
 	respHost, err := client.CreateHost(&h)
-	if err == nil {
-		fResp := fmt.Sprintf("The server responded with: %v", respHost.Name)
+	if respHost != nil {
+		log.Printf("Successfully created %s\n", respHost.Name)
 		if debug {
-			print(fResp)
+			log.Printf("The server responded with: %+v\n", respHost)
 		}
-	} else {
-		// Wrong place for this
-		//if strings.Contains(string(resp), "error") {
-		//	err = errors.New(string(resp))
-		//}
-		fmt.Printf("ERROR: Foreman failed to create host -\n %s", err)
+		//d.SetId(d.Get("name").(string))
+		return nil
+	} else if err != nil {
+		log.Printf("ERROR: Foreman failed to create host - %s\n", h.Name)
+		log.Printf("ERROR: %s", err)
 		return err
+	} else {
+		log.Printf("Successfully sent created request for server %s but there was no data returned!\n", h.Name)
+		panic("Unknown state whilst creating server resource details!")
 	}
-	d.SetId(d.Get("name").(string))
-	return nil
 }
 
 func resourceServerRead(d *schema.ResourceData, meta interface{}) error {
 	h := buildHostStruct(d, meta)
 	client := meta.(*ForemanClient).foremanconn
-	//dom := getDomain(&h, &u)
-	//fqdn := fmt.Sprintf("%s.%s", h.Name, dom)
+	debug := true
 
-	//resp, err := httpClient("GET", &h, &client, "hosts", false, fqdn)
 	respHost, err := client.GetHost(&h)
 	if respHost != nil {
-		fResp := fmt.Sprintf("The server responded with: %v", respHost.Name)
-		print(fResp)
-	}
+		if debug {
+			log.Printf("The server responded with: %+v", respHost)
+		}
+		d.SetId(d.Get("name").(string))
+		d.Set("ip", h.Ip)
+		d.Set("comment", h.Comment)
 
-	if err != nil {
+		return nil
+	} else if err != nil {
+		log.Printf("Failed to read server: %s\n", h.Name)
+		log.Printf("Status Code: %s\n", err)
+		if err.Error() == "HTTP Error 404 Not Found" {
+			// Server not found rather than API error
+			return nil
+		}
 		return err
+	} else {
+		log.Printf("Successfully read server %s but there was no data returned!\n", h.Name)
+		panic("Unknown state whilst fetching server resource details!")
 	}
-	d.SetId(d.Get("name").(string))
-	d.Set("ip", h.Ip)
-	d.Set("comment", h.Comment)
-	return nil
 }
 
 func resourceServerUpdate(d *schema.ResourceData, meta interface{}) error {
@@ -792,17 +690,18 @@ func resourceServerUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*ForemanClient).foremanconn
 	//hChanges := new(host)
 	//dom := getDomain(&h, &u)
-	//fqdn := fmt.Sprintf("%s.%s", h.Name, dom)
+	//fqdn := log.Printf("%s.%s", h.Name, dom)
 
 	//if (fqdn != "") && (fqdn != dom) {
 	//resp, err := httpClient("PUT", &h, &u, "hosts", false, fqdn)
 	respHost, err := client.UpdateHost(&h)
 	if respHost != nil {
-		fResp := fmt.Sprintf("The server responded with: %v", respHost.Name)
-		print(fResp)
-	}
-	if err != nil {
+		log.Printf("The server responded with: %v", respHost.Name)
+	} else if err != nil {
 		return err
+	} else {
+		log.Printf("Successfully updated server %s but there was no data returned!\n", h.Name)
+		panic("Unknown state whilst updating server resource details!")
 	}
 	//}
 	return nil
@@ -812,11 +711,11 @@ func resourceServerDelete(d *schema.ResourceData, m interface{}) error {
 	/* commenting out till this can be properly tested
 	h := buildHostStruct(d,m)
 	dom := getDomain(&h,&u)
-	fqdn := fmt.Sprintf("%s.%s",h.Name,dom)
+	fqdn := log.Printf("%s.%s",h.Name,dom)
 	if (fqdn != "") && (fqdn != dom) {
 	 resp, err := httpClient("DELETE", &h, &u, "hosts", false,fqdn)
 	 if resp != nil {
-		 fResp := fmt.Sprintf("The server responded with: %v",resp)
+		 fResp := log.Printf("The server responded with: %v",resp)
 		 print(fResp)
 	 	 if strings.Contains(string(resp),"error"){
 	 		 err = errors.New(string(resp))

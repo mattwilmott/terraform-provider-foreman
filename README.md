@@ -17,7 +17,7 @@ Install terraform first using the instructions at https://terraform.io/intro/get
 Add the following to your ~/.terraformrc
 ```
 providers {
-     foreman = "/path/to/bin/terraform-foreman"
+     foreman = "/path/to/bin/terraform-provider-foreman"
 }
 ```
 

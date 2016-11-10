@@ -24,6 +24,16 @@ func Provider() terraform.ResourceProvider {
 				Optional:    true,
 				Description: descriptions["password"],
 			},
+			"insecure": &schema.Schema{
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: descriptions["insecure"],
+			},
+			"debug": &schema.Schema{
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: descriptions["debug"],
+			},
 		},
 
 		/*ResourcesMap: map[string]*schema.Resource{
@@ -49,6 +59,8 @@ func init() {
 		"username": "Foreman username with API access",
 
 		"password": "Foreman password",
+		"insecure": "Disable SSL checking on API. Defaults: false",
+		"debug":    "Enable debug logging",
 	}
 
 }
@@ -59,6 +71,8 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		Username: d.Get("username").(string),
 		Password: d.Get("password").(string),
 		URL:      d.Get("url").(string),
+		Insecure: d.Get("insecure").(bool),
+		Debug:    d.Get("debug").(bool),
 	}
 
 	return config.Client()
