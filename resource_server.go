@@ -45,7 +45,7 @@ func resourceServer() *schema.Resource {
 				Required: true,
 			},
 			"environment_id": &schema.Schema{
-				Type:     schema.TypeString,
+				Type:     schema.TypeInt,
 				Optional: true,
 			},
 			"location_id": &schema.Schema{
@@ -80,7 +80,7 @@ func resourceServer() *schema.Resource {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"puppetclass_ids": &schema.Schema{
+			"puppet_class_ids": &schema.Schema{
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
@@ -89,7 +89,7 @@ func resourceServer() *schema.Resource {
 				},
 			},
 			"operatingsystem_id": &schema.Schema{
-				Type:     schema.TypeString, //Why isnt this an Int? API doco may be incorrect
+				Type:     schema.TypeInt, //Why isnt this an Int? API doco may be incorrect
 				Optional: true,
 			},
 			"medium_id": &schema.Schema{
@@ -533,7 +533,7 @@ func buildHostStruct(d *schema.ResourceData, meta interface{}) foreman.Host {
 
 	// populate h struct instance for regular level data
 	if v, ok := d.GetOk("environment_id"); ok {
-		h.Environment_id = v.(string)
+		h.Environment_id = v.(int)
 	}
 	if v, ok := d.GetOk("organization_id"); ok {
 		h.Organization_id = v.(int)
@@ -563,10 +563,10 @@ func buildHostStruct(d *schema.ResourceData, meta interface{}) foreman.Host {
 		h.Puppetclass_ids = v.([]int)
 	}
 	if v, ok := d.GetOk("operatingsystem_id"); ok {
-		h.Operatingsystem_id = v.(string)
+		h.Operatingsystem_id = v.(int)
 	}
 	if v, ok := d.GetOk("medium_id"); ok {
-		h.Medium_id = v.(string)
+		h.Medium_id = v.(int)
 	}
 	if v, ok := d.GetOk("ptable_id"); ok {
 		h.Ptable_id = v.(int)
@@ -619,7 +619,7 @@ func buildHostStruct(d *schema.ResourceData, meta interface{}) foreman.Host {
 		h.Comment = v.(string)
 	}
 	if v, ok := d.GetOk("capabilities"); ok {
-		h.Capabilities = v.(string)
+		h.Capabilities = v.([]interface{})
 	}
 	if v, ok := d.GetOk("compute_profile_id"); ok {
 		h.Compute_profile_id = v.(int)
